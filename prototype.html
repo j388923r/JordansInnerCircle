@@ -1,6 +1,8 @@
 <html>
     <head>
         <title>Simple As Love</title>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
@@ -9,7 +11,93 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        
+        <style>
+        
+            body {
+                padding-left:2%;
+                background-color:salmon;
+            }
+            
+            h1 {
+                margin: 0px;
+                padding-right: 2%;
+                font-family: "Comic Sans MS", cursive, sans-serif;
+                display: inline-block;
+            }
+            
+            .navigationbar {
+            
+            }
+            
+            ul.header {
+                display: inline;
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            h1 a:hover {
+                text-decoration: none;
+            }
+            
+            .header li {
+                font: 20pt bold "Pacifico";
+                width:12%;
+                padding: 1%;
+                margin: 1%;
+                display:inline-block;
+                background-color: #E5D058;
+                text-align: center;
+                border-radius: 5px;
+            }
+            
+            #boardBackground {
+                border-radius: 10px;
+                width: 96%;
+                background-color: rgba(167, 167, 167, 0.99);
+            }
+            
+            #ideaBoard {
+                position: absolute;
+                border-radius: 10px;
+                margin:2%;
+                width: 92%;
+                background-color: rgba(255, 255, 255, 1.0);
+                z-index: 10;
+            }
+            
+        </style>
+        
+        <script>
+            $(document).ready(function(){
+                var canvas = doument.getElementById('ideaBoard');
+                var ctx = canvas.getContext('2d');
+                
+            });
+        </script>
     </head>
     <body>
+        <div class="navigationbar">
+            <h1><a ref="/">Simple as Love</a></h1>
+            <ul class="header">
+                <li>Main Page</li>
+                <li>Ideas</li>
+                <li>Decisions</li>
+                <li>Budget</li>
+                <li>Deleted <br> Archive</li>
+            </ul>
+        </div>
+        <div>
+            <button class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
+        </div>
+        <canvas id="boardBackground">
+            
+        </canvas>
+        <canvas id='ideaBoard'>
+            
+        </canvas>
+        <canvas id='decisionBoard'>
+            
+        </canvas>
     </body>
 </html>
