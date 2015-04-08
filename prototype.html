@@ -52,8 +52,10 @@
             }
             
             #boardBackground {
+                position: absolute;
                 border-radius: 10px;
                 width: 96%;
+                height: 90%;
                 background-color: rgba(167, 167, 167, 0.99);
             }
             
@@ -61,7 +63,19 @@
                 position: absolute;
                 border-radius: 10px;
                 margin:2%;
-                width: 92%;
+                width: 45%;
+                height: 82%;
+                background-color: rgba(255, 255, 255, 1.0);
+                z-index: 10;
+            }
+            
+            #decisionBoard {
+                position: absolute;
+                border-radius: 10px;
+                margin:2%;
+                margin-left: 49%;
+                width: 45%;
+                height: 82%;
                 background-color: rgba(255, 255, 255, 1.0);
                 z-index: 10;
             }
@@ -70,8 +84,8 @@
         
         <script>
             $(document).ready(function(){
-                var canvas = doument.getElementById('ideaBoard');
-                var ctx = canvas.getContext('2d');
+                var ideaBoard = document.getElementById('ideaBoard');
+                var decisionBoard = document.getElementById('decisionBoard');
                 
             });
         </script>
@@ -88,7 +102,7 @@
             </ul>
         </div>
         <div>
-            <button class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
+            <button class="btn" style="margin-bottom: 5px">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
         </div>
         <canvas id="boardBackground">
             
