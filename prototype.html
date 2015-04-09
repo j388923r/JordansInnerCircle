@@ -52,32 +52,51 @@
             }
             
             #boardBackground {
-                position: absolute;
                 border-radius: 10px;
                 width: 96%;
                 height: 90%;
                 background-color: rgba(167, 167, 167, 0.99);
+                display: inline-block;
             }
             
             #ideaBoard {
-                position: absolute;
                 border-radius: 10px;
                 margin:2%;
+                margin-left: 3%;
                 width: 45%;
-                height: 82%;
+                height: 93%;
                 background-color: rgba(255, 255, 255, 1.0);
+                float: left;
                 z-index: 10;
             }
             
             #decisionBoard {
-                position: absolute;
                 border-radius: 10px;
                 margin:2%;
-                margin-left: 49%;
+                margin-left: 52%;
                 width: 45%;
-                height: 82%;
+                height: 93%;
                 background-color: rgba(255, 255, 255, 1.0);
                 z-index: 10;
+            }
+            
+            #decisionHeader, #ideaHeader {
+                position: absolute;
+                margin-top: -20px;
+                height: 40px;
+                width: 10%;
+                border-radius: 5px;
+                background-color: #EEEEEE;
+                text-align: center;
+                z-index: 11;
+            }
+            
+            #ideaHeader {
+                margin-left: 15.5%;
+            }
+            
+            #decisionHeader {
+                margin-left: 15.5%;
             }
             
         </style>
@@ -104,14 +123,17 @@
         <div>
             <button class="btn" style="margin-bottom: 5px">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
         </div>
-        <canvas id="boardBackground">
-            
-        </canvas>
-        <canvas id='ideaBoard'>
-            
-        </canvas>
-        <canvas id='decisionBoard'>
-            
-        </canvas>
+        <div id="boardBackground">
+            <div id='ideaBoard'>
+                <div id="ideaHeader">
+                    Ideas
+                </div>
+            </div>
+            <div id='decisionBoard'>
+                <div id="decisionheader">
+                    Decisions
+                </div>
+            </div>
+        </div>
     </body>
 </html>
