@@ -99,13 +99,31 @@
                 margin-left: 15.5%;
             }
             
+            #filterPopover {
+                position: absolute;
+                background-color: lightblue;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            
+            #categories {
+                list-style-type: none;
+                padding-left: 1em
+            }
         </style>
         
         <script>
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
-                
+                $('[data-toggle="popover"]').popover({
+                    placement : 'bottom',
+                    content : '<input type="text" placeholder="Filter term"/>'
+                });
+                $('#filters').click(function() {
+                    var categories = document.getElementById("filterPopover");
+                    categories.hidden = !categories.hidden;
+                });
             });
         </script>
     </head>
@@ -121,7 +139,17 @@
             </ul>
         </div>
         <div>
-            <button class="btn" style="margin-bottom: 5px">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
+            <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
+            <div id="filterPopover">
+                <input type="text" placeholder="Filter term"/><br>
+                <h4>Categories:</h4>
+                <ul id="categories">
+                    <li><input type="checkbox" name="Clothing" /> Clothing </li>
+                    <li><input type="checkbox" name="Entertainment" /> Entertainment </li>
+                    <li><input type="checkbox" name="Flowers" /> Flowers </li>
+                    <li><input type="checkbox" name="Venue" /> Venue </li>
+                </ul>
+            </div>
         </div>
         <div id="boardBackground">
             <div id='ideaBoard'>
