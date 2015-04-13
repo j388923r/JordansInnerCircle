@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Budget</title>
+    <link type="text/css" href="jquery/css/ui-lightness/jquery-ui-1.10.0.custom.css" rel="stylesheet" />
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div class="center">
+        <div class="row" id="header">
+            <div class="col-md-12">Your Budget</div>
+        </div>
+        <div class="row" id="label">
+            <div class="col-md-6">Category</div>
+            <div class="col-md-2">Amount Spent</div>
+            <div class="col-md-2">Amount Alloted</div>
+        </div>
+        <div class="row" id="current">
+            <div class="col-md-2" id="current-word"></div>
+            <div class="col-md-2 guess">
+                <input id="guess" type="text" name="guess" style="width:150px" autofocus="autofocus">
+            </div>
+            <div class="col-md-2">
+                <button id="submit" style="font: 12px 'Trebuchet MS', Tahoma, sans-serif">See Answer</button>
+            </div>
+        </div>
+        <div class="previous">
+        </div>
+    </div>
+
+</body>
+</html>
