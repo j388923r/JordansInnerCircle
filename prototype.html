@@ -134,6 +134,14 @@
                     categories.hidden = !categories.hidden;
                     buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 });
+                $(':checkbox').change(function() {
+                    if(this.checked){
+                        console.log(this.name);
+                    }
+                    else{
+                        console.log("remove filter")
+                    }
+                });
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
