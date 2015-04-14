@@ -110,6 +110,14 @@
                 list-style-type: none;
                 padding-left: 1em
             }
+            #cost {
+                list-style-type: none;
+                padding-left: 1em
+            }
+            #tags {
+                list-style-type: none;
+                padding-left: 1em
+            }
         </style>
         
         <script>
@@ -134,10 +142,16 @@
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
+                $("#tags").html("");
                 for (var i = 0; i < cat_arr.length; i++) {
                     var cat = cat_arr[i];
-                    var newString = "<li><input type=\"checkbox\" name="+ cat+" />" + cat+ "</li>";
+                    var newString = "<li><input type=\"checkbox\" name="+ cat+" />  " + cat+ "</li>"; //might need to change to allow addition of event listeners
                     $("#categories").append(newString);
+                };
+                for (var i = 0; i < tag_arr.length; i++) {
+                    var tag = tag_arr[i];
+                    var newString = "<li><input type=\"checkbox\" name="+ tag+" />  " + tag+ "</li>";
+                    $("#tags").append(newString);
                 };
             }
         </script>
@@ -166,13 +180,19 @@
                 </ul>
                 <h4>Cost:</h4>
                 <!--do we want this to dynamically change -->
-                <ul id="categories">
-                    <li><input type="checkbox" name="lessThan500" /> less than $500 </li>
-                    <li><input type="checkbox" name="500To2000" /> $500 to $2000 </li>
-                    <li><input type="checkbox" name="2000To5000" /> $2001 to $5000 </li>
-                    <li><input type="checkbox" name="moreThan5000" /> greater than $5000 </li>
+                <ul id="cost">
+                    <li><input type="checkbox" name="lessThan500" />  less than $500 </li>
+                    <li><input type="checkbox" name="500To2000" />  $500 to $2000 </li>
+                    <li><input type="checkbox" name="2000To5000" />  $2001 to $5000 </li>
+                    <li><input type="checkbox" name="moreThan5000" />  greater than $5000 </li>
                 </ul>
                 <h4>Tags:</h4>
+                <ul id="tags">
+
+                </ul>
+
+                <input id="btnCheckAll" type="button" name="checkAll" value="Check All"/>
+                <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All"/>
 
             </div>
         </div>
