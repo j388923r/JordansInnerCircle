@@ -116,6 +116,7 @@
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
+                buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
@@ -123,8 +124,22 @@
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
+                    buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 });
             });
+            //function that takes in categories and tags list and contructs the filter 
+            //do we want to do cost filtering dynamically or have set intervals
+
+            var buildFilter = function(cat_arr, tag_arr) {
+                cat_arr.sort();
+                tag_arr.sort();
+                $("#categories").html("");
+                for (var i = 0; i < cat_arr.length; i++) {
+                    var cat = cat_arr[i];
+                    var newString = "<li><input type=\"checkbox\" name="+ cat+" />" + cat+ "</li>";
+                    $("#categories").append(newString);
+                };
+            }
         </script>
     </head>
     <body>
@@ -141,14 +156,24 @@
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
             <div id="filterPopover">
-                <input type="text" placeholder="Filter term"/><br>
+                <input type="text" placeholder="Search term"/><br>
                 <h4>Categories:</h4>
                 <ul id="categories">
-                    <li><input type="checkbox" name="Clothing" /> Clothing </li>
+                    <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
                     <li><input type="checkbox" name="Entertainment" /> Entertainment </li>
                     <li><input type="checkbox" name="Flowers" /> Flowers </li>
-                    <li><input type="checkbox" name="Venue" /> Venue </li>
+                    <li><input type="checkbox" name="Venue" /> Venue </li> -->
                 </ul>
+                <h4>Cost:</h4>
+                <!--do we want this to dynamically change -->
+                <ul id="categories">
+                    <li><input type="checkbox" name="lessThan500" /> less than $500 </li>
+                    <li><input type="checkbox" name="500To2000" /> $500 to $2000 </li>
+                    <li><input type="checkbox" name="2000To5000" /> $2001 to $5000 </li>
+                    <li><input type="checkbox" name="moreThan5000" /> greater than $5000 </li>
+                </ul>
+                <h4>Tags:</h4>
+
             </div>
         </div>
         <div id="boardBackground">
