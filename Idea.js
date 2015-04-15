@@ -14,6 +14,8 @@ var Idea = function(title, category, cost){
 	this.description = "";
 	this.pictures = [];
 	this.tags = [];
+	this.hidden = false;
+	this.deleted = false;
 
 	// Public Functions
 
@@ -56,28 +58,58 @@ var Idea = function(title, category, cost){
 		this.category = category;
 	}
 
-	this.getTitle(){
+	/*
+	* Sets the status of the idea to be hidden from the user.
+	*/
+	this.hide = function(){
+		this.hidden = true;
+	}
+
+	/*
+	* Sets the idea to be able to be visible to the user.
+	*/
+	this.setVisible = function(){
+		this.hidden = false;
+	}
+
+	this.delete = function(){
+		this.deleted = true;
+		this.hide;
+	}
+
+	this.getTitle = function(){
 		return this.title;
 	}
 
-	this.getCategory(){
+	this.getCategory = function(){
 		return this.category;
 	}
 
-	this.getCost(){
+	this.getCost = function(){
 		return this.cost;
 	}
 
-	this.getDescription(){
+	this.getDescription = function(){
 		return this.description;
 	}
 	
-	this.getPictures(){
+	this.getPictures = function(){
 		return this.pictures;
 	}
 
-	this.getTags(){
+	this.getTags = function(){
 		return this.tags;
 	}
 
+	this.isHidden = function(){
+		return this.hidden;
+	}
+
+	/*
+	* Determines whether the idea has been deleted by the user or not.
+	* Returns true if it has been deleted and False otherwise.
+	*/
+	this.isDeleted = function(){
+		return this.deleted;
+	}
 }
