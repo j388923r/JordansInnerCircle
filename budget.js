@@ -1,119 +1,99 @@
 // This allows the Javascript code inside this block to only run when the page
 // has finished loading in the browser.
 $(function() {
-    var lang_to = "English";
-    var lang_from = "Spanish";
-    var current_dict = dicts[lang_to][lang_from]; // keys: words in @lang_to, values: corresponding words in @lang_from 	
 
-    var is_autocomplete = false; 
+    editable();
+    calculate();
 
-    //Reverse the dictionary to Spanish:English 
-    var new_dict = {};
-    for (var pair in current_dict) {
-        new_dict[current_dict[pair]] = pair;
-    }
 
-    //Words - used later for autocomplete
-    var to_words = $.map(new_dict, function(key,value) {return key;});
-
-    //Choose random key from new dictionary and display
-    var current_word = get_random(new_dict);
-
-    //Implement autocomplete 
-    autocomplete(new_dict);
-
-    //Enter in textbox triggers same as clicking
-    $("#guess").keyup(function(event) {
-        if (is_autocomplete == false) { // to avoid double entering
-            if (event.keyCode == 13) {
-                $("#submit").click();
-            }
+    //Textboxes for adding new category
+    $('.new_entry').keyup(function(event) {
+        if (event.keyCode == 13) {
+            var spent = ($('#new_spent').val() == "") ? 0 : $('#new_spent').val();
+            var allotted = ($('#new_allotted').val() == "") ? 0 : $('#new_allotted').val();
+            var category = ($('#new_category').val() == "") ? 'My new category' : $('#new_category').val();
+            var next_row = populate_list(category, spent, allotted);
+            $(".items").append(next_row);
+            $('.new_entry').val("");
+            $('#new_category').focus();
+            editable();
+            calculate();
         }
-        is_autocomplete = false; 
     });
 
-    //Start playing
-    new_game(new_dict, current_word);
+    //Add row for entered item
+    function populate_list(category, spent, allotted) {
+        var next_row = '<div class="row">' + '<div class="editable col-md-6 category">' + category + '</div>' + '<div class="editable col-md-3 spent">' + spent + '</div>' + '<div class="editable col-md-3 allotted">' + allotted + '</div>' + '</div>';
+        return next_row;
+    }
 
-    function new_game(new_dict, current_word) {
-        //Check whether guess is correct and show feedback
-        $('#submit').on("click", function() {
-            var guess = $('#guess').val();	   
-            var answer = new_dict[current_word];
-     
-	        if (guess != answer || !guess) { //Wrong or no answer
-               	if (!guess) {guess = " "};	
-                var next_row = incorrect_guess(current_word, guess, answer);
-                $(".previous").prepend(next_row);
-	        } else {
-                var next_row = correct_guess(current_word, guess);
-                $(".previous").prepend(next_row);
-	        } 
 
-            current_word = get_random(new_dict);
-			$('#guess').val("").focus();
+    function calculateTotal(class_name) {
+        var sum = 0;
+        $(class_name).each(function() {
+            if (!isNaN(this.value) && this.value.length != 0) {
+                sum += parseFloat(this.value);
+            }
+            return sum;
+            console.log(sum);
         });
     }
 
-    //Add row for incorrect guess
-    function incorrect_guess(current_word, guess, answer) {
-        var next_row = '<div class="row false">' 
-			+ '<div class="col-md-2 current_word"><span class="item">' + current_word + '</span></div>' 
-			+ '<div class="col-md-2 guess"><span style="text-decoration:line-through">' + guess + '</span></div>' 
-			+ '<div class="col-md-2 answer"><span class="item">' + answer + '</span></div>' + '</div>';
-        return next_row;
+
+    //Get totals
+    function calculate() {
+        $(".editable.spent").each(function() {
+            var class_name = ".editable.spent";
+            //$(this).keyup(function() {
+            var total_spent = calculateTotal(class_name);
+            console.log(total_spent);
+            //});
+            $("#total_spent").val(total_spent);
+        });
+
+
+        $(".editable.allotted").each(function() {
+            var class_name = ".editable.allotted";
+            //$(this).keyup(function() {
+            var total_allotted = calculateTotal(class_name);
+            console.log(total_allotted);
+            //});
+            $("#total_allotted").val(total_allotted);
+        });
     }
 
-    //Add row for correct guess
-    function correct_guess(current_word, guess) {
-         var next_row = '<div class="row true">' 
-	        + '<div class="col-md-2 current_word"><span class="item">' + current_word + '</span></div>'
-	        + '<div class="col-md-2 guess"><span class="item">' + guess + '</span></div>'
-	        + '<div class="col-md-2 answer"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>' 
-	        + '</div>';
-        return next_row;
-    }
+    //Switch between span and textbox
+    function editable() {
+        $(".editable").click(function() {
+            //Reference the Label.
+            var label = $(this);
 
-    //Get random word from dictionary
-    function get_random(new_dict) {
-        var keys = Object.keys(new_dict);
-        current = keys[Math.floor(Math.random() * keys.length)];
-        $('#current-word').html(current);
-        return current;
-    }
+            //Add a TextBox next to the Label.
+            label.after("<input type = text + style = 'display:none' />");
 
-//Autocomplete
-function autocomplete(new_dict) {
-    $('#guess').autocomplete({
-        source: function(request, response) { //return autocomplete matching only the start
-            var matches = $.map(to_words, function(item) {
-                if (item.indexOf(request.term) == 0) {
-                    return item;
-                } else {
-                    return null;
-                }
+            //Reference the TextBox.
+            var textbox = $(this).next();
+
+            //Set the name attribute of the TextBox.
+            textbox[0].name = this.id.replace("lbl", "txt");
+
+            //Assign the value of Label to TextBox.
+            textbox.val(label.html());
+
+            //When Label is clicked, hide Label and show TextBox.
+            label.click(function() {
+                $(this).hide();
+                $(this).next().show();
             });
-            response(matches);
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            is_autocomplete = true; //set to true to indicate that an autocomplete selection was made
-            if (ui.item) {
-                $(event.target).val(ui.item.value);
-                $(".ui-menu-item").hide();
-            }
-            $('#submit').click();
-            this.value = "";
-            return false;
-        }
-    }).keyup(function(e) {
-        if (e.which === 13) {
-            $(".ui-menu-item").hide();
-        }
-    });
-}
+
+            //When focus is lost from TextBox, hide TextBox and show Label.
+            textbox.focusout(function() {
+                $(this).hide();
+                $(this).prev().html($(this).val());
+                $(this).prev().show();
+            });
+        });
+    }
+
 
 });
-
-
-
