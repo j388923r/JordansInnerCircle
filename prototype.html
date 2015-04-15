@@ -165,13 +165,27 @@
                     categories.hidden = !categories.hidden;
                     buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 });
-                $(':checkbox').change(function() {
-                    if(this.checked){
+                $('input').change(function() {
+                    console.log("hi")
+                    if(this.type = "checkbox"){
+                        if(this.checked){
                         console.log(this.name);
+                        }
+                        else{
+                            console.log("remove filter")
+                        }
                     }
-                    else{
-                        console.log("remove filter")
-                    }
+                    
+                });
+
+                $('#btnCheckAll').click(function() {
+                    console.log("click all");
+                    checkAll();
+                });
+
+                $('#btnUncheckAll').click(function() {
+                    uncheckAll();
+                    console.log("click none");
                 });
             });
             //function that takes in categories and tags list and contructs the filter 
@@ -193,6 +207,25 @@
                     $("#tags").append(newString);
                 };
             }
+
+            var checkAll = function() {
+                var boxes = document.getElementsByTagName('input');
+                for(var i = 0; i< boxes.length; i++){
+                    if(boxes[i].type == 'checkbox') {
+                        boxes[i].checked = true;
+                    }
+                }
+            }
+
+            var uncheckAll = function() {
+                var boxes = document.getElementsByTagName('input');
+                for(var i = 0; i< boxes.length; i++){
+                    if(boxes[i].type == 'checkbox') {
+                        boxes[i].checked = false;
+                    }
+                }
+            }
+
         </script>
     </head>
     <body>
