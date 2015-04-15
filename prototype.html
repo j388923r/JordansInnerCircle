@@ -127,8 +127,11 @@
         </style>
         
         <script>
+
+            var ideasInGroupMapping = {'cost':[],'category':[],'tags':[]};
             var isAllChecked = false;
             var checked_arr = [];
+
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
@@ -159,6 +162,10 @@
                 $('#btnUncheckAll').click(function() {
                     uncheckAll();
                     isAllChecked = false;
+                });
+
+                $('#addIdeaButton').click(function(){
+                    console.log(ideasInGroupMapping);
                 });
 
             });
