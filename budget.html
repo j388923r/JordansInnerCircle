@@ -15,6 +15,18 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
          <script type="text/javascript" src="budget.js"></script>
+        
+        <style>
+        #trash {
+            display: none; /* hide button */
+        }
+
+        #trash:hover {
+            display: block; /* On :hover of div show button */
+        }
+
+
+        </style>
 
 </head>
 <body>
@@ -23,37 +35,63 @@
             <div class="col-md-12">My Wedding Budget</div>
         </div>
         <div class="row" id="label" style="font-weight:bold">
+            <div class="col-md-1"></div>
             <div class="col-md-4">Category</div>
             <div class="col-md-2">Amount Spent</div>
             <div class="col-md-2">Amount Allotted</div>
         </div>
         <div class="row" style="color:steelblue">
-            <div class="editable category col-md-4">My wedding dress</div>
-            <div class="editable spent col-md-2">1000</div>
-            <div class="editable allotted col-md-2">2000</div>
+            <div class="col-md-1"><span class="glyphicon glyphicon-heart pull-right" aria-hidden="true"></span></div>
+            <div class="editable category col-md-4">My invitations</div>
+            <div class="editable spent col-md-2">200</div>
+            <div class="editable allotted col-md-2">300</div>
+            <div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn">
+                <i class="glyphicon glyphicon-trash"></i></button>
+            </div>
         </div>
         <div class="items" style="color:steelblue">
         </div>
         <div class="row" id="add_new">
+            <div class="col-md-1"></div>
             <div class="col-md-4 category">
                 <input class="new_entry" id="new_category" type="text" name="category" style="width:150px" placeholder = "Add a new category!"></input>
             </div>
             <div class="col-md-2 spent">
-                <input class="new_entry" id="new_spent" type="number" min="0" name="spent" style="width:150px" placeholder = "$0"></input>
+                <input class="new_entry" id="new_spent" type="number" min="0" name="spent" style="width:150px" placeholder = "0"></input>
             </div>
             <div class="col-md-2 allotted">
-                <input class="new_entry" id="new_allotted" type="number" min="0" name="allotted" style="width:150px" placeholder= "$1000"></input>
+                <input class="new_entry" id="new_allotted" type="number" min="0" name="allotted" style="width:150px" placeholder= "1000"></input>
             </div>
         </div>
-        <div class="row" id="total" style="font-weight:bold">
-            <div class="col-md-4">Total</div>
+        <div class="row" id="totals" style="font-weight:bold">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">Totals</div>
             <div class="col-md-2" id="total_spent"></div>
             <div class="col-md-2" id="total_allotted"></div>
         </div>
-
+        <div class="row" id="remaining" class="remaining" style="font-weight:bold">
+            <div class="col-md-1"><span class="glyphicon glyphicon-check pull-right" aria-hidden="true"></span></div>
+            <div class="col-md-4">Money Remaining to Spend</div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2" id="remaining_budget"></div>
+        </div>
+        <div class="row" id="budget" style="font-weight:bold">
+            <div class="col-md-1"><span class="glyphicon glyphicon-check pull-right" aria-hidden="true"></span></div>
+            <div class="col-md-4">My Total Budget</div>
+            <div class="col-md-2" id="total_spent"></div>
+            <div class="col-md-2"><span class="total_budget" id="total_budget"></span></div>
+        </div>
     </div>
 
-
+    <div id="confirm" class="modal hide fade">
+        <div class="modal-body">
+            Are you sure you want to delete?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+        </div>
+    </div>
 
 </body>
 </html>
