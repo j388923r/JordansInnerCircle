@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
         <link rel="stylesheet" href="mainLayout.css">
+
+        <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -189,7 +191,7 @@
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
             var tagsList = ["vegas", "prince"];
-            var titleList = []
+            var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
 
             var costFilters = [];
             var categoryFilters = [];
@@ -202,6 +204,7 @@
 
             var isAllChecked = false;
             var checked_arr = [];
+            
 
             $(document).ready(function(){
                 var draggedSticky = undefined;
@@ -214,11 +217,15 @@
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
 
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,costList);
+
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
                 third.addEventListener("change", checkboxChange);
                 fourth.addEventListener("change", checkboxChange);
-                buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
+
+
                 buildFilter(categorieslist, tagsList); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
@@ -247,6 +254,14 @@
                         console.log(inputValue);
                     }
                 })
+
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
+                $("#search").autocomplete( "option", "autoFocus", false );
+                $("#search").autocomplete( "option", "minLength", 1 );
+                $("#search").autocomplete( "option", "delay", 0);
 
                 $('#addIdeaButton').click(function(){
                     ideaPopupBuilder();
@@ -280,6 +295,8 @@
             //do we want to do cost filtering dynamically or have set intervals
 
             var buildFilter = function(cat_arr, tag_arr) {
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,costList);
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -353,7 +370,6 @@
 
             var checkboxChange = function() {
                 if(this.checked){
-                    console.log(this.name);
                     checked_arr.push(this.id);
                     if(this.name == "cat"){
                         categoryFilters.push(this.id);
@@ -409,6 +425,8 @@
                     listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
+                    console.log("tags here")
+                    console.log(tagFilters);
                     listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
@@ -441,8 +459,13 @@
             }
 
             var listUnion = function(list1, list2) {
-                var retList = list1;
+                var retList = [];
+                var list1 = list1;
+                for(var i = 0; i< list1.length; i++){
+                    retList.push(list1[i]);
+                }
                 var list2 = list2;
+                console.log(list2);
                 for(var i = 0; i < list2.length; i++){
                     var inRetList = false;
                     for(var j = 0; j < retList.length; j++){
@@ -451,7 +474,7 @@
                         }
                     }
                     if(!inRetList){
-                        inRetList.push(list2[i]);
+                        retList.push(list2[i]);
                     }
                 }
                 return retList;
