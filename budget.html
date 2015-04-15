@@ -19,36 +19,36 @@
 </head>
 <body>
     <div class="center">
-        <div class="row" id="header">
+        <div class="row" id="header" style="font-size: 20px">
             <div class="col-md-12">My Wedding Budget</div>
         </div>
-        <div class="row" id="label">
-            <div class="col-md-6">Category</div>
-            <div class="col-md-3">Amount Spent</div>
-            <div class="col-md-3">Amount Allotted</div>
+        <div class="row" id="label" style="font-weight:bold">
+            <div class="col-md-4">Category</div>
+            <div class="col-md-2">Amount Spent</div>
+            <div class="col-md-2">Amount Allotted</div>
         </div>
-        <div class="row">
-            <div class="editable category col-md-6">My wedding dress</div>
-            <div class="editable spent col-md-3">$1000</div>
-            <div class="editable allotted col-md-3">$2000</div>
+        <div class="row" style="color:steelblue">
+            <div class="editable category col-md-4">My wedding dress</div>
+            <div class="editable spent col-md-2">1000</div>
+            <div class="editable allotted col-md-2">2000</div>
         </div>
-        <div class="items">
+        <div class="items" style="color:steelblue">
         </div>
         <div class="row" id="add_new">
-            <div class="col-md-6 category">
+            <div class="col-md-4 category">
                 <input class="new_entry" id="new_category" type="text" name="category" style="width:150px" placeholder = "Add a new category!"></input>
             </div>
-            <div class="col-md-3 spent">
-                <input class="new_entry" id="new_spent" type="number" name="spent" style="width:150px" placeholder = "$0"></input>
+            <div class="col-md-2 spent">
+                <input class="new_entry" id="new_spent" type="number" min="0" name="spent" style="width:150px" placeholder = "$0"></input>
             </div>
-            <div class="col-md-3 allotted">
-                <input class="new_entry" id="new_allotted" type="number" name="allotted" style="width:150px" placeholder= "$1000"></input>
+            <div class="col-md-2 allotted">
+                <input class="new_entry" id="new_allotted" type="number" min="0" name="allotted" style="width:150px" placeholder= "$1000"></input>
             </div>
         </div>
-        <div class="row" id="total">
-            <div class="col-md-6">Totals</div>
-            <div class="col-md-3" id="total_spent"></div>
-            <div class="col-md-3" id="total_allotted"></div>
+        <div class="row" id="total" style="font-weight:bold">
+            <div class="col-md-4">Total</div>
+            <div class="col-md-2" id="total_spent"></div>
+            <div class="col-md-2" id="total_allotted"></div>
         </div>
 
     </div>
