@@ -11,6 +11,10 @@
 
         <link rel="stylesheet" href="mainLayout.css">
         
+        <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+        
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         
@@ -18,7 +22,7 @@
         
             body {
                 padding-left:2%;
-                background-color:salmon;
+                background-color:black;
             }
             
             h1 {
@@ -37,7 +41,13 @@
                 padding: 0px;
                 margin: 0px;
             }
+            h1 a {
+                color: rgb(230, 194, 0);
+            }
             
+            a {
+                color:black;
+            }
             a:hover {
                 color:black;
                 text-decoration: none;
@@ -62,7 +72,7 @@
                 border-radius: 10px;
                 width: 96%;
                 height: 90%;
-                background-color: rgba(167, 167, 167, 0.99);
+                background-color: rgba(230, 194, 0, 0.99);
                 display: inline-block;
             }
             
@@ -85,6 +95,14 @@
                 height: 93%;
                 background-color: rgba(255, 255, 255, 1.0);
                 z-index: 10;
+            }
+            
+            .stickynote {
+                position: absolute;
+                height: 100px;
+                width: 100px;
+                background-color: rgb(230, 194, 0);
+                border: solid 2px black;
             }
             
             #decisionHeader, #ideaHeader {
@@ -171,6 +189,7 @@
             var checked_arr = [];
 
             $(document).ready(function(){
+                var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
                 var first =  document.getElementById('lessThan500');
@@ -182,6 +201,7 @@
                 third.addEventListener("change", checkboxChange);
                 fourth.addEventListener("change", checkboxChange);
                 buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
+                
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
@@ -205,7 +225,30 @@
                 $('#addIdeaButton').click(function(){
                     ideaPopupBuilder();
                 });
-
+                
+                $('.stickynote').mousedown(function(event){
+                    //console.log(event);
+                    draggedSticky = event.currentTarget;
+                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
+                });
+                
+                $('.stickynote').mouseup(function(event) {
+                    //console.log(event);
+                    down = undefined;
+                });
+                
+                $('.stickynote').mousemove(function(event){
+                    //console.log(event.clientX, event.clientY);
+                    if(draggedSticky && down) {
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                    }
+                });
+                
+                $('.stickynote').mouseleave(function(event) {
+                    //console.log(event);
+                    down = undefined;
+                });
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -348,7 +391,7 @@
         </div>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
-            <div id="filterPopover">
+            <div id="filterPopover" hidden>
                 <input type="text" id = "search" placeholder="Search term"/><br>
                 <h4>Categories:</h4>
                 <ul id="categories">
@@ -380,13 +423,21 @@
                 <div id="ideaHeader">
                     <a href="#" onclick="show('ideas')">Ideas</a>
                 </div>
-                <div>
-                    
+                <div style="padding-top:25px">
+                    <button id="addIdeaButton" class="btn">Add New Idea</button>
                 </div>
-                <button id="addIdeaButton" class="btn">Add New Idea</button>
+                <div class="stickynote">
+                    <h4>Venue</h4>
+                    <h3>Beach</h3>
+                </div>
+                <div class="stickynote">
+                    <h4>Venue</h4>
+                    <h3>Church</h3>
+                </div>
                 <div id="ideaPopup">
                     <form class="form" action="#" id="newIdeaForm">
-                        <input type="text" 
+                    </form>
+                </div>
             </div>
             <div id='decisionBoard'>
                 <div id="decisionheader">
