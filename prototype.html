@@ -118,6 +118,12 @@
                 list-style-type: none;
                 padding-left: 1em
             }
+
+            #addIdeaButton {
+                position: relative;
+                left: 39%;
+                top: 5%;
+            }
         </style>
         
         <script>
@@ -139,7 +145,6 @@
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
                 });
-
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
@@ -155,6 +160,7 @@
                     uncheckAll();
                     isAllChecked = false;
                 });
+
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -293,6 +299,7 @@
                 <div id="ideaHeader">
                     Ideas
                 </div>
+                <button id="addIdeaButton" class="btn">Add New Idea</button>
             </div>
             <div id='decisionBoard'>
                 <div id="decisionheader">
