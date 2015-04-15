@@ -16,6 +16,7 @@ var Idea = function(title, category, cost){
 	this.tags = [];
 	this.hidden = false;
 	this.deleted = false;
+	this.decided= false;
 
 	// Public Functions
 
@@ -56,6 +57,13 @@ var Idea = function(title, category, cost){
 
 	this.updateCategory = function(category){
 		this.category = category;
+	}
+
+	/*
+	* Set the idea as Decided when the user drags the idea from the Ideas section to the Decided section.
+	*/
+	this.setDecided = function(){
+		this.decided = true;
 	}
 
 	/*
@@ -103,6 +111,10 @@ var Idea = function(title, category, cost){
 
 	this.isHidden = function(){
 		return this.hidden;
+	}
+
+	this.isDecided = function(){
+		return this.decided;
 	}
 
 	/*
