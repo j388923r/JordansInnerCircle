@@ -103,6 +103,11 @@
                 width: 100px;
                 background-color: rgb(230, 194, 0);
                 border: solid 2px black;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select:none;
+                user-select:none;
+                -o-user-select:none;
             }
             
             #decisionHeader, #ideaHeader {
@@ -127,9 +132,11 @@
             
             #filterPopover {
                 position: absolute;
-                background-color: lightblue;
+                background-color: rgb(230, 194, 0);
+                border: solid 2px black;
                 border-radius: 5px;
                 padding: 5px;
+                z-index: 9;
             }
             
             #categories {
@@ -264,7 +271,7 @@
                     }
                 });
                 
-                $('.stickynote').mouseleave(function(event) {
+                $('#ideaBoard').mouseleave(function(event) {
                     //console.log(event);
                     down = undefined;
                 });
@@ -522,8 +529,11 @@
                 </div>
                 <div style="padding-top:25px">
                     <button id="addIdeaButton" class="btn">Add New Idea</button>
+                    <div>
+                        
+                    </div>
                 </div>
-                <div class="stickynote">
+                <div class="stickynote" unselectable='on'>
                     <h4>Venue</h4>
                     <h3>Beach</h3>
                 </div>
