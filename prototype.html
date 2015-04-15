@@ -128,7 +128,14 @@
         
         <script>
 
-            var ideasInGroupMapping = {'cost':[],'category':[],'tags':[]};
+            var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
+            var categoryMapping = {};
+            var tagsMapping = {};
+            var categorieslist = [];
+            var tagsList = [];
+
+            var ideasInIdeas = [];
+            var ideasInDecisions = [];
             var isAllChecked = false;
             var checked_arr = [];
 
@@ -165,7 +172,7 @@
                 });
 
                 $('#addIdeaButton').click(function(){
-                    console.log(ideasInGroupMapping);
+                    ideaPopupBuilder();
                 });
 
             });
@@ -290,6 +297,11 @@
                 return retList;
             }
 
+            // Adding an Idea pop-up
+            var ideaPopupBuilder = function(){
+                // Add a form
+
+            }
         </script>
     </head>
     <body>
@@ -306,7 +318,7 @@
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
             <div id="filterPopover">
-                <input type="text" placeholder="Search term"/><br>
+                <input type="text" id = "search" placeholder="Search term"/><br>
                 <h4>Categories:</h4>
                 <ul id="categories">
                     <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
