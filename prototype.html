@@ -9,6 +9,8 @@
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
+        <link rel="stylesheet" href="mainLayout.css">
+        
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         
@@ -34,6 +36,11 @@
                 display: inline;
                 padding: 0px;
                 margin: 0px;
+            }
+            
+            ul.header li a {
+                color:black;
+                text-decoration: none;
             }
             
             h1 a:hover {
@@ -84,10 +91,11 @@
                 position: absolute;
                 margin-top: -20px;
                 height: 40px;
-                width: 10%;
+                width: 12%;
                 border-radius: 5px;
                 background-color: #EEEEEE;
                 text-align: center;
+                font-size: 2em;
                 z-index: 11;
             }
             
@@ -118,6 +126,29 @@
                 list-style-type: none;
                 padding-left: 1em
             }
+                
+            .modal {
+                position: fixed;
+                opacity: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background: rgba(0, 0, 0, .7);
+                z-index: 99999;
+            }
+                
+            .modal:target {
+                opacity: 1;
+            }
+                
+            #budgetModal > div {
+                width: 400px;
+                position: relative;
+                margin: 10% auto;
+                padding: 5px 20px 13px 20px;
+            }
+            
         </style>
         
         <script>
@@ -168,11 +199,11 @@
         <div class="navigationbar">
             <h1><a ref="/">Simple as Love</a></h1>
             <ul class="header">
-                <li>Main Page</li>
-                <li>Ideas</li>
-                <li>Decisions</li>
-                <li>Budget</li>
-                <li>Deleted <br> Archive</li>
+                <li><a href="/">Main Page</a></li>
+                <li><a href="#">Ideas</a></li>
+                <li><a href="#">Decisions</a></li>
+                <li><a href="#budgetModal">Budget</a></li>
+                <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
         </div>
         <div>
@@ -209,11 +240,23 @@
                 <div id="ideaHeader">
                     Ideas
                 </div>
+                <div>
+                        
+                </div>
             </div>
             <div id='decisionBoard'>
                 <div id="decisionheader">
                     Decisions
                 </div>
+            </div>
+        </div>
+        <div id="budgetModal" class="modal">
+            <div>	<a href="#close" title="Close" class="close">X</a>
+
+        	<h2>Modal Box</h2>
+
+            <p>This is a sample modal box that can be created using the powers of CSS3.</p>
+            <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
             </div>
         </div>
     </body>
