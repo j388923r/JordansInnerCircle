@@ -121,19 +121,23 @@
         </style>
         
         <script>
+            var isAllChecked = false;
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
+                
                 buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
                 });
+
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 });
+
                 $('input').change(function() {
                     console.log("hi")
                     if(this.type = "checkbox"){
@@ -148,13 +152,13 @@
                 });
 
                 $('#btnCheckAll').click(function() {
-                    console.log("click all");
+                    isAllChecked = true;
                     checkAll();
                 });
 
                 $('#btnUncheckAll').click(function() {
                     uncheckAll();
-                    console.log("click none");
+                    isAllChecked = false;
                 });
             });
             //function that takes in categories and tags list and contructs the filter 
@@ -167,13 +171,35 @@
                 $("#tags").html("");
                 for (var i = 0; i < cat_arr.length; i++) {
                     var cat = cat_arr[i];
-                    var newString = "<li><input type=\"checkbox\" name="+ cat+" />  " + cat+ "</li>"; //might need to change to allow addition of event listeners
-                    $("#categories").append(newString);
+                    var newCat = document.createElement("input");
+                    newCat.type = "checkbox";
+                    newCat.name = cat;
+                    newCat.id = cat;
+                    
+                    newCat.checked = isAllChecked;
+
+                    var newList = document.createElement("li");
+
+                    $(newList).append(newCat);
+                    $(newList).append("  " + cat);
+                    // var newString = "<li><input type=\"checkbox\" name="+ cat+" />  " + cat+ "</li>"; //might need to change to allow addition of event listeners
+                    $("#categories").append(newList);
                 };
                 for (var i = 0; i < tag_arr.length; i++) {
                     var tag = tag_arr[i];
-                    var newString = "<li><input type=\"checkbox\" name="+ tag+" />  " + tag+ "</li>";
-                    $("#tags").append(newString);
+                    var newTag = document.createElement("input");
+                    newTag.type = "checkbox";
+                    newTag.name = tag;
+                    newTag.id = tag;
+                    
+                    newTag.checked = isAllChecked;
+
+                    var newList = document.createElement("li");
+
+                    $(newList).append(newTag);
+                    $(newList).append("  " + tag);
+                    // var newString = "<li><input type=\"checkbox\" name="+ tag+" />  " + tag+ "</li>";
+                    $("#tags").append(newList);
                 };
             }
 
