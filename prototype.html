@@ -179,29 +179,35 @@
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
             var categoryMapping = {};
             var tagsMapping = {};
-            var categorieslist = [];
-            var tagsList = [];
+
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
+            var tagsList = ["cool", "vegas", "prince"];
+
             var allNonDeletedIdeas = [];
             var deletedIdeas = [];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
+            
             var isAllChecked = false;
             var checked_arr = [];
 
             $(document).ready(function(){
                 var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
+
+
                 var decisionBoard = document.getElementById('decisionBoard');
                 var first =  document.getElementById('lessThan500');
                 var second = document.getElementById('500To2000');
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
+
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
                 third.addEventListener("change", checkboxChange);
                 fourth.addEventListener("change", checkboxChange);
                 buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
-                
+                buildFilter(categorieslist, tagsList); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
@@ -209,7 +215,7 @@
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
-                    buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
+                    buildFilter(categorieslist, tagsList); //change to names
                 });
 
                 $('#btnCheckAll').click(function() {
@@ -221,6 +227,14 @@
                     uncheckAll();
                     isAllChecked = false;
                 });
+
+                $('#search').keyup(function(e) {
+                    if (e.keyCode == 13){
+                        var input = $("#search");
+                        var inputValue = $(input).val();
+                        console.log(inputValue);
+                    }
+                })
 
                 $('#addIdeaButton').click(function(){
                     ideaPopupBuilder();
@@ -339,6 +353,12 @@
                     }
                 }
             }
+
+            var searching = function(term) {
+
+
+            }
+
             var listUnion = function(list1, list2) {
                 var retList = list1;
                 for(var i = 0; i < list2.length; i++){
