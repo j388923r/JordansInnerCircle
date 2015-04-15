@@ -165,11 +165,15 @@
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
             var tagsList = ["cool", "vegas", "prince"];
 
+            var costFilters = [];
+            var categoryFilters = [];
+            var tagFilters = [];
+
             var allNonDeletedIdeas = [];
             var deletedIdeas = [];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
-            
+
             var isAllChecked = false;
             var checked_arr = [];
 
@@ -235,7 +239,7 @@
                     var cat = cat_arr[i];
                     var newCat = document.createElement("input");
                     newCat.type = "checkbox";
-                    newCat.name = cat;
+                    newCat.name = "cat";
                     newCat.id = cat;
                     newCat.onchange = checkboxChange;
                     
@@ -258,7 +262,7 @@
                     var tag = tag_arr[i];
                     var newTag = document.createElement("input");
                     newTag.type = "checkbox";
-                    newTag.name = tag;
+                    newTag.name = "tag";
                     newTag.id = tag;
                     
                     newTag.checked = isAllChecked;
@@ -301,16 +305,85 @@
             var checkboxChange = function() {
                 if(this.checked){
                     console.log(this.name);
-                    checked_arr.push(this.name);
+                    checked_arr.push(this.id);
+                    if(this.name == "cat"){
+                        categoryFilters.push(this.id);
+                    }
+                    else if(this.name = "cost"){
+                        costFilters.push(this.id);
+                    }
+                    else {
+                        tagFilters.push(this.id);
+                    }
+
+
                 }
                 else{
                     console.log("remove filter")
                     for(var i = 0; i < checked_arr.length; i++){
-                        if(checked_arr[i]== this.name){
+                        if(checked_arr[i]== this.id){
                             checked_arr.splice(i,1);
                         }
                     }
+                    if(this.name == "cat"){
+                        for(var i = 0; i < categoryFilters.length; i++){
+                            if(categoryFilters[i]== this.id){
+                                categoryFilters.splice(i,1);
+                            }
+                        }
+                    }
+                    else if(this.name = "cost"){
+                        for(var i = 0; i < costFilters.length; i++){
+                            if(costFilters[i]== this.id){
+                                costFilters.splice(i,1);
+                            }
+                        }
+                    }
+                    else {
+                        for(var i = 0; i < tagFilters.length; i++){
+                            if(tagFilters[i]== this.id){
+                                tagFilters.splice(i,1);
+                            }
+                        }
+                    }
+
                 }
+                updateFilter();
+            }
+
+            var updateFilter = function() {
+                var costset = [];
+                var catset = [];
+                var tagset = [];
+                var ideasToShow = [];
+                for(var i = 0; i< costFilters.length; i++){
+                    listUnion(costset,costMapping[costFilters[i]]);
+                }
+                for(var i = 0; i< tagFilters.length; i++){
+                    listUnion(tagset, tagsMapping[tagFilters[i]]);
+                }
+                for(var i = 0; i< categoryFilters.length; i++){
+                    listUnion(catset, categoryMapping[categoryFilters[i]]);
+                }
+                if(costFilters.length == 0){
+                    costset = allNonDeletedIdeas;
+                }
+                if(tagFilters.length == 0){
+                    tagset = allNonDeletedIdeas;
+                }
+                if(categoryFilters.length == 0 ) {
+                    catset = allNonDeletedIdeas;
+                }
+                var temp_arr = listInter(catset, costset);
+                ideasToShow = listInter(temp_arr, tagset);
+                for(var i = 0; i < allNonDeletedIdeas.length; i++){
+                    //not sure how to hide an idea but trying to do that here
+                    allNonDeletedIdeas[i].hide();
+                }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    ideasToShow[i].show();
+                }
+
             }
 
             var searching = function(term) {
@@ -320,6 +393,7 @@
 
             var listUnion = function(list1, list2) {
                 var retList = list1;
+                var list2 = list2;
                 for(var i = 0; i < list2.length; i++){
                     var inRetList = false;
                     for(var j = 0; j < retList.length; j++){
@@ -335,7 +409,9 @@
             }
 
             var listInter = function(list1, list2) {
-                var retList = []
+                var retList = [];
+                var list1 = list1;
+                var list2 = list2;
                 for(var i = 0; i < list1.length; i++){
                     var matched = false;
                     for(var j = 0; j < list2.length; j++){
@@ -382,10 +458,10 @@
                 <h4>Cost:</h4>
                 <!--do we want this to dynamically change -->
                 <ul id="cost">
-                    <li><input type="checkbox" name="lessThan500" id="lessThan500" />  less than $500 </li>
-                    <li><input type="checkbox" name="500To2000" id="500To2000" />  $500 to $2000 </li>
-                    <li><input type="checkbox" name="2000To5000" id="2000To5000" />  $2001 to $5000 </li>
-                    <li><input type="checkbox" name="moreThan5000" id="moreThan5000" />  greater than $5000 </li>
+                    <li><input type="checkbox" name="cost" id="lessThan500" />  less than $500 </li>
+                    <li><input type="checkbox" name="cost" id="500To2000" />  $500 to $2000 </li>
+                    <li><input type="checkbox" name="cost" id="2000To5000" />  $2001 to $5000 </li>
+                    <li><input type="checkbox" name="cost" id="moreThan5000" />  greater than $5000 </li>
                 </ul>
                 <h4>Tags:</h4>
                 <ul id="tags">
