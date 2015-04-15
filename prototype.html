@@ -133,7 +133,8 @@
             var tagsMapping = {};
             var categorieslist = [];
             var tagsList = [];
-
+            var allNonDeletedIdeas = [];
+            var deletedIdeas = [];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
             var isAllChecked = false;
@@ -299,7 +300,7 @@
 
             // Adding an Idea pop-up
             var ideaPopupBuilder = function(){
-                // Add a form
+                
 
             }
         </script>
@@ -350,6 +351,9 @@
                     Ideas
                 </div>
                 <button id="addIdeaButton" class="btn">Add New Idea</button>
+                <div id="ideaPopup">
+                    <form class="form" action="#" id="newIdeaForm">
+                        <input type="text" 
             </div>
             <div id='decisionBoard'>
                 <div id="decisionheader">
