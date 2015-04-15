@@ -9,14 +9,26 @@
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
+        <link rel="stylesheet" href="mainLayout.css">
+
+        <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+        
+        <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+        
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <!-- For drag and drop uploader -->
+        <script type="text/javascript" src="dropzone.js"></script>
+        <link rel="stylesheet" type="text/css" href="dropzone.css" />
         
         <style>
-        
+
             body {
                 padding-left:2%;
-                background-color:salmon;
+                background-color:black;
             }
             
             h1 {
@@ -34,6 +46,17 @@
                 display: inline;
                 padding: 0px;
                 margin: 0px;
+            }
+            h1 a {
+                color: rgb(230, 194, 0);
+            }
+            
+            a {
+                color:black;
+            }
+            a:hover {
+                color:black;
+                text-decoration: none;
             }
             
             h1 a:hover {
@@ -55,7 +78,7 @@
                 border-radius: 10px;
                 width: 96%;
                 height: 90%;
-                background-color: rgba(167, 167, 167, 0.99);
+                background-color: rgba(230, 194, 0, 0.99);
                 display: inline-block;
             }
             
@@ -80,14 +103,28 @@
                 z-index: 10;
             }
             
+            .stickynote {
+                position: absolute;
+                height: 100px;
+                width: 100px;
+                background-color: rgb(230, 194, 0);
+                border: solid 2px black;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select:none;
+                user-select:none;
+                -o-user-select:none;
+            }
+            
             #decisionHeader, #ideaHeader {
                 position: absolute;
                 margin-top: -20px;
                 height: 40px;
-                width: 10%;
+                width: 12%;
                 border-radius: 5px;
                 background-color: #EEEEEE;
                 text-align: center;
+                font-size: 2em;
                 z-index: 11;
             }
             
@@ -101,9 +138,11 @@
             
             #filterPopover {
                 position: absolute;
-                background-color: lightblue;
+                background-color: rgb(230, 194, 0);
+                border: solid 2px black;
                 border-radius: 5px;
                 padding: 5px;
+                z-index: 9;
             }
             
             #categories {
@@ -118,39 +157,91 @@
                 list-style-type: none;
                 padding-left: 1em
             }
+                
+            /*.modal {
+                position: fixed;
+                opacity: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background: rgba(0, 0, 0, .7);
+                z-index: 99999;
+            }
+                
+            .modal:target {
+                opacity: 1;
+            }*/
+                
+            #budgetModal > div {
+                width: 400px;
+                position: relative;
+                margin: 10% auto;
+                padding: 5px 20px 13px 20px;
+            }
 
             #addIdeaButton {
                 position: relative;
                 left: 39%;
                 top: 5%;
+                width: 22%;
+            }
+
+            #ideaPopup {
+                position: relative;
+                top: 30%;
+                left: 60%;
+                background: white;
+                border: 1px solid black;
+                padding: 10px;
+
             }
         </style>
         
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
-            var categoryMapping = {};
-            var tagsMapping = {};
-            var categorieslist = [];
-            var tagsList = [];
+            var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[]};
+            var tagsMapping = {'vegas':[], 'prince':[]};
 
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
+            var tagsList = ["vegas", "prince"];
+            var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
+
+            var costFilters = [];
+            var categoryFilters = [];
+            var tagFilters = [];
+
+            var allNonDeletedIdeas = [];
+            var deletedIdeas = [];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
+
             var isAllChecked = false;
             var checked_arr = [];
+            
 
             $(document).ready(function(){
+                var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
+
+
                 var decisionBoard = document.getElementById('decisionBoard');
                 var first =  document.getElementById('lessThan500');
                 var second = document.getElementById('500To2000');
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
+
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,costList);
+
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
                 third.addEventListener("change", checkboxChange);
                 fourth.addEventListener("change", checkboxChange);
-                buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
+
+
+                buildFilter(categorieslist, tagsList); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
@@ -158,7 +249,7 @@
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
-                    buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
+                    buildFilter(categorieslist, tagsList); //change to names
                 });
 
                 $('#btnCheckAll').click(function() {
@@ -171,15 +262,69 @@
                     isAllChecked = false;
                 });
 
+                $('#search').keyup(function(e) {
+                    if (e.keyCode == 13){
+                        var input = $("#search");
+                        var inputValue = $(input).val();
+                        console.log(inputValue);
+                    }
+                });
+
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
+                $("#search").autocomplete( "option", "autoFocus", false );
+                $("#search").autocomplete( "option", "minLength", 1 );
+                $("#search").autocomplete( "option", "delay", 0);
+
                 $('#addIdeaButton').click(function(){
                     ideaPopupBuilder();
                 });
 
+                
+                $('.stickynote').mousedown(function(event){
+                    //console.log(event);
+                    draggedSticky = event.currentTarget;
+                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
+                });
+                
+                $('.stickynote').mouseup(function(event) {
+                    //console.log(event);
+                    down = undefined;
+                });
+                
+                $('.stickynote').mousemove(function(event){
+                    //console.log(event.clientX, event.clientY);
+                    if(draggedSticky && down) {
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                    }
+                });
+                
+                $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
+                    down = undefined;
+                });
+
+                $('#addIdeaButton').click(function(){
+                    var popupIdea = document.getElementById("ideaPopup");
+                    popupIdea.style.display = 'block';
+                });
+
+                $('#cancelIdeaButton').click(function(){
+                    $("#ideaPopup").attr("style","display: none");
+                })
+                
+                $('#boardBackground').mousedown(function(event) {
+                    console.log(event);
+                });
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
 
             var buildFilter = function(cat_arr, tag_arr) {
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,costList);
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -188,7 +333,7 @@
                     var cat = cat_arr[i];
                     var newCat = document.createElement("input");
                     newCat.type = "checkbox";
-                    newCat.name = cat;
+                    newCat.name = "cat";
                     newCat.id = cat;
                     newCat.onchange = checkboxChange;
                     
@@ -211,7 +356,7 @@
                     var tag = tag_arr[i];
                     var newTag = document.createElement("input");
                     newTag.type = "checkbox";
-                    newTag.name = tag;
+                    newTag.name = "tag";
                     newTag.id = tag;
                     
                     newTag.checked = isAllChecked;
@@ -253,20 +398,102 @@
 
             var checkboxChange = function() {
                 if(this.checked){
-                    console.log(this.name);
-                    checked_arr.push(this.name);
+                    checked_arr.push(this.id);
+                    if(this.name == "cat"){
+                        categoryFilters.push(this.id);
+                    }
+                    else if(this.name = "cost"){
+                        costFilters.push(this.id);
+                    }
+                    else {
+                        tagFilters.push(this.id);
+                    }
+
+
                 }
                 else{
                     console.log("remove filter")
                     for(var i = 0; i < checked_arr.length; i++){
-                        if(checked_arr[i]== this.name){
+                        if(checked_arr[i]== this.id){
                             checked_arr.splice(i,1);
                         }
                     }
+                    if(this.name == "cat"){
+                        for(var i = 0; i < categoryFilters.length; i++){
+                            if(categoryFilters[i]== this.id){
+                                categoryFilters.splice(i,1);
+                            }
+                        }
+                    }
+                    else if(this.name = "cost"){
+                        for(var i = 0; i < costFilters.length; i++){
+                            if(costFilters[i]== this.id){
+                                costFilters.splice(i,1);
+                            }
+                        }
+                    }
+                    else {
+                        for(var i = 0; i < tagFilters.length; i++){
+                            if(tagFilters[i]== this.id){
+                                tagFilters.splice(i,1);
+                            }
+                        }
+                    }
+
                 }
+                updateFilter();
             }
+
+            var updateFilter = function() {
+                var costset = [];
+                var catset = [];
+                var tagset = [];
+                var ideasToShow = [];
+                for(var i = 0; i< costFilters.length; i++){
+                    listUnion(costset,costMapping[costFilters[i]]);
+                }
+                for(var i = 0; i< tagFilters.length; i++){
+                    console.log("tags here")
+                    console.log(tagFilters);
+                    listUnion(tagset, tagsMapping[tagFilters[i]]);
+                }
+                for(var i = 0; i< categoryFilters.length; i++){
+                    listUnion(catset, categoryMapping[categoryFilters[i]]);
+                }
+                if(costFilters.length == 0){
+                    costset = allNonDeletedIdeas;
+                }
+                if(tagFilters.length == 0){
+                    tagset = allNonDeletedIdeas;
+                }
+                if(categoryFilters.length == 0 ) {
+                    catset = allNonDeletedIdeas;
+                }
+                var temp_arr = listInter(catset, costset);
+                ideasToShow = listInter(temp_arr, tagset);
+                for(var i = 0; i < allNonDeletedIdeas.length; i++){
+                    //not sure how to hide an idea but trying to do that here
+                    allNonDeletedIdeas[i].hide();
+                }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    ideasToShow[i].show();
+                }
+
+            }
+
+            var searching = function(term) {
+
+
+            }
+
             var listUnion = function(list1, list2) {
-                var retList = list1;
+                var retList = [];
+                var list1 = list1;
+                for(var i = 0; i< list1.length; i++){
+                    retList.push(list1[i]);
+                }
+                var list2 = list2;
+                console.log(list2);
                 for(var i = 0; i < list2.length; i++){
                     var inRetList = false;
                     for(var j = 0; j < retList.length; j++){
@@ -275,14 +502,16 @@
                         }
                     }
                     if(!inRetList){
-                        inRetList.push(list2[i]);
+                        retList.push(list2[i]);
                     }
                 }
                 return retList;
             }
 
             var listInter = function(list1, list2) {
-                var retList = []
+                var retList = [];
+                var list1 = list1;
+                var list2 = list2;
                 for(var i = 0; i < list1.length; i++){
                     var matched = false;
                     for(var j = 0; j < list2.length; j++){
@@ -296,28 +525,39 @@
                 }
                 return retList;
             }
-
-            // Adding an Idea pop-up
-            var ideaPopupBuilder = function(){
-                // Add a form
-
-            }
-        </script>
+            
+            var show = function(boardName) {
+                if(boardName === 'ideas') {
+                    $('#ideaBoard').show();
+                    $('#ideaBoard').css('width', '94%');
+                    $('#ideaBoard').css('margin-left', '3%');
+                    $('#ideaHeader').css('margin-left', '38%');
+                    $('#decisionBoard').hide();
+                }
+                else {
+                    $('#decisionBoard').show();
+                    $('#decisionBoard').css('width', '94%');
+                    $('#decisionBoard').css('margin-left', '3%');
+                    $('#decisionHeader').css('margin-left', '38%');
+                    $('#ideaBoard').hide();
+                }
+            };
+         </script>
     </head>
     <body>
         <div class="navigationbar">
             <h1><a ref="/">Simple as Love</a></h1>
             <ul class="header">
-                <li>Main Page</li>
-                <li>Ideas</li>
-                <li>Decisions</li>
-                <li>Budget</li>
-                <li>Deleted <br> Archive</li>
+                <li><a href="/">Main Page</a></li>
+                <li><a href="#" onclick="show('ideas')">Ideas</a></li>
+                <li><a href="#" onclick="show('decisions')">Decisions</a></li>
+                <li><a href="#budgetModal">Budget</a></li>
+                <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
         </div>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
-            <div id="filterPopover">
+            <div id="filterPopover" hidden>
                 <input type="text" id = "search" placeholder="Search term"/><br>
                 <h4>Categories:</h4>
                 <ul id="categories">
@@ -329,10 +569,10 @@
                 <h4>Cost:</h4>
                 <!--do we want this to dynamically change -->
                 <ul id="cost">
-                    <li><input type="checkbox" name="lessThan500" id="lessThan500" />  less than $500 </li>
-                    <li><input type="checkbox" name="500To2000" id="500To2000" />  $500 to $2000 </li>
-                    <li><input type="checkbox" name="2000To5000" id="2000To5000" />  $2001 to $5000 </li>
-                    <li><input type="checkbox" name="moreThan5000" id="moreThan5000" />  greater than $5000 </li>
+                    <li><input type="checkbox" name="cost" id="lessThan500" />  less than $500 </li>
+                    <li><input type="checkbox" name="cost" id="500To2000" />  $500 to $2000 </li>
+                    <li><input type="checkbox" name="cost" id="2000To5000" />  $2001 to $5000 </li>
+                    <li><input type="checkbox" name="cost" id="moreThan5000" />  greater than $5000 </li>
                 </ul>
                 <h4>Tags:</h4>
                 <ul id="tags">
@@ -347,14 +587,67 @@
         <div id="boardBackground">
             <div id='ideaBoard'>
                 <div id="ideaHeader">
-                    Ideas
+                    <a href="#" onclick="show('ideas')">Ideas</a>
                 </div>
-                <button id="addIdeaButton" class="btn">Add New Idea</button>
+                <div style="padding-top:25px">
+                    <button id="addIdeaButton" class="btn">Add New Idea</button>
+                    <div>
+                        
+                    </div>
+                </div>
+                <div class="stickynote" unselectable='on'>
+                    <h4>Venue</h4>
+                    <h3>Beach</h3>
+                </div>
+                <div class="stickynote">
+                    <h4>Venue</h4>
+                    <h3>Church</h3>
+                </div>
+                <div id="ideaPopup" style="display: none;">
+                    <form class="form" action="#" id="newIdeaForm">
+                        <input type="text" id="ideaTitleInput" placeholder="Title"/>
+                        <div id="dragAndDropPicUploader">
+                            <form action="/file-upload" class="dropzone" id="picUploader">
+                                <div class="fallback">
+                                    <input name="file" type="file" multiple>
+                                </div>
+                            </form>
+                        </div>
+                        <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
+                        <input type="text" id="ideaCostInput" placeholder="Cost"/>
+                        <div id="ideaCategoryPicker">
+                            <div id="categoryPopover">
+                                <select name="categoryDropDown" placeholder="Category">
+                                    <option disabled selected>Select a Category</option>
+                                    <option value="Catering">Catering</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Flowers">Flowers</option>
+                                    <option value="Invitations">Invitations</option>
+                                    <option value="Venue">Venue</option>
+                                    <optoin value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="text" id="ideaTagInput" placeholder="Tags"/>
+                        <button id="saveIdeaButton" class="btn">Save</button>
+                        <button id="cancelIdeaButton" class="btn">Cancel</button>
+                    </form>
+                </div>
             </div>
             <div id='decisionBoard'>
-                <div id="decisionheader">
-                    Decisions
+                <div id="decisionHeader">
+                    <a href="#" onclick="show('decisions')">Decisions</a>
                 </div>
+            </div>
+        </div>
+        <div id="budgetModal" class="modal">
+            <div>	<a href="#close" title="Close" class="close">X</a>
+
+        	<h2>Modal Box</h2>
+
+            <p>This is a sample modal box that can be created using the powers of CSS3.</p>
+            <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
             </div>
         </div>
     </body>

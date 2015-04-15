@@ -50,7 +50,7 @@ $(function() {
         + '<div class="editable category col-md-4">' + category + '</div>' 
         + '<div class="editable spent col-md-2">' + spent + '</div>' 
         + '<div class="editable allotted col-md-2">' + allotted + '</div>'
-        + '<div class="btn trash col-md-1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></div>'
+        + '<div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'
         + '</div>';
         return next_row;
     }
@@ -131,17 +131,17 @@ $(function() {
             });
         });
     }
-
+    
     //Delete confirmation
-    $('.delete_confirm').on('click', function(e) {
-        $('#confirm')
-            .modal({
-                backdrop: 'static',
-                keyboard: false
-            })
-            .one('click', '#delete', function(e) {
-                //delete function
-            });
+    $('button[name="delete_btn"]').click(function (e) {
+        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
+            var $killrow = $('#delete_btn').closest('div[class^="row"]');
+               $killrow.addClass("danger");
+               $killrow.fadeOut(2000, function() {
+                   $killrow.remove();
+               });
+        } 
     });
+
 
 });
