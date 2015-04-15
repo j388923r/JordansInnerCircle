@@ -178,6 +178,7 @@
                 position: relative;
                 left: 39%;
                 top: 5%;
+                width: 22%;
             }
         </style>
         
@@ -270,9 +271,12 @@
                     }
                 });
                 
-                $('#ideaBoard').mouseleave(function(event) {
-                    //console.log(event);
+                $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
+                });
+                
+                $('#boardBackground').mousedown(function(event) {
+                    console.log(event);
                 });
             });
             //function that takes in categories and tags list and contructs the filter 
@@ -479,15 +483,32 @@
                 
 
             }
-        </script>
+            
+            var show = function(boardName) {
+                if(boardName === 'ideas') {
+                    $('#ideaBoard').show();
+                    $('#ideaBoard').css('width', '94%');
+                    $('#ideaBoard').css('margin-left', '3%');
+                    $('#ideaHeader').css('margin-left', '38%');
+                    $('#decisionBoard').hide();
+                }
+                else {
+                    $('#decisionBoard').show();
+                    $('#decisionBoard').css('width', '94%');
+                    $('#decisionBoard').css('margin-left', '3%');
+                    $('#decisionHeader').css('margin-left', '38%');
+                    $('#ideaBoard').hide();
+                }
+            };
+         </script>
     </head>
     <body>
         <div class="navigationbar">
             <h1><a ref="/">Simple as Love</a></h1>
             <ul class="header">
                 <li><a href="/">Main Page</a></li>
-                <li><a href="#">Ideas</a></li>
-                <li><a href="#">Decisions</a></li>
+                <li><a href="#" onclick="show('ideas')">Ideas</a></li>
+                <li><a href="#" onclick="show('decisions')">Decisions</a></li>
                 <li><a href="#budgetModal">Budget</a></li>
                 <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
@@ -546,7 +567,7 @@
                 </div>
             </div>
             <div id='decisionBoard'>
-                <div id="decisionheader">
+                <div id="decisionHeader">
                     <a href="#" onclick="show('decisions')">Decisions</a>
                 </div>
             </div>
