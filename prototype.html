@@ -21,6 +21,11 @@
         <!-- For drag and drop uploader -->
         <script type="text/javascript" src="dropzone.js"></script>
         <link rel="stylesheet" type="text/css" href="dropzone.css" />
+
+        <!-- For Cool Tagging -->
+        <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+        <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+        
         
         <style>
 
@@ -294,6 +299,10 @@
                 $('#cancelIdeaButton').click(function(){
                     $("#ideaPopup").attr("style","display: none");
                 })
+
+                $('#saveIdeaButton').click(function(){
+                    createNewIdea();
+                });
                 
                 $('#boardBackground').mousedown(function(event) {
                     console.log(event);
@@ -514,6 +523,42 @@
                     $('#ideaBoard').hide();
                 }
             };
+
+            var createNewIdea = function(){
+                ideaTitle = $('#ideaTitleInput').val();
+                ideaCost = $('#ideaCostInput').val();
+                ideaCategory = $("#categoryDropDown").val();
+                ideaPics = $("#picUploader").context.URL;
+                ideaDescription = $("#ideaDescriptionInput").val();
+                ideaTags = ('#ideaTagInput').tagsInput();
+
+                var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
+                if (!validIdea){
+                    missingInputFeedback();
+                    return;
+                }
+
+                var idea = new Idea(ideaTitle, ideaCategory, ideaCost);
+                allNonDeletedIdeas.push(idea);
+                ideasInIdeas.push(idea);
+
+            }
+
+            var checkUserInputs = function(title, cost, category){
+                if (title == "" | cost == "" | category == ""){
+                    return false;
+                } 
+                if (cost !== parseInt(cost, 10)){
+                    return false;
+                }
+            
+                return true;
+            }
+
+            var missingInputFeedback = function(){
+                return;
+            }
+
          </script>
     </head>
     <body>
@@ -589,7 +634,7 @@
                         <input type="text" id="ideaCostInput" placeholder="Cost"/>
                         <div id="ideaCategoryPicker">
                             <div id="categoryPopover">
-                                <select name="categoryDropDown" placeholder="Category">
+                                <select id="categoryDropDown" placeholder="Category">
                                     <option disabled selected>Select a Category</option>
                                     <option value="Catering">Catering</option>
                                     <option value="Clothing">Clothing</option>
@@ -601,7 +646,7 @@
                                 </select>
                             </div>
                         </div>
-                        <input type="text" id="ideaTagInput" placeholder="Tags"/>
+                        <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                         <button id="saveIdeaButton" class="btn">Save</button>
                         <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
