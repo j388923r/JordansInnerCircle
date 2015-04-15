@@ -107,6 +107,11 @@
                 width: 100px;
                 background-color: rgb(230, 194, 0);
                 border: solid 2px black;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select:none;
+                user-select:none;
+                -o-user-select:none;
             }
             
             #decisionHeader, #ideaHeader {
@@ -131,9 +136,11 @@
             
             #filterPopover {
                 position: absolute;
-                background-color: lightblue;
+                background-color: rgb(230, 194, 0);
+                border: solid 2px black;
                 border-radius: 5px;
                 padding: 5px;
+                z-index: 9;
             }
             
             #categories {
@@ -175,6 +182,7 @@
                 position: relative;
                 left: 39%;
                 top: 5%;
+                width: 22%;
             }
 
             #ideaPopup {
@@ -191,11 +199,12 @@
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
-            var categoryMapping = {};
-            var tagsMapping = {};
+            var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[]};
+            var tagsMapping = {'vegas':[], 'prince':[]};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
-            var tagsList = ["cool", "vegas", "prince"];
+            var tagsList = ["vegas", "prince"];
+            var titleList = []
 
             var costFilters = [];
             var categoryFilters = [];
@@ -273,8 +282,7 @@
                     }
                 });
                 
-                $('.stickynote').mouseleave(function(event) {
-                    //console.log(event);
+                $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
                 });
 
@@ -286,8 +294,10 @@
                 $('#cancelIdeaButton').click(function(){
                     $("#ideaPopup").attr("style","display: none");
                 })
-
-
+                
+                $('#boardBackground').mousedown(function(event) {
+                    console.log(event);
+                });
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -487,16 +497,32 @@
                 }
                 return retList;
             }
-
-        </script>
+            
+            var show = function(boardName) {
+                if(boardName === 'ideas') {
+                    $('#ideaBoard').show();
+                    $('#ideaBoard').css('width', '94%');
+                    $('#ideaBoard').css('margin-left', '3%');
+                    $('#ideaHeader').css('margin-left', '38%');
+                    $('#decisionBoard').hide();
+                }
+                else {
+                    $('#decisionBoard').show();
+                    $('#decisionBoard').css('width', '94%');
+                    $('#decisionBoard').css('margin-left', '3%');
+                    $('#decisionHeader').css('margin-left', '38%');
+                    $('#ideaBoard').hide();
+                }
+            };
+         </script>
     </head>
     <body>
         <div class="navigationbar">
             <h1><a ref="/">Simple as Love</a></h1>
             <ul class="header">
                 <li><a href="/">Main Page</a></li>
-                <li><a href="#">Ideas</a></li>
-                <li><a href="#">Decisions</a></li>
+                <li><a href="#" onclick="show('ideas')">Ideas</a></li>
+                <li><a href="#" onclick="show('decisions')">Decisions</a></li>
                 <li><a href="#budgetModal">Budget</a></li>
                 <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
@@ -537,8 +563,11 @@
                 </div>
                 <div style="padding-top:25px">
                     <button id="addIdeaButton" class="btn">Add New Idea</button>
+                    <div>
+                        
+                    </div>
                 </div>
-                <div class="stickynote">
+                <div class="stickynote" unselectable='on'>
                     <h4>Venue</h4>
                     <h3>Beach</h3>
                 </div>
@@ -579,7 +608,7 @@
                 </div>
             </div>
             <div id='decisionBoard'>
-                <div id="decisionheader">
+                <div id="decisionHeader">
                     <a href="#" onclick="show('decisions')">Decisions</a>
                 </div>
             </div>
