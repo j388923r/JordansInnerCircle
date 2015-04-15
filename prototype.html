@@ -23,6 +23,11 @@
         <!-- For drag and drop uploader -->
         <script type="text/javascript" src="dropzone.js"></script>
         <link rel="stylesheet" type="text/css" href="dropzone.css" />
+
+        <!-- For Cool Tagging -->
+        <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+        <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+        
         
         <style>
 
@@ -136,6 +141,14 @@
                 margin-left: 15.5%;
             }
             
+            #ideaContent {
+                padding-top:25px;
+            }
+            
+            #decisionContent {
+                padding-top:59px;
+            }
+            
             #filterPopover {
                 position: absolute;
                 background-color: rgb(230, 194, 0);
@@ -196,6 +209,10 @@
                 padding: 10px;
 
             }
+            
+            .ui-helper-hidden-accessible {
+                display: none
+            }
         </style>
         
         <script>
@@ -224,8 +241,11 @@
             $(document).ready(function(){
                 var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
-
-
+                
+                var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
+                var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                console.log(boardBackgroundLeft);
+                var decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 var decisionBoard = document.getElementById('decisionBoard');
                 var first =  document.getElementById('lessThan500');
                 var second = document.getElementById('500To2000');
@@ -277,14 +297,9 @@
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
-
-                $('#addIdeaButton').click(function(){
-                    ideaPopupBuilder();
-                });
-
                 
                 $('.stickynote').mousedown(function(event){
-                    //console.log(event);
+                    console.log($("#addIdeaButton").css('height'));
                     draggedSticky = event.currentTarget;
                     down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
                 });
@@ -295,15 +310,33 @@
                 });
                 
                 $('.stickynote').mousemove(function(event){
-                    //console.log(event.clientX, event.clientY);
+                    //console.log(decisionLeft);
                     if(draggedSticky && down) {
-                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        console.log(down.stickyLeft + event.clientX - down.x);
                         $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                console.log('board changed');
+                                $('#decisionBoard').append($(draggedSticky));
+                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //down = undefined;
+                            } else {
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                            }
+                        } else {
+                            console.log(down.stickyLeft + event.clientX - down.x);
+                            if(down.x < decisionLeft)
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                            else
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        }
                     }
                 });
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
+                    console.log(down);
                 });
 
                 $('#addIdeaButton').click(function(){
@@ -314,6 +347,10 @@
                 $('#cancelIdeaButton').click(function(){
                     $("#ideaPopup").attr("style","display: none");
                 })
+
+                $('#saveIdeaButton').click(function(){
+                    createNewIdea();
+                });
                 
                 $('#boardBackground').mousedown(function(event) {
                     console.log(event);
@@ -533,22 +570,62 @@
                     $('#ideaBoard').css('margin-left', '3%');
                     $('#ideaHeader').css('margin-left', '38%');
                     $('#decisionBoard').hide();
-                }
-                else {
+                } else if(boardName === 'decisions') {
                     $('#decisionBoard').show();
                     $('#decisionBoard').css('width', '94%');
                     $('#decisionBoard').css('margin-left', '3%');
                     $('#decisionHeader').css('margin-left', '38%');
                     $('#ideaBoard').hide();
+                } else {
+                    $('#decisionBoard, #ideaBoard').show();
+                    $('#decisionBoard, #ideaBoard').css('width', '45%');
+                    $('#decisionBoard').css('margin-left', '52%');
+                    $('#decisionHeader, #ideaHeader').css('margin-left', '15.5%');
                 }
             };
+
+            var createNewIdea = function(){
+                ideaTitle = $('#ideaTitleInput').val();
+                ideaCost = $('#ideaCostInput').val();
+                ideaCategory = $("#categoryDropDown").val();
+                ideaPics = $("#picUploader").context.URL;
+                ideaDescription = $("#ideaDescriptionInput").val();
+                ideaTags = ('#ideaTagInput').tagsInput();
+
+                var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
+                if (!validIdea){
+                    missingInputFeedback();
+                    return;
+                }
+
+                var idea = new Idea(ideaTitle, ideaCategory, ideaCost);
+                allNonDeletedIdeas.push(idea);
+                ideasInIdeas.push(idea);
+
+            }
+
+            var checkUserInputs = function(title, cost, category){
+                if (title == "" | cost == "" | category == ""){
+                    return false;
+                } 
+                if (cost !== parseInt(cost, 10)){
+                    return false;
+                }
+            
+                return true;
+            }
+
+            var missingInputFeedback = function(){
+                return;
+            }
+
          </script>
     </head>
     <body>
         <div class="navigationbar">
             <h1><a ref="/">Simple as Love</a></h1>
             <ul class="header">
-                <li><a href="/">Main Page</a></li>
+                <li><a href="#" onclick="show('home')">Main Page</a></li>
                 <li><a href="#" onclick="show('ideas')">Ideas</a></li>
                 <li><a href="#" onclick="show('decisions')">Decisions</a></li>
                 <li><a href="#budgetModal">Budget</a></li>
@@ -589,7 +666,7 @@
                 <div id="ideaHeader">
                     <a href="#" onclick="show('ideas')">Ideas</a>
                 </div>
-                <div style="padding-top:25px">
+                <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add New Idea</button>
                     <div>
                         
@@ -617,7 +694,7 @@
                         <input type="text" id="ideaCostInput" placeholder="Cost"/>
                         <div id="ideaCategoryPicker">
                             <div id="categoryPopover">
-                                <select name="categoryDropDown" placeholder="Category">
+                                <select id="categoryDropDown" placeholder="Category">
                                     <option disabled selected>Select a Category</option>
                                     <option value="Catering">Catering</option>
                                     <option value="Clothing">Clothing</option>
@@ -629,7 +706,7 @@
                                 </select>
                             </div>
                         </div>
-                        <input type="text" id="ideaTagInput" placeholder="Tags"/>
+                        <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                         <button id="saveIdeaButton" class="btn">Save</button>
                         <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
@@ -638,6 +715,9 @@
             <div id='decisionBoard'>
                 <div id="decisionHeader">
                     <a href="#" onclick="show('decisions')">Decisions</a>
+                </div>
+                <div id="decisionContent">
+                    
                 </div>
             </div>
         </div>
