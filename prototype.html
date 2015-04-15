@@ -17,9 +17,13 @@
         
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <!-- For drag and drop uploader -->
+        <script type="text/javascript" src="dropzone.js"></script>
+        <link rel="stylesheet" type="text/css" href="dropzone.css" />
         
         <style>
-        
+
             body {
                 padding-left:2%;
                 background-color:black;
@@ -172,6 +176,16 @@
                 left: 39%;
                 top: 5%;
             }
+
+            #ideaPopup {
+                position: relative;
+                top: 30%;
+                left: 60%;
+                background: white;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
         </style>
         
         <script>
@@ -239,10 +253,6 @@
                         console.log(inputValue);
                     }
                 })
-
-                $('#addIdeaButton').click(function(){
-                    ideaPopupBuilder();
-                });
                 
                 $('.stickynote').mousedown(function(event){
                     //console.log(event);
@@ -267,6 +277,17 @@
                     //console.log(event);
                     down = undefined;
                 });
+
+                $('#addIdeaButton').click(function(){
+                    var popupIdea = document.getElementById("ideaPopup");
+                    popupIdea.style.display = 'block';
+                });
+
+                $('#cancelIdeaButton').click(function(){
+                    $("#ideaPopup").attr("style","display: none");
+                })
+
+
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -467,11 +488,6 @@
                 return retList;
             }
 
-            // Adding an Idea pop-up
-            var ideaPopupBuilder = function(){
-                
-
-            }
         </script>
     </head>
     <body>
@@ -530,8 +546,35 @@
                     <h4>Venue</h4>
                     <h3>Church</h3>
                 </div>
-                <div id="ideaPopup">
+                <div id="ideaPopup" style="display: none;">
                     <form class="form" action="#" id="newIdeaForm">
+                        <input type="text" id="ideaTitleInput" placeholder="Title"/>
+                        <div id="dragAndDropPicUploader">
+                            <form action="/file-upload" class="dropzone" id="picUploader">
+                                <div class="fallback">
+                                    <input name="file" type="file" multiple>
+                                </div>
+                            </form>
+                        </div>
+                        <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
+                        <input type="text" id="ideaCostInput" placeholder="Cost"/>
+                        <div id="ideaCategoryPicker">
+                            <div id="categoryPopover">
+                                <select name="categoryDropDown" placeholder="Category">
+                                    <option disabled selected>Select a Category</option>
+                                    <option value="Catering">Catering</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Flowers">Flowers</option>
+                                    <option value="Invitations">Invitations</option>
+                                    <option value="Venue">Venue</option>
+                                    <optoin value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="text" id="ideaTagInput" placeholder="Tags"/>
+                        <button id="saveIdeaButton" class="btn">Save</button>
+                        <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
                 </div>
             </div>
