@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Simple As Love</title>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+         <script type="text/javascript" src="budget.js"></script>
+
+</head>
+<body>
+    <div class="center">
+        <div class="row" id="header" style="font-size: 20px">
+            <div class="col-md-12">My Wedding Budget</div>
+        </div>
+        <div class="row" id="label" style="font-weight:bold">
+            <div class="col-md-4">Category</div>
+            <div class="col-md-2">Amount Spent</div>
+            <div class="col-md-2">Amount Allotted</div>
+        </div>
+        <div class="row" style="color:steelblue">
+            <div class="editable category col-md-4">My wedding dress</div>
+            <div class="editable spent col-md-2">1000</div>
+            <div class="editable allotted col-md-2">2000</div>
+        </div>
+        <div class="items" style="color:steelblue">
+        </div>
+        <div class="row" id="add_new">
+            <div class="col-md-4 category">
+                <input class="new_entry" id="new_category" type="text" name="category" style="width:150px" placeholder = "Add a new category!"></input>
+            </div>
+            <div class="col-md-2 spent">
+                <input class="new_entry" id="new_spent" type="number" min="0" name="spent" style="width:150px" placeholder = "$0"></input>
+            </div>
+            <div class="col-md-2 allotted">
+                <input class="new_entry" id="new_allotted" type="number" min="0" name="allotted" style="width:150px" placeholder= "$1000"></input>
+            </div>
+        </div>
+        <div class="row" id="total" style="font-weight:bold">
+            <div class="col-md-4">Total</div>
+            <div class="col-md-2" id="total_spent"></div>
+            <div class="col-md-2" id="total_allotted"></div>
+        </div>
+
+    </div>
+
+
+
+</body>
+</html>
