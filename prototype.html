@@ -129,11 +129,20 @@
         <script>
 
             var ideasInGroupMapping = {'cost':[],'category':[],'tags':[]};
-
+            var isAllChecked = false;
+            var checked_arr = [];
 
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
+                var first =  document.getElementById('lessThan500');
+                var second = document.getElementById('500To2000');
+                var third = document.getElementById('2000To5000');
+                var fourth = document.getElementById('moreThan5000');
+                first.addEventListener("change", checkboxChange);
+                second.addEventListener("change", checkboxChange);
+                third.addEventListener("change", checkboxChange);
+                fourth.addEventListener("change", checkboxChange);
                 buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
@@ -144,18 +153,21 @@
                     categories.hidden = !categories.hidden;
                     buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 });
-                $(':checkbox').change(function() {
-                    if(this.checked){
-                        console.log(this.name);
-                    }
-                    else{
-                        console.log("remove filter")
-                    }
+
+                $('#btnCheckAll').click(function() {
+                    isAllChecked = true;
+                    checkAll();
+                });
+
+                $('#btnUncheckAll').click(function() {
+                    uncheckAll();
+                    isAllChecked = false;
                 });
 
                 $('#addIdeaButton').click(function(){
                     console.log(ideasInGroupMapping);
                 });
+
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -167,15 +179,86 @@
                 $("#tags").html("");
                 for (var i = 0; i < cat_arr.length; i++) {
                     var cat = cat_arr[i];
-                    var newString = "<li><input type=\"checkbox\" name="+ cat+" />  " + cat+ "</li>"; //might need to change to allow addition of event listeners
-                    $("#categories").append(newString);
+                    var newCat = document.createElement("input");
+                    newCat.type = "checkbox";
+                    newCat.name = cat;
+                    newCat.id = cat;
+                    newCat.onchange = checkboxChange;
+                    
+                    newCat.checked = isAllChecked;
+
+                    for(var j = 0; j < checked_arr.length; j++){
+                        if(checked_arr[j] == cat){
+                            newCat.checked = true;
+                        }
+                    }
+
+                    var newList = document.createElement("li");
+
+                    $(newList).append(newCat);
+                    $(newList).append("  " + cat);
+                    // var newString = "<li><input type=\"checkbox\" name="+ cat+" />  " + cat+ "</li>"; //might need to change to allow addition of event listeners
+                    $("#categories").append(newList);
                 };
                 for (var i = 0; i < tag_arr.length; i++) {
                     var tag = tag_arr[i];
-                    var newString = "<li><input type=\"checkbox\" name="+ tag+" />  " + tag+ "</li>";
-                    $("#tags").append(newString);
+                    var newTag = document.createElement("input");
+                    newTag.type = "checkbox";
+                    newTag.name = tag;
+                    newTag.id = tag;
+                    
+                    newTag.checked = isAllChecked;
+                    newTag.onchange = checkboxChange;
+
+                    for(var j = 0; j < checked_arr.length; j++){
+                        if(checked_arr[j] == tag){
+                            newTag.checked = true;
+                        }
+                    }
+
+                    var newList = document.createElement("li");
+
+                    $(newList).append(newTag);
+                    $(newList).append("  " + tag);
+                    // var newString = "<li><input type=\"checkbox\" name="+ tag+" />  " + tag+ "</li>";
+                    $("#tags").append(newList);
                 };
             }
+
+            var checkAll = function() {
+                var boxes = document.getElementsByTagName('input');
+                for(var i = 0; i< boxes.length; i++){
+                    if(boxes[i].type == 'checkbox') {
+                        boxes[i].checked = true;
+                    }
+                }
+            }
+
+            var uncheckAll = function() {
+                var boxes = document.getElementsByTagName('input');
+                for(var i = 0; i< boxes.length; i++){
+                    if(boxes[i].type == 'checkbox') {
+                        boxes[i].checked = false;
+                        checked_arr = []
+                    }
+                }
+            }
+
+            var checkboxChange = function() {
+                if(this.checked){
+                    console.log(this.name);
+                    checked_arr.push(this.name);
+                }
+                else{
+                    console.log("remove filter")
+                    for(var i = 0; i < checked_arr.length; i++){
+                        if(checked_arr[i]== this.name){
+                            checked_arr.splice(i,1);
+                        }
+                    }
+                }
+            }
+
         </script>
     </head>
     <body>
@@ -203,10 +286,10 @@
                 <h4>Cost:</h4>
                 <!--do we want this to dynamically change -->
                 <ul id="cost">
-                    <li><input type="checkbox" name="lessThan500" />  less than $500 </li>
-                    <li><input type="checkbox" name="500To2000" />  $500 to $2000 </li>
-                    <li><input type="checkbox" name="2000To5000" />  $2001 to $5000 </li>
-                    <li><input type="checkbox" name="moreThan5000" />  greater than $5000 </li>
+                    <li><input type="checkbox" name="lessThan500" id="lessThan500" />  less than $500 </li>
+                    <li><input type="checkbox" name="500To2000" id="500To2000" />  $500 to $2000 </li>
+                    <li><input type="checkbox" name="2000To5000" id="2000To5000" />  $2001 to $5000 </li>
+                    <li><input type="checkbox" name="moreThan5000" id="moreThan5000" />  greater than $5000 </li>
                 </ul>
                 <h4>Tags:</h4>
                 <ul id="tags">
