@@ -122,10 +122,18 @@
         
         <script>
             var isAllChecked = false;
+            var checked_arr = [];
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 var decisionBoard = document.getElementById('decisionBoard');
-                
+                var first =  document.getElementById('lessThan500');
+                var second = document.getElementById('500To2000');
+                var third = document.getElementById('2000To5000');
+                var fourth = document.getElementById('moreThan5000');
+                first.addEventListener("change", checkboxChange);
+                second.addEventListener("change", checkboxChange);
+                third.addEventListener("change", checkboxChange);
+                fourth.addEventListener("change", checkboxChange);
                 buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
@@ -136,19 +144,6 @@
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
-                });
-
-                $('input').change(function() {
-                    console.log("hi")
-                    if(this.type = "checkbox"){
-                        if(this.checked){
-                        console.log(this.name);
-                        }
-                        else{
-                            console.log("remove filter")
-                        }
-                    }
-                    
                 });
 
                 $('#btnCheckAll').click(function() {
@@ -175,8 +170,15 @@
                     newCat.type = "checkbox";
                     newCat.name = cat;
                     newCat.id = cat;
+                    newCat.onchange = checkboxChange;
                     
                     newCat.checked = isAllChecked;
+
+                    for(var j = 0; j < checked_arr.length; j++){
+                        if(checked_arr[j] == cat){
+                            newCat.checked = true;
+                        }
+                    }
 
                     var newList = document.createElement("li");
 
@@ -193,6 +195,13 @@
                     newTag.id = tag;
                     
                     newTag.checked = isAllChecked;
+                    newTag.onchange = checkboxChange;
+
+                    for(var j = 0; j < checked_arr.length; j++){
+                        if(checked_arr[j] == tag){
+                            newTag.checked = true;
+                        }
+                    }
 
                     var newList = document.createElement("li");
 
@@ -217,6 +226,22 @@
                 for(var i = 0; i< boxes.length; i++){
                     if(boxes[i].type == 'checkbox') {
                         boxes[i].checked = false;
+                        checked_arr = []
+                    }
+                }
+            }
+
+            var checkboxChange = function() {
+                if(this.checked){
+                    console.log(this.name);
+                    checked_arr.push(this.name);
+                }
+                else{
+                    console.log("remove filter")
+                    for(var i = 0; i < checked_arr.length; i++){
+                        if(checked_arr[i]== this.name){
+                            checked_arr.splice(i,1);
+                        }
                     }
                 }
             }
@@ -248,10 +273,10 @@
                 <h4>Cost:</h4>
                 <!--do we want this to dynamically change -->
                 <ul id="cost">
-                    <li><input type="checkbox" name="lessThan500" />  less than $500 </li>
-                    <li><input type="checkbox" name="500To2000" />  $500 to $2000 </li>
-                    <li><input type="checkbox" name="2000To5000" />  $2001 to $5000 </li>
-                    <li><input type="checkbox" name="moreThan5000" />  greater than $5000 </li>
+                    <li><input type="checkbox" name="lessThan500" id="lessThan500" />  less than $500 </li>
+                    <li><input type="checkbox" name="500To2000" id="500To2000" />  $500 to $2000 </li>
+                    <li><input type="checkbox" name="2000To5000" id="2000To5000" />  $2001 to $5000 </li>
+                    <li><input type="checkbox" name="moreThan5000" id="moreThan5000" />  greater than $5000 </li>
                 </ul>
                 <h4>Tags:</h4>
                 <ul id="tags">
