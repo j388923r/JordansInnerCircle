@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
         <link rel="stylesheet" href="mainLayout.css">
+
+        <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -139,6 +141,14 @@
                 margin-left: 15.5%;
             }
             
+            #ideaContent {
+                padding-top:25px;
+            }
+            
+            #decisionContent {
+                padding-top:59px;
+            }
+            
             #filterPopover {
                 position: absolute;
                 background-color: rgb(230, 194, 0);
@@ -209,7 +219,7 @@
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
             var tagsList = ["vegas", "prince"];
-            var titleList = []
+            var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
 
             var costFilters = [];
             var categoryFilters = [];
@@ -222,23 +232,31 @@
 
             var isAllChecked = false;
             var checked_arr = [];
+            
 
             $(document).ready(function(){
                 var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
-
-
+                
+                var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
+                var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                console.log(boardBackgroundLeft);
+                var decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 var decisionBoard = document.getElementById('decisionBoard');
                 var first =  document.getElementById('lessThan500');
                 var second = document.getElementById('500To2000');
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
 
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,costList);
+
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
                 third.addEventListener("change", checkboxChange);
                 fourth.addEventListener("change", checkboxChange);
-                buildFilter(["Clothing","Entertainment","Flowers","Venue"], ["cool", "vegas", "prince"]); //change to names
+
+
                 buildFilter(categorieslist, tagsList); //change to names
                 $('[data-toggle="popover"]').popover({
                     placement : 'bottom',
@@ -266,10 +284,23 @@
                         var inputValue = $(input).val();
                         console.log(inputValue);
                     }
-                })
+                });
+
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
+                $("#search").autocomplete( "option", "autoFocus", false );
+                $("#search").autocomplete( "option", "minLength", 1 );
+                $("#search").autocomplete( "option", "delay", 0);
+
+                $('#addIdeaButton').click(function(){
+                    ideaPopupBuilder();
+                });
+
                 
                 $('.stickynote').mousedown(function(event){
-                    //console.log(event);
+                    console.log($("#addIdeaButton").css('height'));
                     draggedSticky = event.currentTarget;
                     down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
                 });
@@ -280,15 +311,33 @@
                 });
                 
                 $('.stickynote').mousemove(function(event){
-                    //console.log(event.clientX, event.clientY);
+                    //console.log(decisionLeft);
                     if(draggedSticky && down) {
-                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        console.log(down.stickyLeft + event.clientX - down.x);
                         $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                console.log('board changed');
+                                $('#decisionBoard').append($(draggedSticky));
+                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //down = undefined;
+                            } else {
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                            }
+                        } else {
+                            console.log(down.stickyLeft + event.clientX - down.x);
+                            if(down.x < decisionLeft)
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                            else
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        }
                     }
                 });
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
+                    console.log(down);
                 });
 
                 $('#addIdeaButton').click(function(){
@@ -312,6 +361,8 @@
             //do we want to do cost filtering dynamically or have set intervals
 
             var buildFilter = function(cat_arr, tag_arr) {
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,costList);
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -385,7 +436,6 @@
 
             var checkboxChange = function() {
                 if(this.checked){
-                    console.log(this.name);
                     checked_arr.push(this.id);
                     if(this.name == "cat"){
                         categoryFilters.push(this.id);
@@ -441,6 +491,8 @@
                     listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
+                    console.log("tags here")
+                    console.log(tagFilters);
                     listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
@@ -473,8 +525,13 @@
             }
 
             var listUnion = function(list1, list2) {
-                var retList = list1;
+                var retList = [];
+                var list1 = list1;
+                for(var i = 0; i< list1.length; i++){
+                    retList.push(list1[i]);
+                }
                 var list2 = list2;
+                console.log(list2);
                 for(var i = 0; i < list2.length; i++){
                     var inRetList = false;
                     for(var j = 0; j < retList.length; j++){
@@ -483,7 +540,7 @@
                         }
                     }
                     if(!inRetList){
-                        inRetList.push(list2[i]);
+                        retList.push(list2[i]);
                     }
                 }
                 return retList;
@@ -514,13 +571,17 @@
                     $('#ideaBoard').css('margin-left', '3%');
                     $('#ideaHeader').css('margin-left', '38%');
                     $('#decisionBoard').hide();
-                }
-                else {
+                } else if(boardName === 'decisions') {
                     $('#decisionBoard').show();
                     $('#decisionBoard').css('width', '94%');
                     $('#decisionBoard').css('margin-left', '3%');
                     $('#decisionHeader').css('margin-left', '38%');
                     $('#ideaBoard').hide();
+                } else {
+                    $('#decisionBoard, #ideaBoard').show();
+                    $('#decisionBoard, #ideaBoard').css('width', '45%');
+                    $('#decisionBoard').css('margin-left', '52%');
+                    $('#decisionHeader, #ideaHeader').css('margin-left', '15.5%');
                 }
             };
 
@@ -565,7 +626,7 @@
         <div class="navigationbar">
             <h1><a ref="/">Simple as Love</a></h1>
             <ul class="header">
-                <li><a href="/">Main Page</a></li>
+                <li><a href="#" onclick="show('home')">Main Page</a></li>
                 <li><a href="#" onclick="show('ideas')">Ideas</a></li>
                 <li><a href="#" onclick="show('decisions')">Decisions</a></li>
                 <li><a href="#budgetModal">Budget</a></li>
@@ -606,7 +667,7 @@
                 <div id="ideaHeader">
                     <a href="#" onclick="show('ideas')">Ideas</a>
                 </div>
-                <div style="padding-top:25px">
+                <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add New Idea</button>
                     <div>
                         
@@ -655,6 +716,9 @@
             <div id='decisionBoard'>
                 <div id="decisionHeader">
                     <a href="#" onclick="show('decisions')">Decisions</a>
+                </div>
+                <div id="decisionContent">
+                    
                 </div>
             </div>
         </div>
