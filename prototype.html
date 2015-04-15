@@ -128,7 +128,14 @@
         
         <script>
 
-            var ideasInGroupMapping = {'cost':[],'category':[],'tags':[]};
+            var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
+            var categoryMapping = {};
+            var tagsMapping = {};
+            var categorieslist = [];
+            var tagsList = [];
+
+            var ideasInIdeas = [];
+            var ideasInDecisions = [];
             var isAllChecked = false;
             var checked_arr = [];
 
@@ -165,7 +172,7 @@
                 });
 
                 $('#addIdeaButton').click(function(){
-                    console.log(ideasInGroupMapping);
+                    ideaPopupBuilder();
                 });
 
             });
@@ -290,6 +297,11 @@
                 return retList;
             }
 
+            // Adding an Idea pop-up
+            var ideaPopupBuilder = function(){
+                // Add a form
+
+            }
         </script>
     </head>
     <body>
