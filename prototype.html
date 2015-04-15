@@ -251,6 +251,37 @@
                     }
                 }
             }
+            var listUnion = function(list1, list2) {
+                var retList = list1;
+                for(var i = 0; i < list2.length; i++){
+                    var inRetList = false;
+                    for(var j = 0; j < retList.length; j++){
+                        if(list2[i] == retList[j]){
+                            inRetList = true;
+                        }
+                    }
+                    if(!inRetList){
+                        inRetList.push(list2[i]);
+                    }
+                }
+                return retList;
+            }
+
+            var listInter = function(list1, list2) {
+                var retList = []
+                for(var i = 0; i < list1.length; i++){
+                    var matched = false;
+                    for(var j = 0; j < list2.length; j++){
+                        if(list1[i] == list2[j]){
+                            matched = true;
+                        }
+                    }
+                    if(matched){
+                        retList.push(list1[i]);
+                    }
+                }
+                return retList;
+            }
 
         </script>
     </head>
