@@ -131,4 +131,32 @@ var Idea = function(title, category, cost){
 	this.isDeleted = function(){
 		return this.deleted;
 	}
+
+	this.getHtml = function(){
+		var ideaTags = this.getTags();
+
+		var html = "<form action='#'>";
+		html += "<h1>"+this.getTitle()+"</h1><br>";
+		html += "<h3>"+this.getCategory()+"</h3><br>"
+		html += "<img src='Jellyfish.jpg' height='50%' width='50%'><br>";
+		html += "<p>"+this.getDescription()+"</p><br>";
+		
+		for (var tagIndex in ideaTags){
+			html += "<p style='border: 1px solid black; border-radius: 10px;'>";
+			html += ideaTag(tagIndex);
+			html += "</p>";
+		}
+
+		html += "<br>"
+		html += "<h3>$" + this.getCost() + "</h3><br>";
+		html += "<button type='button' class='btn'>Edit</button>";
+		html += "<button type='button' class='btn'>Cancel</button></form>";
+
+		return html;
+	}
+
 }
+
+
+
+
