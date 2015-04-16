@@ -6,6 +6,7 @@ $(function() {
     document.getElementById('total_budget').innerHTML = total_budget;
     editable();
     calculate();
+    delete_confirm();
 
     //Editable from edit button
     $('.edit-btn').click(function(e) {
@@ -41,15 +42,17 @@ $(function() {
     }
 
     //Delete confirmation
-    $('.delete_confirm').click(function (e) {
-        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
-            var $killrow = $('#delete_btn').closest('div[class^="row"]');
-               $killrow.addClass("danger");
-               $killrow.fadeOut(500, function() {
-                   $killrow.remove();
-               });
-        } 
-    });
+    function delete_confirm() {
+        $('.delete_confirm').click(function (e) {
+            if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
+                var $killrow = $(this).closest('div[class^="row"]');
+                   $killrow.addClass("danger");
+                   $killrow.fadeOut(500, function() {
+                       $killrow.remove();
+                   });
+            } 
+        });
+    }
 
     // Only numbers allowed
       $('#new_spent').on('change keyup', function() {
@@ -88,29 +91,21 @@ $(function() {
     //Add row for entered item
     function populate_list(category, spent, allotted) {
         $next_row = $(".items")
-            .append($('<div>').attr("class","row")
-                .append($('<div>').attr("class","col-md-1")
-                    .append($('<button></button>').addClass("btn edit-btn btn-s")
-                        .append($('<span></span>').addClass('glyphicon glyphicon-edit pull-right'))))
-                .append($('<div>').attr("class","editable category col-md-4").text(category))
-                .append($('<div>').attr("class","editable category col-md-3").text(spent))
-                .append($('<div>').attr("class","editable category col-md-3").text(allotted))
+            .append($('<div>').addClass("row")
+                .append($('<div>').addClass("col-md-1")
+                    .append($('<button>').addClass("btn edit-btn btn-s")
+                        .append($('<span>').addClass('glyphicon glyphicon-edit pull-right'))))
+                .append($('<div>').addClass("editable category col-md-4").text(category))
+                .append($('<div>').addClass("editable category col-md-3").text(spent))
+                .append($('<div>').addClass("editable category col-md-3").text(allotted))
+                .append($('<div>').addClass("delete_space col-md-1")
+                    .append($('<button>').addClass("btn delete_confirm btn-s btn-danger")
+                        .attr("title", "delete")
+                        .append($('<span>').addClass('glyphicon glyphicon-trash'))))
 
         );
 
-        var btn = document.createElement('button');
-        btn.type = "button";
-        btn.className = "btn delete_confirm btn-s btn-danger";
-        btn.id = "delete_btn";
-
-        $(btn).append($('<span></span>')
-            .addClass('glyphicon glyphicon-open'));
-      
-        $next_row.append($("<div>"))
-            .attr("class", "col-md-1");
-
-        $(btn).appendTo($next_row.closest('td'));
-
+        delete_confirm();
     }
 
 
