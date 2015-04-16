@@ -259,7 +259,7 @@
         position: absolute;
         left: 20;
         bottom: 10;
-        margin-bottom: -100px;
+        margin-bottom: -70px;
         font-size: 5em;
         height: 80px;
         z-index: 15;
@@ -347,7 +347,7 @@
     
     .ui-menu {
         width: 14%;
-        background-color: rgba(230, 194, 0, 0.99);  ;
+        background-color: #F1E5ED;
         border-radius: 2px;
         border: solid 1px black;
     }

@@ -174,14 +174,14 @@
                         $(draggedSticky).remove();
                         for(var i = 0; i < allNonDeletedIdeas.length; i++) {
                             var ideaToDelete = allNonDeletedIdeas[i];
-                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getTitle() === $(children[0]).text()) {
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
                                 allNonDeletedIdeas.splice(i, 1);
                                 break;
                             }
                         }
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var ideaToDelete = allNonDeletedIdeas[i];
-                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getTitle() === $(children[0]).text()) {
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
                                 ideasInIdeas.splice(i, 1);
                                 break;
                             }
@@ -679,8 +679,9 @@
             };
             var stickyUp = function(event) {
                 //console.log(event);
-                if(event.clientX - down.x === 0 && event.clientY - down.y === 0){
-                    
+                if(event.clientX === down.x && event.clientY === down.y){
+                    var idea = getNonDeletedIdea(draggedSticky);
+                    showIdea(idea);
                 }
                 down = undefined;
             };
@@ -777,7 +778,21 @@
                 updateFilter();
             }
 
+            var getNonDeletedIdea = function(sticky) {
+                var children = $(draggedSticky).children();
+                var title = $(children[1]).text();
+                var category = $(children[0]).text();
+                for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                    var idea = allNonDeletedIdeas[i];
+                    if(title === idea.getTitle() && category === idea.getCategory()) {
+                        return idea;
+                    }
+                }
+            }
             
+            var showIdea = function(idea) {
+            
+            }
          </script>
     </head>
     <body>
