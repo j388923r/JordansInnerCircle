@@ -506,9 +506,19 @@
 
     #ideaView {
     }
+    
+    #iframeClose {
+        font-size: 30px;
+        color: white;
+        display:none;
+    }
 
     iframe {
         display:none;
+        position: absolute;
+        top: 0;
+        width: 94%;
+        height: 100%;
     }
 
     iframe[seamless] {

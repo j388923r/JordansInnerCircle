@@ -92,6 +92,7 @@
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
                 });
+                
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
@@ -460,10 +461,17 @@
 
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
-                    var iframe = window.frames['budget_iframe'];
+                    var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
-                    iframe.css({"height":"400", "width":"800", "border":"none"});
+                    $("#iframeClose").css("display", "block");
+                    //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
+            }
+            
+            var closeBudget = function() {
+                var iframe = $('#budget_iframe');
+                iframe.css("display", "none");
+                $("#iframeClose").css("display", "none");
             }
 
             var createNewIdea = function(){
@@ -631,6 +639,7 @@
                 <li><a href="#" onclick="load('budget_page')">Budget</a></li>
                 <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
+            <button id="iframeClose" class="pull-right btn-danger" onclick="closeBudget()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
@@ -750,7 +759,7 @@
             <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budget_link" >
-            <iframe name="budget_iframe" src="budget.html" seamless></iframe>
+            <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
     </body>
 </html>
