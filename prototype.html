@@ -458,6 +458,19 @@
                 }
             }
 
+            var createIdeaDisplay = function(idea) {
+                var idea = idea;
+                console.log("make idea pop up");
+                var pictures = idea.getPictures();
+                var title = idea.getTitle();
+                var category = idea.getCategory();
+                var description = idea.getDescription();
+                var tags = idea.getTags();
+                var cost = idea.getCost();
+
+                
+            }
+
             var createNewIdea = function(){
                 ideaTitle = $('#ideaTitleInput').val();
                 ideaCost = $('#ideaCostInput').val();
