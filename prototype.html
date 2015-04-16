@@ -57,6 +57,8 @@
             
             var page = 'home';
             var decisionLeft;
+            var down = undefined;
+            var draggedSticky = undefined;
 
             var ideasToShow = [];
 
@@ -155,7 +157,10 @@
                     console.log(true);
                     createNewIdea();
                 });
-
+                
+                $('#trashIcon').mouseenter(function(event) {
+                    //console.log(event);
+                });
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -578,36 +583,36 @@
                 down = undefined;
             };
             var stickyMove = function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        if(page === 'home') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                    console.log('board changed');
-                                    $('#decisionBoard').append($(draggedSticky));
-                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                    //down = undefined;
-                                } else {
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                                }
+                //console.log(decisionLeft);
+                if(draggedSticky && down) {
+                    if(page === 'home') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                console.log('board changed');
+                                $('#decisionBoard').append($(draggedSticky));
+                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //down = undefined;
                             } else {
-                                //console.log(down.stickyLeft + event.clientX - down.x);
-                                if(down.x < decisionLeft)
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                                else
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
-                        } else if(page === 'ideas') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        } else if(page === 'decisions') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else {
+                            //console.log(down.stickyLeft + event.clientX - down.x);
+                            if(down.x < decisionLeft)
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                            else
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                         }
+                    } else if(page === 'ideas') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                    } else if(page === 'decisions') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                     }
-                };
+                }
+            };
             
          </script>
     </head>
@@ -666,6 +671,9 @@
                     <h5 style='font-weight:bold;font-size: 24'>Venue</h5>
                     <h6 style='font-size: 24'>Underwater Palooza</h6>
                     <h6 style='bottom: 0;font-size: 24'>$20000</h6>
+                </div>
+                <div id="trashIcon">
+                    <span class="glyphicon glyphicon-trash"></span>
                 </div>
             </div>
             <div id='decisionBoard'>
