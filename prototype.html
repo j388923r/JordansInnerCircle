@@ -112,8 +112,8 @@
             
             .stickynote {
                 position: absolute;
-                height: 100px;
-                width: 100px;
+                height: 150px;
+                width: 150px;
                 background-color: rgb(230, 194, 0);
                 border: solid 2px black;
                 -moz-user-select: none;
@@ -240,14 +240,14 @@
                 display: none
             }
 
-            #ideaCostInput{
+            #ideaCostInput, #ideaView{
                 position: relative;
                 padding: 10px;
                 width: 100%;
 
             }
 
-            #descriptionAndCost{
+            #descriptionAndCost, #descriptionAndCostView{
                 width: 50%;
                 float: left;
                 padding: 10px;
@@ -264,7 +264,7 @@
                 padding: 10px;
             }
 
-            #tagsAndCategory{
+            #tagsAndCategory, #tagsAndCategoryView{
                 position: relative;
                 padding: 10px;
                 width: 50%;
@@ -276,12 +276,13 @@
                 padding: 10px;
             }
 
-            #cancelIdeaButton{
+            #cancelIdeaButton, #closeIdeaButton{
                 position: relative;
                 padding: 10px;
             }
 
-            
+            #ideaView {
+            }
         </style>
         
         <script>
@@ -290,16 +291,17 @@
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
+            var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000']
 
             var costFilters = [];
             var categoryFilters = [];
             var tagFilters = [];
 
             var allNonDeletedIdeas = [];
-            var deletedIdeas = [];
+            var deletedIdeas = [new Idea("Underwater", "Venue", 2000)];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
 
@@ -310,6 +312,8 @@
             var decisionLeft;
 
             var ideasToShow = [];
+
+            var searchedFor = "";
 
             $(document).ready(function(){
                 var draggedSticky = undefined;
@@ -360,8 +364,17 @@
                         var input = $("#search");
                         var inputValue = $(input).val();
                         console.log(inputValue);
+                        searching(inputValue);
                     }
                 });
+
+                // $('#search').onchange(function() {
+                //     var input = $("#search");
+                //     var inputValue = $(input).val();
+                //     if(inputValue == ""){
+                //         clearing();
+                //     }
+                // });
 
                 $('#search').autocomplete({
                     source: searchSource
@@ -371,48 +384,11 @@
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
                 
-                $('.stickynote').mousedown(function(event){
-                    //console.log($("#addIdeaButton").css('height'));
-                    draggedSticky = event.currentTarget;
-                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
-                });
+                $('.stickynote').mousedown(stickyDown);
                 
-                $('.stickynote').mouseup(function(event) {
-                    //console.log(event);
-                    down = undefined;
-                });
+                $('.stickynote').mouseup(stickyUp);
                 
-                $('.stickynote').mousemove(function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        if(page === 'home') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                    console.log('board changed');
-                                    $('#decisionBoard').append($(draggedSticky));
-                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                    //down = undefined;
-                                } else {
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                                }
-                            } else {
-                                console.log(down.stickyLeft + event.clientX - down.x);
-                                if(down.x < decisionLeft)
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                                else
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                            }
-                        } else if(page === 'ideas') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        } else if(page === 'decisions') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        }
-                    }
-                });
+                $('.stickynote').mousemove(stickyMove);
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
@@ -498,6 +474,16 @@
                         boxes[i].checked = true;
                     }
                 }
+                for(var i = 0; i < categorieslist.length; i++) {
+                    categoryFilters.push(categorieslist[i]);
+                }
+                for(var i = 0; i < tagsList.length; i++) {
+                    tagFilters.push(tagsList[i]);
+                }
+                for(var i = 0; i < costListForCheckAll.length; i++) {
+                    costFilters.push(costListForCheckAll[i]);
+                }
+                updateFilter();
             }
 
             var uncheckAll = function() {
@@ -506,8 +492,14 @@
                     if(boxes[i].type == 'checkbox') {
                         boxes[i].checked = false;
                         checked_arr = []
+
                     }
                 }
+                categoryFilters = [];
+                tagFilters = [];
+                costFilters = [];
+                updateFilter();
+
             }
 
             var checkboxChange = function() {
@@ -566,14 +558,13 @@
                 var tagset = [];
                 ideasToShow = [];
                 for(var i = 0; i< costFilters.length; i++){
-
-                    listUnion(costset,costMapping[costFilters[i]]);
+                    costset = listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
-                    listUnion(tagset, tagsMapping[tagFilters[i]]);
+                    tagset = listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
-                    listUnion(catset, categoryMapping[categoryFilters[i]]);
+                    catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
@@ -584,6 +575,7 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
+
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
@@ -591,14 +583,48 @@
                     allNonDeletedIdeas[i].hide();
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
+                    console.log(ideasToShow);
                     ideasToShow[i].show();
                 }
 
             }
 
+
             var searching = function(term) {
+                var term = term;
+                for(var i= 0; i< costList.length; i++){
+                    if(term == costList[i]){
+                        searchedFor = costListForCheckAll[i];
+                        ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
+                    }
+                }
+                for(var i = 0; i< tagsList.length; i++ ){
+                    if(term == tagsList[i]){
+                        searchedFor = tagsList[i];
+                        ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
+                    }
+                }
+                for(var i = 0; i< categorieslist.length; i++){
+                    if(term == categorieslist[i]){
+                        searchedFor = categorieslist[i];
+                        ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
+                    }
+                }
 
+                for(var i = 0; i < allNonDeletedIdeas.length; i++){
+                    //not sure how to hide an idea but trying to do that here
+                    allNonDeletedIdeas[i].hide();
+                }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    console.log(ideasToShow);
+                    ideasToShow[i].show();
+                }
 
+            }
+
+            var clearing = function(){
+                updateFilter();
+                searchedFor = "";
             }
 
             var listUnion = function(list1, list2) {
@@ -699,46 +725,17 @@
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
                 var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<span style='font-weight:bold'>" + idea.category + "</span>" +
-                               "<span>" + idea.title + "</span>"
+                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
+                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
+                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
                                "</div>";
-                console.log($('#ideaBoard'));
+                               
                 var ideaDiv = $(ideaHtml);
-                ideaDiv.mousedown(function(event){
-                    console.log($("#addIdeaButton").css('height'));
-                    draggedSticky = event.currentTarget;
-                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
-                });
+                ideaDiv.mousedown(stickyDown);
                 
-                ideaDiv.mouseup(function(event) {
-                    //console.log(event);
-                    down = undefined;
-                });
+                ideaDiv.mouseup(stickyUp);
                 
-                ideaDiv.mousemove(function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        //console.log(down.stickyLeft + event.clientX - down.x);
-                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                console.log('board changed');
-                                $('#decisionBoard').append($(draggedSticky));
-                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                //down = undefined;
-                            } else {
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                            }
-                        } else {
-                            console.log(down.stickyLeft + event.clientX - down.x);
-                            if(down.x < decisionLeft)
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                            else
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        }
-                    }
-                });
+                ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
 
                 console.log(tagsMapping);
@@ -753,13 +750,11 @@
                 if (title == "" | cost == "" | category == ""){
                     return false;
                 } 
-                console.log("passed1");
                 if (cost != parseInt(cost, 10)){
                     return false;
                 } else if (parseInt(cost,10) < 0){
                     return false;
                 }
-                console.log("passed2");
                 return true;
             }
 
@@ -801,6 +796,47 @@
                 $("")
             }
 
+            var stickyDown = function(event){
+                //console.log($("#addIdeaButton").css('height'));
+                draggedSticky = event.currentTarget;
+                down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
+            };
+            var stickyUp = function(event) {
+                //console.log(event);
+                down = undefined;
+            };
+            var stickyMove = function(event){
+                    //console.log(decisionLeft);
+                    if(draggedSticky && down) {
+                        if(page === 'home') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                    console.log('board changed');
+                                    $('#decisionBoard').append($(draggedSticky));
+                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                    //down = undefined;
+                                } else {
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                }
+                            } else {
+                                //console.log(down.stickyLeft + event.clientX - down.x);
+                                if(down.x < decisionLeft)
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                                else
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                            }
+                        } else if(page === 'ideas') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else if(page === 'decisions') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        }
+                    }
+                };
+            
          </script>
     </head>
     <body>
@@ -854,15 +890,11 @@
                         
                     </div>
                 </div>
-                <div class="stickynote" unselectable='on'>
-                    <h4>Venue</h4>
-                    <h3>Beach</h3>
+                <div class='stickynote' unselectable='on'>
+                    <h5 style='font-weight:bold;font-size: 24'>Venue</h5>
+                    <h6 style='font-size: 24'>Underwater Palooza</h6>
+                    <h6 style='bottom: 0;font-size: 24'>$20000</h6>
                 </div>
-                <div class="stickynote">
-                    <h4>Venue</h4>
-                    <h3>Church</h3>
-                </div>
-                
             </div>
             <div id='decisionBoard'>
                 <div id="decisionHeader">
@@ -871,6 +903,7 @@
                 <div id="decisionContent">
                     
                 </div>
+                
             </div>
             <div id="ideaPopup" style="display: none;">
                     <form class="form" action="#" id="newIdeaForm">
@@ -908,6 +941,26 @@
                         <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
                 </div>
+        </div>
+        <div id='ideaView' style="display: none;">
+            <View type="text" id="ideaTitleView" placeholder="Title"/>
+            <div id="dragAndDropPicView">
+                <!--<form action="/file-upload" class="dropzone" id="picUploader">
+                    <div class="fallback">
+                        <View name="file" type="file" multiple>
+                    </div>
+                </form>-->
+            </div>
+            <div id="descriptionAndCostView">
+                <textarea rows="4" id="ideaDescriptionView" placeholder="Description"></textarea>
+                <View type="text" id="ideaCostView" placeholder="Cost"/>
+            </div>
+            <div id="tagsAndCategoryView">
+
+                Category: <span id="ideaCategoryView"></span>
+                
+            </div>
+            <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budgetModal" class="modal">
             <div>	<a href="#close" title="Close" class="close">X</a>
