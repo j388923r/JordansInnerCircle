@@ -150,6 +150,7 @@
                 });
 
                 $('#cancelIdeaButton').click(function(){
+                    restoreBorderColor();
                     closeAndClearForm();
                 })
 
@@ -459,6 +460,8 @@
             }
 
             var createNewIdea = function(){
+                restoreBorderColor();
+
                 ideaTitle = $('#ideaTitleInput').val();
                 ideaCost = $('#ideaCostInput').val();
                 ideaCategory = $("#categoryDropDown").val();
@@ -520,7 +523,6 @@
             }
 
             var checkUserInputs = function(title, cost, category){
-                console.log(category);
                 if (title == "" | cost == "" | category == "" | category == null){
                     return false;
                 } 
@@ -533,7 +535,30 @@
             }
 
             var missingInputFeedback = function(){
-                return;
+                var ideaTitle = $("#ideaTitleInput").val();
+                var ideaCost = $("#ideaCostInput").val();
+                var ideaCategory = $("#categoryDropDown").val();
+
+                if (ideaTitle == "" | ideaTitle == null){
+                    $("#ideaTitleInput").css({"border":"1px solid red"});
+                }
+
+                if (parseInt(ideaCost, 10) != ideaCost){
+                    $("#ideaCostInput").css("border","1px solid red");
+
+                } else if (parseInt(ideaCost, 10) < 0){
+                    $("#ideaCostInput").css("border","1px solid red");
+                }
+
+                if (ideaCategory == "" | ideaCategory == null){
+                    $("#ideaCategoryPicker").css("border","1px solid red");
+                }
+            }
+
+            var restoreBorderColor = function(){
+                $("#ideaTitleInput").css("border","1px solid black");
+                $("#ideaCostInput").css("border","1px solid black");
+                $("#ideaCategoryPicker").css("border","1px solid black");
             }
 
             var updateTagMapping = function(idea, tags){
@@ -694,24 +719,22 @@
             </div>
             <div id="ideaPopup" style="display: none;">
                     <form class="form" action="#" id="newIdeaForm">
-                        <input type="text" id="ideaTitleInput" placeholder="Title"/>
+                        <input type="text" id="ideaTitleInput" placeholder="Title *"/>
                         <div id="dragAndDropPicUploader">
-                            <form action="/file-upload" class="dropzone" id="picUploader">
                                 <div class="fallback">
                                     <input name="file" type="file" multiple>
                                 </div>
-                            </form>
                         </div>
                         <div id="descriptionAndCost">
                             <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                            <input type="text" id="ideaCostInput" placeholder="Cost"/>
+                            <input type="text" id="ideaCostInput" placeholder="Cost *"/>
                         </div>
                         <div id="tagsAndCategory">
 
                             <div id="ideaCategoryPicker">
                                 <div id="categoryPopover">
                                     <select id="categoryDropDown" placeholder="Category">
-                                        <option disabled selected>Select a Category</option>
+                                        <option disabled selected>Select a Category *</option>
                                         <option value="Catering">Catering</option>
                                         <option value="Clothing">Clothing</option>
                                         <option value="Entertainment">Entertainment</option>
