@@ -655,6 +655,9 @@
             };
             var stickyUp = function(event) {
                 //console.log(event);
+                if(event.clientX - down.x === 0 && event.clientY - down.y === 0){
+                    
+                }
                 down = undefined;
             };
             var stickyMove = function(event){
