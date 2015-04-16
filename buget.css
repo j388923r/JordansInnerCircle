@@ -27,20 +27,20 @@ body {
 }
 
 .row {
-	font-size: 24px;
+	font-size: 22px;
 	font-family: "Gill Sans", sans-serif;
 	margin: 10px;
 }
 #totals {
 	color: steelblue;
-	font-weight:bold;
+	
 }
 #remaining {
 	color: steelblue;
-	font-weight:bold;
-}
-
+	
 #budget {
 	color: steelblue;
-	font-weight:bold;
+}
+.btn.edit-btn {
+	color: steelblue;
 }

@@ -7,6 +7,39 @@ $(function() {
     editable();
     calculate();
 
+    //Editable from edit button
+    $('.edit-btn').click(function(e) {
+        $(this).css("color","steelblue");
+        var $row = $(this).closest('div[class^="row"]'); 
+        $row.children('.editable:first').click();
+    });
+
+    //Highlight textbox of closest box when edit button clicked
+    function focusOnEdit(target) {
+        //Reference the Label.
+        var label = target;
+
+        //Add a TextBox next to the Label.
+        label.after("<input style = 'display:none' />");
+
+        //Reference the TextBox.
+        var textbox = $(this).next();
+        textbox.addClass(label.attr('class'));
+
+        //Set the name attribute of the TextBox.
+        textbox[0].name = this.id.replace("lbl", "txt");
+
+        //Assign the value of Label to TextBox.
+        textbox.val(label.html());
+
+        //When Label is clicked, hide Label and show TextBox.
+        label.click(function() {
+            $(this).hide();
+            $(this).next().show().select();
+        });
+
+    }
+
     //Delete confirmation
     $('.delete_confirm').click(function (e) {
         if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
@@ -44,8 +77,7 @@ $(function() {
             var spent = ($('#new_spent').val() == "") ? 0 : $('#new_spent').val();
             var allotted = ($('#new_allotted').val() == "") ? 0 : $('#new_allotted').val();
             var category = ($('#new_category').val() == "") ? 'My new category' : $('#new_category').val();
-            var next_row = populate_list(category, spent, allotted);
-            $(".items").append(next_row);
+            populate_list(category, spent, allotted);
             $('.new_entry').val("");
             $('#new_category').focus();
             editable();
@@ -55,21 +87,31 @@ $(function() {
 
     //Add row for entered item
     function populate_list(category, spent, allotted) {
-        var next_row = '<div class="row">' 
-        + '<div class="col-md-1"><span class="glyphicon glyphicon-heart pull-right" aria-hidden="true"></span></div>' 
-        + '<div class="editable category col-md-4">' + category + '</div>' 
-        + '<div class="editable spent col-md-3">' + spent + '</div>' 
-        + '<div class="editable allotted col-md-3">' + allotted + '</div>'
-        + '<div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'
-        + '</div>';
-        
-        return next_row;
+        $next_row = $(".items")
+            .append($('<div>').attr("class","row")
+                .append($('<div>').attr("class","col-md-1")
+                    .append($('<button></button>').addClass("btn edit-btn btn-s")
+                        .append($('<span></span>').addClass('glyphicon glyphicon-edit pull-right'))))
+                .append($('<div>').attr("class","editable category col-md-4").text(category))
+                .append($('<div>').attr("class","editable category col-md-3").text(spent))
+                .append($('<div>').attr("class","editable category col-md-3").text(allotted))
+
+        );
+
+        var btn = document.createElement('button');
+        btn.type = "button";
+        btn.className = "btn delete_confirm btn-s btn-danger";
+        btn.id = "delete_btn";
+
+        $(btn).append($('<span></span>')
+            .addClass('glyphicon glyphicon-open'));
+      
+        $next_row.append($("<div>"))
+            .attr("class", "col-md-1");
+
+        $(btn).appendTo($next_row.closest('td'));
+
     }
-
-    //Delete with dialog box when clicking trash icon
-    $('.trash').click(function(){
-
-    });
 
 
     //Get totals
@@ -148,6 +190,8 @@ $(function() {
             });
         });
     }
+
+    
 
 
 });
