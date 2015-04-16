@@ -160,7 +160,7 @@
                     createNewIdea();
                 });
                 
-                $('#trashIcon').mouseenter(function(event) {
+                $('#trashIcon').mouseup(function(event) {
                     console.log($(draggedSticky));
                     down = undefined;
                     if(draggedSticky) {
