@@ -760,10 +760,11 @@
                         .append($('<td>').attr("class", "lalign").text(title))
                         .append($('<td>').text(category))
                         .append($('<td>').text((cost)))
-                        .append($('<td>').attr("id", "restore_button"))
+                        .append($('<td>').attr("id", title).attr("class", "restore_button"))
                     );
 
-                $(btn).appendTo("#restore_button");
+                var $row = document.getElementById(title);
+                $(btn).appendTo($row.closest('td'));
             }
 
             //Restore idea
