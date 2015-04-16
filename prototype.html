@@ -38,7 +38,7 @@
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations"];
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
@@ -57,13 +57,14 @@
             
             var page = 'home';
             var decisionLeft;
+            var down = undefined;
+            var draggedSticky = undefined;
 
             var ideasToShow = [];
 
             var searchedFor = "";
 
             $(document).ready(function(){
-                var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -90,6 +91,7 @@
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
                 });
+                
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
@@ -115,13 +117,6 @@
                     }
                 });
 
-                // $('#search').onchange(function() {
-                //     var input = $("#search");
-                //     var inputValue = $(input).val();
-                //     if(inputValue == ""){
-                //         clearing();
-                //     }
-                // });
 
                 $('#search').autocomplete({
                     source: searchSource
@@ -130,6 +125,14 @@
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
+
+                $('#search').change(function() {
+                    var input = $("#search");
+                    var inputValue = $(input).val();
+                    if(inputValue == ""){
+                        clearing();
+                    }
+                });
                 
                 $('.stickynote').mousedown(stickyDown);
                 
@@ -148,14 +151,40 @@
                 });
 
                 $('#cancelIdeaButton').click(function(){
-                    $("#ideaPopup").attr("style","display: none");
+                    restoreBorderColor();
+                    closeAndClearForm();
                 })
 
                 $('#saveIdeaButton').click(function(){
                     console.log(true);
                     createNewIdea();
                 });
-
+                
+                $('#trashIcon').mouseup(function(event) {
+                    console.log($(draggedSticky));
+                    down = undefined;
+                    if(draggedSticky) {
+                        var children = $(draggedSticky).children();
+                        console.log($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
+                        var idea = new Idea($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
+                        $(draggedSticky).remove();
+                        for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                            var ideaToDelete = allNonDeletedIdeas[i];
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getTitle() === $(children[0]).text()) {
+                                allNonDeletedIdeas.splice(i, 1);
+                                break;
+                            }
+                        }
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var ideaToDelete = allNonDeletedIdeas[i];
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getTitle() === $(children[0]).text()) {
+                                ideasInIdeas.splice(i, 1);
+                                break;
+                            }
+                        }
+                        deletedItems.push(idea);
+                    }
+                });
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -263,11 +292,6 @@
                     else {
                         tagFilters.push(this.id);
                     }
-                    console.log(categoryFilters);
-                    console.log(costFilters);
-                    console.log(tagFilters);
-
-
                 }
                 else{
                     console.log("remove filter")
@@ -298,9 +322,6 @@
                             }
                         }
                     }
-                    console.log(categoryFilters);
-                    console.log(costFilters);
-                    console.log(tagFilters);
 
                 }
                 updateFilter();
@@ -331,9 +352,6 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
-                console.log(catset);
-                console.log(costset);
-                console.log(tagset);
 
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
@@ -343,6 +361,9 @@
 
                 console.log("allNonDeletedIdeas");
                 console.log(allNonDeletedIdeas);
+
+                console.log("cost dict");
+                console.log(costMapping);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -455,13 +476,36 @@
 
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
-                    var iframe = window.frames['budget_iframe'];
+                    var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
-                    iframe.css({"height":"400", "width":"800", "border":"none"});
+                    $("#iframeClose").css("display", "block");
+                    //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
+            }
+            
+            var closeBudget = function() {
+                var iframe = $('#budget_iframe');
+                iframe.css("display", "none");
+                $("#iframeClose").css("display", "none");
+            }
+
+            var createIdeaDisplay = function(idea) {
+                var idea = idea;
+                console.log("make idea pop up");
+                var pictures = idea.getPictures();
+                var title = idea.getTitle();
+                var category = idea.getCategory();
+                var description = idea.getDescription();
+                var tags = idea.getTags();
+                var cost = idea.getCost();
+
+
+                
             }
 
             var createNewIdea = function(){
+                restoreBorderColor();
+
                 ideaTitle = $('#ideaTitleInput').val();
                 ideaCost = $('#ideaCostInput').val();
                 ideaCategory = $("#categoryDropDown").val();
@@ -480,7 +524,7 @@
 
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
-                updateCostMapping();
+                updateCostMapping(idea, ideaCost);
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -504,6 +548,9 @@
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
+
+                idea.setDiv(ideaDiv);
+
                 ideaDiv.mousedown(stickyDown);
                 
                 ideaDiv.mouseup(stickyUp);
@@ -520,7 +567,7 @@
             }
 
             var checkUserInputs = function(title, cost, category){
-                if (title == "" | cost == "" | category == ""){
+                if (title == "" | cost == "" | category == "" | category == null){
                     return false;
                 } 
                 if (cost != parseInt(cost, 10)){
@@ -532,7 +579,30 @@
             }
 
             var missingInputFeedback = function(){
-                return;
+                var ideaTitle = $("#ideaTitleInput").val();
+                var ideaCost = $("#ideaCostInput").val();
+                var ideaCategory = $("#categoryDropDown").val();
+
+                if (ideaTitle == "" | ideaTitle == null){
+                    $("#ideaTitleInput").css({"border":"1px solid red"});
+                }
+
+                if (parseInt(ideaCost, 10) != ideaCost){
+                    $("#ideaCostInput").css("border","1px solid red");
+
+                } else if (parseInt(ideaCost, 10) < 0){
+                    $("#ideaCostInput").css("border","1px solid red");
+                }
+
+                if (ideaCategory == "" | ideaCategory == null){
+                    $("#ideaCategoryPicker").css("border","1px solid red");
+                }
+            }
+
+            var restoreBorderColor = function(){
+                $("#ideaTitleInput").css("border","1px solid black");
+                $("#ideaCostInput").css("border","1px solid black");
+                $("#ideaCategoryPicker").css("border","1px solid black");
             }
 
             var updateTagMapping = function(idea, tags){
@@ -570,12 +640,17 @@
             var closeAndClearForm = function(){
                 $("#ideaPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
-                $("")
+                $("#ideaDescriptionInput").val('');
+                $("#ideaCostInput").val('');
+                $("#categoryDropDown").val(['Select a Category']);
+                $("#ideaTagInput").tagsinput("removeAll");
+                
             }
 
             var stickyDown = function(event){
                 //console.log($("#addIdeaButton").css('height'));
                 draggedSticky = event.currentTarget;
+                console.log(draggedSticky);
                 down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
             };
             var stickyUp = function(event) {
@@ -583,36 +658,36 @@
                 down = undefined;
             };
             var stickyMove = function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        if(page === 'home') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                    console.log('board changed');
-                                    $('#decisionBoard').append($(draggedSticky));
-                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                    //down = undefined;
-                                } else {
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                                }
+                //console.log(decisionLeft);
+                if(draggedSticky && down) {
+                    if(page === 'home') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                console.log('board changed');
+                                $('#decisionBoard').append($(draggedSticky));
+                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //down = undefined;
                             } else {
-                                //console.log(down.stickyLeft + event.clientX - down.x);
-                                if(down.x < decisionLeft)
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                                else
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
-                        } else if(page === 'ideas') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        } else if(page === 'decisions') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else {
+                            //console.log(down.stickyLeft + event.clientX - down.x);
+                            if(down.x < decisionLeft)
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                            else
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                         }
+                    } else if(page === 'ideas') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                    } else if(page === 'decisions') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                     }
-                };
+                }
+            };
             
          </script>
     </head>
@@ -626,6 +701,7 @@
                 <li><a href="#" onclick="load('budget_page')">Budget</a></li>
                 <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
+            <button id="iframeClose" class="pull-right btn-danger" onclick="closeBudget()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
@@ -672,6 +748,9 @@
                     <h6 style='font-size: 24'>Underwater Palooza</h6>
                     <h6 style='bottom: 0;font-size: 24'>$20000</h6>
                 </div>
+                <div id="trashIcon">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </div>
             </div>
             <div id='decisionBoard'>
                 <div id="decisionHeader">
@@ -686,24 +765,22 @@
             </div>
             <div id="ideaPopup" style="display: none;">
                     <form class="form" action="#" id="newIdeaForm">
-                        <input type="text" id="ideaTitleInput" placeholder="Title"/>
+                        <input type="text" id="ideaTitleInput" placeholder="Title *"/>
                         <div id="dragAndDropPicUploader">
-                            <form action="/file-upload" class="dropzone" id="picUploader">
                                 <div class="fallback">
                                     <input name="file" type="file" multiple>
                                 </div>
-                            </form>
                         </div>
                         <div id="descriptionAndCost">
                             <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                            <input type="text" id="ideaCostInput" placeholder="Cost"/>
+                            <input type="text" id="ideaCostInput" placeholder="Cost *"/>
                         </div>
                         <div id="tagsAndCategory">
 
                             <div id="ideaCategoryPicker">
                                 <div id="categoryPopover">
                                     <select id="categoryDropDown" placeholder="Category">
-                                        <option disabled selected>Select a Category</option>
+                                        <option disabled selected>Select a Category *</option>
                                         <option value="Catering">Catering</option>
                                         <option value="Clothing">Clothing</option>
                                         <option value="Entertainment">Entertainment</option>
@@ -742,7 +819,7 @@
             <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budget_link" >
-            <iframe name="budget_iframe" src="budget.html" seamless></iframe>
+            <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
     </body>
 </html>
