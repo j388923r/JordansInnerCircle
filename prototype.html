@@ -24,6 +24,8 @@
         <script type="text/javascript" src="dropzone.js"></script>
         <link rel="stylesheet" type="text/css" href="dropzone.css" />
 
+        <script type="text/javascript" src="Idea.js"></script>
+        
         <!-- For Cool Tagging -->
         <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
         <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
@@ -171,7 +173,7 @@
                 padding-left: 1em
             }
                 
-            .modal {
+            /*.modal {
                 position: fixed;
                 opacity: 0;
                 top: 0;
@@ -184,7 +186,7 @@
                 
             .modal:target {
                 opacity: 1;
-            }
+            }*/
                 
             #budgetModal > div {
                 width: 400px;
@@ -204,6 +206,9 @@
                 position: relative;
                 top: 0%;
                 left: 60%;
+                position: absolute;
+                top: 30%;
+                left: 30%;
                 background: white;
                 border: 1px solid black;
                 padding: 10px;
@@ -228,7 +233,11 @@
                 position: relative;
                 padding: 10px;
                 width: 100%;
-                height: 10%;
+                height: 10%;  
+            }          
+            
+            .ui-helper-hidden-accessible {
+                display: none
             }
 
             #ideaCostInput{
@@ -297,6 +306,10 @@
             var isAllChecked = false;
             var checked_arr = [];
             
+            var page = 'home';
+            var decisionLeft;
+
+            var ideasToShow = [];
 
             $(document).ready(function(){
                 var draggedSticky = undefined;
@@ -304,7 +317,7 @@
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
-                console.log(boardBackgroundLeft);
+                //console.log(boardBackgroundLeft);
                 var decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 var decisionBoard = document.getElementById('decisionBoard');
                 var first =  document.getElementById('lessThan500');
@@ -359,7 +372,7 @@
                 $("#search").autocomplete( "option", "delay", 0);
                 
                 $('.stickynote').mousedown(function(event){
-                    console.log($("#addIdeaButton").css('height'));
+                    //console.log($("#addIdeaButton").css('height'));
                     draggedSticky = event.currentTarget;
                     down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
                 });
@@ -372,24 +385,31 @@
                 $('.stickynote').mousemove(function(event){
                     //console.log(decisionLeft);
                     if(draggedSticky && down) {
-                        console.log(down.stickyLeft + event.clientX - down.x);
-                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                console.log('board changed');
-                                $('#decisionBoard').append($(draggedSticky));
-                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                //down = undefined;
+                        if(page === 'home') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                    console.log('board changed');
+                                    $('#decisionBoard').append($(draggedSticky));
+                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                    //down = undefined;
+                                } else {
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                }
                             } else {
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                console.log(down.stickyLeft + event.clientX - down.x);
+                                if(down.x < decisionLeft)
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                                else
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
-                        } else {
-                            console.log(down.stickyLeft + event.clientX - down.x);
-                            if(down.x < decisionLeft)
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                            else
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else if(page === 'ideas') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else if(page === 'decisions') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                         }
                     }
                 });
@@ -409,11 +429,8 @@
                 })
 
                 $('#saveIdeaButton').click(function(){
+                    console.log(true);
                     createNewIdea();
-                });
-                
-                $('#boardBackground').mousedown(function(event) {
-                    console.log(event);
                 });
             });
             //function that takes in categories and tags list and contructs the filter 
@@ -496,10 +513,11 @@
             var checkboxChange = function() {
                 if(this.checked){
                     checked_arr.push(this.id);
+                    console.log(this.name);
                     if(this.name == "cat"){
                         categoryFilters.push(this.id);
                     }
-                    else if(this.name = "cost"){
+                    else if(this.name == "cost"){
                         costFilters.push(this.id);
                     }
                     else {
@@ -522,7 +540,7 @@
                             }
                         }
                     }
-                    else if(this.name = "cost"){
+                    else if(this.name == "cost"){
                         for(var i = 0; i < costFilters.length; i++){
                             if(costFilters[i]== this.id){
                                 costFilters.splice(i,1);
@@ -530,6 +548,7 @@
                         }
                     }
                     else {
+
                         for(var i = 0; i < tagFilters.length; i++){
                             if(tagFilters[i]== this.id){
                                 tagFilters.splice(i,1);
@@ -545,13 +564,12 @@
                 var costset = [];
                 var catset = [];
                 var tagset = [];
-                var ideasToShow = [];
+                ideasToShow = [];
                 for(var i = 0; i< costFilters.length; i++){
+
                     listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
-                    console.log("tags here")
-                    console.log(tagFilters);
                     listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
@@ -590,7 +608,6 @@
                     retList.push(list1[i]);
                 }
                 var list2 = list2;
-                console.log(list2);
                 for(var i = 0; i < list2.length; i++){
                     var inRetList = false;
                     for(var j = 0; j < retList.length; j++){
@@ -624,6 +641,7 @@
             }
             
             var show = function(boardName) {
+                page = boardName;
                 if(boardName === 'ideas') {
                     $('#ideaBoard').show();
                     $('#ideaBoard').css('width', '94%');
@@ -652,6 +670,7 @@
                 ideaDescription = $("#ideaDescriptionInput").val();
 
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
+                console.log(validIdea);
                 if (!validIdea){
                     missingInputFeedback();
                     return;
@@ -660,17 +679,65 @@
                 var idea = new Idea(ideaTitle, ideaCategory, ideaCost);
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
-
+                
+                var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
+                var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                //console.log(boardBackgroundLeft);
+                decisionLeft = decisionBoardLeft - boardBackgroundLeft;
+                
+                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
+                               "<span style='font-weight:bold'>" + idea.category + "</span>" +
+                               "<span>" + idea.title + "</span>"
+                               "</div>";
+                console.log($('#ideaBoard'));
+                var ideaDiv = $(ideaHtml);
+                ideaDiv.mousedown(function(event){
+                    console.log($("#addIdeaButton").css('height'));
+                    draggedSticky = event.currentTarget;
+                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
+                });
+                
+                ideaDiv.mouseup(function(event) {
+                    //console.log(event);
+                    down = undefined;
+                });
+                
+                ideaDiv.mousemove(function(event){
+                    //console.log(decisionLeft);
+                    if(draggedSticky && down) {
+                        //console.log(down.stickyLeft + event.clientX - down.x);
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                console.log('board changed');
+                                $('#decisionBoard').append($(draggedSticky));
+                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //down = undefined;
+                            } else {
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                            }
+                        } else {
+                            console.log(down.stickyLeft + event.clientX - down.x);
+                            if(down.x < decisionLeft)
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                            else
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        }
+                    }
+                });
+                $('#ideaBoard').append(ideaDiv);
             }
 
             var checkUserInputs = function(title, cost, category){
                 if (title == "" | cost == "" | category == ""){
                     return false;
                 } 
-                if (cost !== parseInt(cost, 10)){
+                console.log("passed1");
+                if (cost != parseInt(cost, 10)){
                     return false;
                 }
-            
+                console.log("passed2");
                 return true;
             }
 
@@ -739,7 +806,17 @@
                     <h4>Venue</h4>
                     <h3>Church</h3>
                 </div>
-                <div id="ideaPopup" style="display: none;">
+                
+            </div>
+            <div id='decisionBoard'>
+                <div id="decisionHeader">
+                    <a href="#" onclick="show('decisions')">Decisions</a>
+                </div>
+                <div id="decisionContent">
+                    
+                </div>
+            </div>
+            <div id="ideaPopup" style="display: none;">
                     <form class="form" action="#" id="newIdeaForm">
                         <input type="text" id="ideaTitleInput" placeholder="Title"/>
                         <div id="dragAndDropPicUploader">
@@ -775,15 +852,6 @@
                         <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
                 </div>
-            </div>
-            <div id='decisionBoard'>
-                <div id="decisionHeader">
-                    <a href="#" onclick="show('decisions')">Decisions</a>
-                </div>
-                <div id="decisionContent">
-                    
-                </div>
-            </div>
         </div>
         <div id="budgetModal" class="modal">
             <div>	<a href="#close" title="Close" class="close">X</a>
