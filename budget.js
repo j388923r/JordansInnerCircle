@@ -9,6 +9,7 @@ $(function() {
     calculate();
     delete_confirm();
     edit_with_btn();
+    calculateRemaining();
 
     //Editable from edit button
     function edit_with_btn() {
@@ -109,9 +110,29 @@ $(function() {
                 $("#remaining").css({"color":"red"});
                 $("#total_allotted").css({"color":"red"});
             }
+
+            (function (global) {
+                global.localStorage.setItem("shared_remaining_budget", remaining);
+            }(window));
         });
- 
+                
+    }
+
+    function calculateRemaining() {
+        var class_name = ".editable.allotted";
+        var total_allotted = calculateTotal(class_name);
+        $("#total_allotted").html(total_allotted);
         
+        remaining = total_budget - total_allotted;
+        $("#remaining_budget").html(remaining);
+        if (remaining < 0) {
+            $("#remaining").css({"color":"red"});
+            $("#total_allotted").css({"color":"red"});
+        }
+        
+        (function (global) {
+            global.localStorage.setItem("shared_remaining_budget", remaining);
+        }(window));
     }
 
     function calculateTotal(class_name) {
@@ -166,16 +187,12 @@ $(function() {
 
 
             if($(this).is("#total_budget")) { //Change budget variable
-                calculate();
                 total_budget = textbox.val();
+                calculateRemaining();
             }
 
         });
-
-        
-    }
-
     
-
+    }
 
 });
