@@ -4,9 +4,19 @@ $(function() {
 
     var total_budget = 40000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
-
     editable();
     calculate();
+
+    //Delete confirmation
+    $('.delete_confirm').click(function (e) {
+        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
+            var $killrow = $('#delete_btn').closest('div[class^="row"]');
+               $killrow.addClass("danger");
+               $killrow.fadeOut(2000, function() {
+                   $killrow.remove();
+               });
+        } 
+    });
 
     // Only numbers allowed
       $('#new_spent').on('change keyup', function() {
@@ -52,6 +62,7 @@ $(function() {
         + '<div class="editable allotted col-md-2">' + allotted + '</div>'
         + '<div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'
         + '</div>';
+        
         return next_row;
     }
 
@@ -131,17 +142,6 @@ $(function() {
             });
         });
     }
-    
-    //Delete confirmation
-    $('button[name="delete_btn"]').click(function (e) {
-        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
-            var $killrow = $('#delete_btn').closest('div[class^="row"]');
-               $killrow.addClass("danger");
-               $killrow.fadeOut(2000, function() {
-                   $killrow.remove();
-               });
-        } 
-    });
 
 
 });
