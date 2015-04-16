@@ -117,13 +117,6 @@
                     }
                 });
 
-                // $('#search').onchange(function() {
-                //     var input = $("#search");
-                //     var inputValue = $(input).val();
-                //     if(inputValue == ""){
-                //         clearing();
-                //     }
-                // });
 
                 $('#search').autocomplete({
                     source: searchSource
@@ -132,6 +125,14 @@
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
+
+                $('#search').change(function() {
+                    var input = $("#search");
+                    var inputValue = $(input).val();
+                    if(inputValue == ""){
+                        clearing();
+                    }
+                });
                 
                 $('.stickynote').mousedown(stickyDown);
                 
@@ -457,6 +458,20 @@
                     iframe.css("display", "block");
                     iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
+            }
+
+            var createIdeaDisplay = function(idea) {
+                var idea = idea;
+                console.log("make idea pop up");
+                var pictures = idea.getPictures();
+                var title = idea.getTitle();
+                var category = idea.getCategory();
+                var description = idea.getDescription();
+                var tags = idea.getTags();
+                var cost = idea.getCost();
+
+
+                
             }
 
             var createNewIdea = function(){
