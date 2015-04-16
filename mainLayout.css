@@ -366,6 +366,20 @@
         margin-left: 15.5%;
     }
     
+    #budgetTotalRemaining {
+        position: absolute;
+        margin-top: -70px;
+        height: 40px;
+        width: 24%;
+        border-radius: 5px;
+        background-color: #EEEEEE;
+        text-align: center;
+        font-size: 2em;
+        z-index: 11;
+        bottom: 0;
+        margin-left: 10%;
+    }
+    
     #ideaContent {
         padding-top:25px;
     }
@@ -505,9 +519,19 @@
 
     #ideaView {
     }
+    
+    #iframeClose {
+        font-size: 30px;
+        color: white;
+        display:none;
+    }
 
     iframe {
         display:none;
+        position: absolute;
+        top: 0;
+        width: 94%;
+        height: 100%;
     }
 
     iframe[seamless] {

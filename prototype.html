@@ -65,7 +65,6 @@
             var searchedFor = "";
 
             $(document).ready(function(){
-                var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -92,6 +91,7 @@
                     placement : 'bottom',
                     content : '<input type="text" placeholder="Filter term"/>'
                 });
+                
                 $('#filters').click(function() {
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
@@ -161,7 +161,29 @@
                 });
                 
                 $('#trashIcon').mouseenter(function(event) {
-                    //console.log(event);
+                    console.log($(draggedSticky));
+                    down = undefined;
+                    if(draggedSticky) {
+                        var children = $(draggedSticky).children();
+                        console.log($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
+                        var idea = new Idea($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
+                        $(draggedSticky).remove();
+                        for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                            var ideaToDelete = allNonDeletedIdeas[i];
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getTitle() === $(children[0]).text()) {
+                                allNonDeletedIdeas.splice(i, 1);
+                                break;
+                            }
+                        }
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var ideaToDelete = allNonDeletedIdeas[i];
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getTitle() === $(children[0]).text()) {
+                                ideasInIdeas.splice(i, 1);
+                                break;
+                            }
+                        }
+                        deletedItems.push(idea);
+                    }
                 });
             });
             //function that takes in categories and tags list and contructs the filter 
@@ -454,10 +476,17 @@
 
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
-                    var iframe = window.frames['budget_iframe'];
+                    var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
-                    iframe.css({"height":"400", "width":"800", "border":"none"});
+                    $("#iframeClose").css("display", "block");
+                    //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
+            }
+            
+            var closeBudget = function() {
+                var iframe = $('#budget_iframe');
+                iframe.css("display", "none");
+                $("#iframeClose").css("display", "none");
             }
 
             var createIdeaDisplay = function(idea) {
@@ -621,6 +650,7 @@
             var stickyDown = function(event){
                 //console.log($("#addIdeaButton").css('height'));
                 draggedSticky = event.currentTarget;
+                console.log(draggedSticky);
                 down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
             };
             var stickyUp = function(event) {
@@ -671,6 +701,7 @@
                 <li><a href="#" onclick="load('budget_page')">Budget</a></li>
                 <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
+            <button id="iframeClose" class="pull-right btn-danger" onclick="closeBudget()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
@@ -788,7 +819,7 @@
             <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budget_link" >
-            <iframe name="budget_iframe" src="budget.html" seamless></iframe>
+            <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
     </body>
 </html>
