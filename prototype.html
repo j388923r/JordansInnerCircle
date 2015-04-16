@@ -287,7 +287,7 @@
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
-            var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[]};
+            var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
@@ -668,6 +668,7 @@
                 ideaCategory = $("#categoryDropDown").val();
                 ideaPics = $("#picUploader").context.URL;
                 ideaDescription = $("#ideaDescriptionInput").val();
+                ideaTags = $("#ideaTagInput").tagsinput("items");
 
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
                 console.log(validIdea);
@@ -677,6 +678,18 @@
                 }
 
                 var idea = new Idea(ideaTitle, ideaCategory, ideaCost);
+
+                // Add attributes to ideas.. except for pic...
+                categoryMapping[ideaCategory].push(idea);
+                updateCostMapping();
+                if (ideaDescription != ""){
+                    idea.updateDescription(ideaDescription);
+                }
+                if (ideaTags.length != 0){
+                    idea.updateTags(ideaTags);
+                    updateTagMapping(idea, ideaTags);
+                }
+
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
                 
@@ -727,6 +740,13 @@
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);
+
+                console.log(tagsMapping);
+                console.log(costMapping);
+                console.log(categoryMapping);
+
+                // closing and clearing form!! :DD
+                closeAndClearForm();
             }
 
             var checkUserInputs = function(title, cost, category){
@@ -736,6 +756,8 @@
                 console.log("passed1");
                 if (cost != parseInt(cost, 10)){
                     return false;
+                } else if (parseInt(cost,10) < 0){
+                    return false;
                 }
                 console.log("passed2");
                 return true;
@@ -743,6 +765,40 @@
 
             var missingInputFeedback = function(){
                 return;
+            }
+
+            var updateTagMapping = function(idea, tags){
+                for(var tagIndex in tags){
+                    tag = tags[tagIndex];
+                    if (tag in Object.keys(tagsMapping)){
+                        if (!(idea in tagsMapping[tag])){
+                            tagsMapping[tag].push(idea);
+                        }
+                    } else {
+                        tagsMapping[tag] = [idea];
+                    }
+                }
+            }
+
+            var updateCostMapping = function(idea, cost){
+                var numberCost = parseInt(cost, 10);
+
+                if (numberCost <= 500){
+                    console.log(costMapping["lessThan500"]);
+                    costMapping["lessThan500"].push(idea);
+                } else if (numberCost <= 2000){
+                    costMapping["500To2000"].push(idea);
+                } else if (numberCost <= 5000){
+                    costMapping["2000To5000"].push(idea);
+                } else {
+                    costMapping["moreThan5000"].push(idea);
+                }
+            }
+
+            var closeAndClearForm = function(){
+                $("#ideaPopup").attr("style","display: none");
+                $("#ideaTitleInput").val('');
+                $("")
             }
 
          </script>
@@ -842,7 +898,7 @@
                                         <option value="Flowers">Flowers</option>
                                         <option value="Invitations">Invitations</option>
                                         <option value="Venue">Venue</option>
-                                        <optoin value="Other">Other</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
                             </div>
