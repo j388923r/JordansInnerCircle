@@ -37,7 +37,7 @@
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations"];
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
@@ -261,11 +261,6 @@
                     else {
                         tagFilters.push(this.id);
                     }
-                    console.log(categoryFilters);
-                    console.log(costFilters);
-                    console.log(tagFilters);
-
-
                 }
                 else{
                     console.log("remove filter")
@@ -296,9 +291,6 @@
                             }
                         }
                     }
-                    console.log(categoryFilters);
-                    console.log(costFilters);
-                    console.log(tagFilters);
 
                 }
                 updateFilter();
@@ -329,9 +321,6 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
-                console.log(catset);
-                console.log(costset);
-                console.log(tagset);
 
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
@@ -341,6 +330,9 @@
 
                 console.log("allNonDeletedIdeas");
                 console.log(allNonDeletedIdeas);
+
+                console.log("cost dict");
+                console.log(costMapping);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -470,7 +462,7 @@
 
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
-                updateCostMapping();
+                updateCostMapping(idea, ideaCost);
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -494,6 +486,9 @@
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
+
+                idea.setDiv(ideaDiv);
+
                 ideaDiv.mousedown(stickyDown);
                 
                 ideaDiv.mouseup(stickyUp);

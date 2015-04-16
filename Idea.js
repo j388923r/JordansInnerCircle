@@ -17,6 +17,7 @@ var Idea = function(title, category, cost){
 	this.hidden = false;
 	this.deleted = false;
 	this.decided= false;
+	this.ideaDiv = undefined;
 
 	// Public Functions
 
@@ -71,6 +72,7 @@ var Idea = function(title, category, cost){
 	*/
 	this.hide = function(){
 		this.hidden = true;
+		this.ideaDiv.hide();
 	}
 
 	/*
@@ -78,6 +80,11 @@ var Idea = function(title, category, cost){
 	*/
 	this.setVisible = function(){
 		this.hidden = false;
+		this.ideaDiv.show();
+	}
+
+	this.setDiv = function(ideaDiv) {
+		this.ideaDiv = ideaDiv;
 	}
 
 	this.delete = function(){
