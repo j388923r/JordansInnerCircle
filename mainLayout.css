@@ -532,9 +532,17 @@
         top: 0;
         width: 94%;
         height: 100%;
+        z-index: 15
     }
 
     iframe[seamless] {
         border: none;
 
+    }
+    
+    .ui-menu .ui-menu-item a{
+        background-color: white;
+        color: black;
+        border-radius: 0px;
+        border: 1px solid #454545;
     }
