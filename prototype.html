@@ -261,6 +261,9 @@
                     else {
                         tagFilters.push(this.id);
                     }
+                    console.log(categoryFilters);
+                    console.log(costFilters);
+                    console.log(tagFilters);
 
 
                 }
@@ -293,6 +296,9 @@
                             }
                         }
                     }
+                    console.log(categoryFilters);
+                    console.log(costFilters);
+                    console.log(tagFilters);
 
                 }
                 updateFilter();
@@ -306,12 +312,14 @@
                 for(var i = 0; i< costFilters.length; i++){
                     costset = listUnion(costset,costMapping[costFilters[i]]);
                 }
+
                 for(var i = 0; i< tagFilters.length; i++){
                     tagset = listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
                     catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
+                console.log("start sets");
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
                 }
@@ -321,16 +329,25 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
+                console.log(catset);
+                console.log(costset);
+                console.log(tagset);
 
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
+
+                console.log("ideasToShow");
+                console.log(ideasToShow);
+
+                console.log("allNonDeletedIdeas");
+                console.log(allNonDeletedIdeas);
+
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
-                    console.log(ideasToShow);
-                    ideasToShow[i].show();
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -363,7 +380,7 @@
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
                     console.log(ideasToShow);
-                    ideasToShow[i].show();
+                    ideasToShow[i].setVisible();
                 }
 
             }
