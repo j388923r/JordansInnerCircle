@@ -32,6 +32,8 @@
         <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
         <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
 
+        <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
+
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
@@ -48,7 +50,7 @@
             var tagFilters = [];
 
             var allNonDeletedIdeas = [];
-            var deletedIdeas = [new Idea("Underwater", "Venue", 2000)];
+            var deletedIdeas = [];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
 
@@ -112,7 +114,7 @@
                     if (e.keyCode == 13){
                         var input = $("#search");
                         var inputValue = $(input).val();
-                        console.log(inputValue);
+                        //console.log(inputValue);
                         searching(inputValue);
                     }
                 });
@@ -142,7 +144,7 @@
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
-                    console.log(down);
+                    //console.log(down);
                 });
 
                 $('#addIdeaButton').click(function(){
@@ -156,16 +158,16 @@
                 })
 
                 $('#saveIdeaButton').click(function(){
-                    console.log(true);
+                    //console.log(true);
                     createNewIdea();
                 });
                 
                 $('#trashIcon').mouseup(function(event) {
-                    console.log($(draggedSticky));
+                    //console.log($(draggedSticky));
                     down = undefined;
                     if(draggedSticky) {
                         var children = $(draggedSticky).children();
-                        console.log($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
+                        //console.log($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
                         var idea = new Idea($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
                         $(draggedSticky).remove();
                         for(var i = 0; i < allNonDeletedIdeas.length; i++) {
@@ -182,7 +184,7 @@
                                 break;
                             }
                         }
-                        deletedItems.push(idea);
+                        deletedIdeas.push(idea);
                     }
                 });
             });
@@ -282,7 +284,7 @@
             var checkboxChange = function() {
                 if(this.checked){
                     checked_arr.push(this.id);
-                    console.log(this.name);
+                    //console.log(this.name);
                     if(this.name == "cat"){
                         categoryFilters.push(this.id);
                     }
@@ -294,7 +296,7 @@
                     }
                 }
                 else{
-                    console.log("remove filter")
+                    //console.log("remove filter")
                     for(var i = 0; i < checked_arr.length; i++){
                         if(checked_arr[i]== this.id){
                             checked_arr.splice(i,1);
@@ -342,7 +344,7 @@
                 for(var i = 0; i< categoryFilters.length; i++){
                     catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
-                console.log("start sets");
+                //console.log("start sets");
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
                 }
@@ -356,14 +358,14 @@
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
 
-                console.log("ideasToShow");
-                console.log(ideasToShow);
+                // console.log("ideasToShow");
+                // console.log(ideasToShow);
 
-                console.log("allNonDeletedIdeas");
-                console.log(allNonDeletedIdeas);
+                // console.log("allNonDeletedIdeas");
+                // console.log(allNonDeletedIdeas);
 
-                console.log("cost dict");
-                console.log(costMapping);
+                // console.log("cost dict");
+                // console.log(costMapping);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -402,7 +404,7 @@
                     allNonDeletedIdeas[i].hide();
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
-                    console.log(ideasToShow);
+                    //console.log(ideasToShow);
                     ideasToShow[i].setVisible();
                 }
 
@@ -482,11 +484,17 @@
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
             }
-            
-            var closeBudget = function() {
+
+            function closeWindows() {
+                
                 var iframe = $('#budget_iframe');
                 iframe.css("display", "none");
                 $("#iframeClose").css("display", "none");
+
+                var deleted_frame = $('.deleted_archive_view');
+                deleted_frame.css("display", "none"); 
+                $("#iframeClose").css("display", "none");
+
             }
 
             var createIdeaDisplay = function(idea) {
@@ -499,8 +507,6 @@
                 var tags = idea.getTags();
                 var cost = idea.getCost();
 
-
-                
             }
 
             var createNewIdea = function(){
@@ -688,6 +694,74 @@
                     }
                 }
             };
+
+            function load_deleted() {
+                
+                for(var i=0; i < deletedIdeas.length; i++){
+                    var idea = deletedIdeas[i];
+                    populate_list(idea.title, idea.category, idea.cost,idea);
+                    console.log(idea.title, idea.category, idea.cost);
+                }
+
+                var deleted_frame = $('.deleted_archive_view');
+                deleted_frame.css("display", "block"); 
+                $("#iframeClose").css("display", "block");
+            
+                $('#keywords').tablesorter(); 
+
+            }
+            
+            //Add row for entered item
+            function populate_list(title, category, cost, idea) {
+                var icon = document.createElement('span');
+                icon.class= "glyphicon glyphicon-open";
+
+                console.log("idea",idea);
+
+                var btn = document.createElement('button');
+                btn.type = "button";
+                btn.className = "btn btn-s";
+                btn.value = "restore";
+                btn.onclick = (function(idea) {
+                    return function(){
+                        
+                        var $deleterow = $(btn).closest('tr');
+                        console.log($deleterow);
+                        $deleterow.addClass("danger");
+                        $deleterow.fadeOut(500, function() {
+                            $deleterow.remove();
+                        });
+
+                        restore_idea(idea);
+                    }
+                })(idea);
+
+               // (function(entry) {return function() {chooseUser(entry);}})(entry);
+       
+                $(btn).append($('<span></span>')
+                    .addClass('glyphicon glyphicon-open'));
+              
+
+                $("#keywords").find('tbody')
+                    .append($('<tr>')
+                        .append($('<td>').attr("class", "lalign").text(title))
+                        .append($('<td>').text(category))
+                        .append($('<td>').text((cost)))
+                        .append($('<td>').attr("id", "restore_button"))
+                    );
+
+                $(btn).appendTo("#restore_button");
+            }
+
+            //Restore idea
+            function restore_idea(idea) {
+                //idea.setVisible();
+                deletedIdeas.splice(deletedIdeas.indexOf(idea),1);
+                allNonDeletedIdeas.push(idea);
+                ideasInIdeas.push(idea);
+                //updateFilter();
+            }
+
             
          </script>
     </head>
@@ -699,9 +773,9 @@
                 <li><a href="#" onclick="show('ideas')">Ideas</a></li>
                 <li><a href="#" onclick="show('decisions')">Decisions</a></li>
                 <li><a href="#" onclick="load('budget_page')">Budget</a></li>
-                <li><a href="#">Deleted <br> Archive</a></li>
+                <li><a href="#" onclick="load_deleted()">Deleted <br> Archive</a></li>
             </ul>
-            <button id="iframeClose" class="pull-right btn-danger" onclick="closeBudget()"><span class="glyphicon glyphicon-remove"></span></button>
+            <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
@@ -820,6 +894,21 @@
         </div>
         <div id="budget_link" >
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
+        </div>
+        <div id="wrapper" class="deleted_archive_view">
+        <h2>Deleted Archive</h2>
+        <table id="keywords" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th><span>Title</span></th>
+                    <th><span>Category</span></th>
+                    <th><span>Cost</span></th>
+                    <th>Restore?</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
         </div>
     </body>
 </html>
