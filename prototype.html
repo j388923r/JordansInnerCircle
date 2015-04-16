@@ -564,12 +564,28 @@
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
 
-                console.log(tagsMapping);
-                console.log(costMapping);
-                console.log(categoryMapping);
-
                 // closing and clearing form!! :DD
                 closeAndClearForm();
+            }
+
+            var makeIdeaDiv = function(idea) {
+
+                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
+               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
+               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
+               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
+               "</div>";
+                               
+                var ideaDiv = $(ideaHtml);
+
+                idea.setDiv(ideaDiv);
+
+                ideaDiv.mousedown(stickyDown);
+                
+                ideaDiv.mouseup(stickyUp);
+                
+                ideaDiv.mousemove(stickyMove);
+                $('#ideaBoard').append(ideaDiv);
             }
 
             var checkUserInputs = function(title, cost, category){
@@ -726,7 +742,6 @@
                     return function(){
                         
                         var $deleterow = $(btn).closest('tr');
-                        console.log($deleterow);
                         $deleterow.addClass("danger");
                         $deleterow.fadeOut(500, function() {
                             $deleterow.remove();
@@ -735,8 +750,6 @@
                         restore_idea(idea);
                     }
                 })(idea);
-
-               // (function(entry) {return function() {chooseUser(entry);}})(entry);
        
                 $(btn).append($('<span></span>')
                     .addClass('glyphicon glyphicon-open'));
@@ -755,11 +768,12 @@
 
             //Restore idea
             function restore_idea(idea) {
-                //idea.setVisible();
+                makeIdeaDiv(idea);
+                idea.setVisible();
                 deletedIdeas.splice(deletedIdeas.indexOf(idea),1);
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
-                //updateFilter();
+                updateFilter();
             }
 
             
