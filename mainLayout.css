@@ -91,7 +91,7 @@
         height: 150px;
         width: 150px;
         background-color: #FFF9C9;
-        border: solid 2px black;
+        border: solid 3px #F5D283;
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select:none;
@@ -101,13 +101,14 @@
     
     #decisionHeader, #ideaHeader {
         position: absolute;
+        font-family: "Great Vibes";
         margin-top: -20px;
         height: 40px;
-        width: 12%;
+        width: 15%;
         border-radius: 5px;
-        background-color: #EEEEEE;
+        background-color: #DBE7F2;
         text-align: center;
-        font-size: 2em;
+        font-size: 36px;
         z-index: 11;
     }
     
@@ -295,7 +296,7 @@
     }
 
     #wrapper {
-      background: #fff;
+      background: #eee;
       margin: 0 auto;
       padding: 10px 17px;
     }

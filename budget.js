@@ -58,8 +58,8 @@ $(function() {
         var next_row = '<div class="row">' 
         + '<div class="col-md-1"><span class="glyphicon glyphicon-heart pull-right" aria-hidden="true"></span></div>' 
         + '<div class="editable category col-md-4">' + category + '</div>' 
-        + '<div class="editable spent col-md-2">' + spent + '</div>' 
-        + '<div class="editable allotted col-md-2">' + allotted + '</div>'
+        + '<div class="editable spent col-md-3">' + spent + '</div>' 
+        + '<div class="editable allotted col-md-3">' + allotted + '</div>'
         + '<div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'
         + '</div>';
         

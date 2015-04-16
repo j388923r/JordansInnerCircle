@@ -10,16 +10,16 @@ body {
 }
 
 #label {
-	font-size: 20px;
+	font-size: 24px;
 	font-family: "Gill Sans", sans-serif;
 	color: #8D9DB2;
 	margin-bottom: 20px;
 }
 
 #header {
-	  font-family: 'Great Vibes', Helvetica, sans-serif;
+	  font: 100 60px 'Great Vibes', Helvetica, sans-serif;
+	  text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
 	  font-weight: bold;
-	  font-size: 3.6em;
 	  line-height: 1.7em;
 	  margin-bottom: 10px;
 	  text-align: center;
@@ -27,7 +27,7 @@ body {
 }
 
 .row {
-	font-size: 20px;
+	font-size: 24px;
 	font-family: "Gill Sans", sans-serif;
 	margin: 10px;
 }
