@@ -2,7 +2,7 @@
 // has finished loading in the browser.
 $(function() {
 
-    var total_budget = 40000; //Set total budget here -- dummy data
+    var total_budget = 4000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
     editable();
     calculate();
@@ -12,7 +12,7 @@ $(function() {
         if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
             var $killrow = $('#delete_btn').closest('div[class^="row"]');
                $killrow.addClass("danger");
-               $killrow.fadeOut(2000, function() {
+               $killrow.fadeOut(500, function() {
                    $killrow.remove();
                });
         } 
@@ -76,7 +76,7 @@ $(function() {
     function calculate() {
         $(".editable.spent").each(function() {
             var class_name = ".editable.spent";
-            var total_spent = calculateTotal(class_name);
+            total_spent = calculateTotal(class_name);
             $("#total_spent").html(total_spent);
         });
 
@@ -85,7 +85,13 @@ $(function() {
             var class_name = ".editable.allotted";
             var total_allotted = calculateTotal(class_name);
             $("#total_allotted").html(total_allotted);
-            $("#remaining_budget").html(total_budget - total_allotted);
+            
+            var remaining = total_budget - total_allotted;
+            $("#remaining_budget").html(remaining);
+            if (remaining < 0) {
+                $("#remaining").css({"color":"red"});
+                $("#total_allotted").css({"color":"red"});
+            }
         });
  
         
