@@ -6,17 +6,53 @@ $(function() {
     document.getElementById('total_budget').innerHTML = total_budget;
     editable();
     calculate();
+    delete_confirm();
+
+    //Editable from edit button
+    $('.edit-btn').click(function(e) {
+        $(this).css("color","steelblue");
+        var $row = $(this).closest('div[class^="row"]'); 
+        $row.children('.editable:first').click();
+    });
+
+    //Highlight textbox of closest box when edit button clicked
+    function focusOnEdit(target) {
+        //Reference the Label.
+        var label = target;
+
+        //Add a TextBox next to the Label.
+        label.after("<input style = 'display:none' />");
+
+        //Reference the TextBox.
+        var textbox = $(this).next();
+        textbox.addClass(label.attr('class'));
+
+        //Set the name attribute of the TextBox.
+        textbox[0].name = this.id.replace("lbl", "txt");
+
+        //Assign the value of Label to TextBox.
+        textbox.val(label.html());
+
+        //When Label is clicked, hide Label and show TextBox.
+        label.click(function() {
+            $(this).hide();
+            $(this).next().show().select();
+        });
+
+    }
 
     //Delete confirmation
-    $('.delete_confirm').click(function (e) {
-        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
-            var $killrow = $('#delete_btn').closest('div[class^="row"]');
-               $killrow.addClass("danger");
-               $killrow.fadeOut(500, function() {
-                   $killrow.remove();
-               });
-        } 
-    });
+    function delete_confirm() {
+        $('.delete_confirm').click(function (e) {
+            if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
+                var $killrow = $(this).closest('div[class^="row"]');
+                   $killrow.addClass("danger");
+                   $killrow.fadeOut(500, function() {
+                       $killrow.remove();
+                   });
+            } 
+        });
+    }
 
     // Only numbers allowed
       $('#new_spent').on('change keyup', function() {
@@ -44,8 +80,7 @@ $(function() {
             var spent = ($('#new_spent').val() == "") ? 0 : $('#new_spent').val();
             var allotted = ($('#new_allotted').val() == "") ? 0 : $('#new_allotted').val();
             var category = ($('#new_category').val() == "") ? 'My new category' : $('#new_category').val();
-            var next_row = populate_list(category, spent, allotted);
-            $(".items").append(next_row);
+            populate_list(category, spent, allotted);
             $('.new_entry').val("");
             $('#new_category').focus();
             editable();
@@ -55,21 +90,23 @@ $(function() {
 
     //Add row for entered item
     function populate_list(category, spent, allotted) {
-        var next_row = '<div class="row">' 
-        + '<div class="col-md-1"><span class="glyphicon glyphicon-heart pull-right" aria-hidden="true"></span></div>' 
-        + '<div class="editable category col-md-4">' + category + '</div>' 
-        + '<div class="editable spent col-md-2">' + spent + '</div>' 
-        + '<div class="editable allotted col-md-2">' + allotted + '</div>'
-        + '<div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'
-        + '</div>';
-        
-        return next_row;
+        $next_row = $(".items")
+            .append($('<div>').addClass("row")
+                .append($('<div>').addClass("col-md-1")
+                    .append($('<button>').addClass("btn edit-btn btn-s")
+                        .append($('<span>').addClass('glyphicon glyphicon-edit pull-right'))))
+                .append($('<div>').addClass("editable category col-md-4").text(category))
+                .append($('<div>').addClass("editable category col-md-3").text(spent))
+                .append($('<div>').addClass("editable category col-md-3").text(allotted))
+                .append($('<div>').addClass("delete_space col-md-1")
+                    .append($('<button>').addClass("btn delete_confirm btn-s btn-danger")
+                        .attr("title", "delete")
+                        .append($('<span>').addClass('glyphicon glyphicon-trash'))))
+
+        );
+
+        delete_confirm();
     }
-
-    //Delete with dialog box when clicking trash icon
-    $('.trash').click(function(){
-
-    });
 
 
     //Get totals
@@ -148,6 +185,8 @@ $(function() {
             });
         });
     }
+
+    
 
 
 });
