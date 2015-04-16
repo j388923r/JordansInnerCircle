@@ -2,11 +2,21 @@
 // has finished loading in the browser.
 $(function() {
 
-    var total_budget = 40000; //Set total budget here -- dummy data
+    var total_budget = 4000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
-
     editable();
     calculate();
+
+    //Delete confirmation
+    $('.delete_confirm').click(function (e) {
+        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
+            var $killrow = $('#delete_btn').closest('div[class^="row"]');
+               $killrow.addClass("danger");
+               $killrow.fadeOut(500, function() {
+                   $killrow.remove();
+               });
+        } 
+    });
 
     // Only numbers allowed
       $('#new_spent').on('change keyup', function() {
@@ -52,6 +62,7 @@ $(function() {
         + '<div class="editable allotted col-md-2">' + allotted + '</div>'
         + '<div class="col-md-1"><button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'
         + '</div>';
+        
         return next_row;
     }
 
@@ -65,7 +76,7 @@ $(function() {
     function calculate() {
         $(".editable.spent").each(function() {
             var class_name = ".editable.spent";
-            var total_spent = calculateTotal(class_name);
+            total_spent = calculateTotal(class_name);
             $("#total_spent").html(total_spent);
         });
 
@@ -74,7 +85,13 @@ $(function() {
             var class_name = ".editable.allotted";
             var total_allotted = calculateTotal(class_name);
             $("#total_allotted").html(total_allotted);
-            $("#remaining_budget").html(total_budget - total_allotted);
+            
+            var remaining = total_budget - total_allotted;
+            $("#remaining_budget").html(remaining);
+            if (remaining < 0) {
+                $("#remaining").css({"color":"red"});
+                $("#total_allotted").css({"color":"red"});
+            }
         });
  
         
@@ -131,17 +148,6 @@ $(function() {
             });
         });
     }
-    
-    //Delete confirmation
-    $('button[name="delete_btn"]').click(function (e) {
-        if (confirm("Are you sure you want to " + $(this).attr("title") + "?")) {
-            var $killrow = $('#delete_btn').closest('div[class^="row"]');
-               $killrow.addClass("danger");
-               $killrow.fadeOut(2000, function() {
-                   $killrow.remove();
-               });
-        } 
-    });
 
 
 });
