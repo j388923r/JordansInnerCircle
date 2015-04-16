@@ -202,13 +202,77 @@
 
             #ideaPopup {
                 position: relative;
-                top: 30%;
+                top: 0%;
                 left: 60%;
                 background: white;
                 border: 1px solid black;
                 padding: 10px;
+            }
+
+            #ideaTitleInput {
+                position: relative;
+                padding: 10px;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #dragAndDropPicUploader{
+                position: relative;
+                border: 1px solid black;
+                padding: 10px;
+                width: 100%;
+                height: 20%;
+            }
+
+            #ideaDescriptionInput{
+                position: relative;
+                padding: 10px;
+                width: 100%;
+                height: 10%;
+            }
+
+            #ideaCostInput{
+                position: relative;
+                padding: 10px;
+                width: 100%;
 
             }
+
+            #descriptionAndCost{
+                width: 50%;
+                float: left;
+                padding: 10px;
+            }
+
+            #ideaCategoryPicker{
+                position: relative;
+                padding: 10px;
+                width: 100%;
+            }
+
+            #ideaTagInput{
+                position: relative;
+                padding: 10px;
+            }
+
+            #tagsAndCategory{
+                position: relative;
+                padding: 10px;
+                width: 50%;
+                float: right;
+            }
+
+            #saveIdeaButton{
+                position: relative;
+                padding: 10px;
+            }
+
+            #cancelIdeaButton{
+                position: relative;
+                padding: 10px;
+            }
+
+            
         </style>
         
         <script>
@@ -685,23 +749,28 @@
                                 </div>
                             </form>
                         </div>
-                        <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                        <input type="text" id="ideaCostInput" placeholder="Cost"/>
-                        <div id="ideaCategoryPicker">
-                            <div id="categoryPopover">
-                                <select id="categoryDropDown" placeholder="Category">
-                                    <option disabled selected>Select a Category</option>
-                                    <option value="Catering">Catering</option>
-                                    <option value="Clothing">Clothing</option>
-                                    <option value="Entertainment">Entertainment</option>
-                                    <option value="Flowers">Flowers</option>
-                                    <option value="Invitations">Invitations</option>
-                                    <option value="Venue">Venue</option>
-                                    <optoin value="Other">Other</option>
-                                </select>
-                            </div>
+                        <div id="descriptionAndCost">
+                            <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
+                            <input type="text" id="ideaCostInput" placeholder="Cost"/>
                         </div>
-                        <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                        <div id="tagsAndCategory">
+
+                            <div id="ideaCategoryPicker">
+                                <div id="categoryPopover">
+                                    <select id="categoryDropDown" placeholder="Category">
+                                        <option disabled selected>Select a Category</option>
+                                        <option value="Catering">Catering</option>
+                                        <option value="Clothing">Clothing</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Flowers">Flowers</option>
+                                        <option value="Invitations">Invitations</option>
+                                        <option value="Venue">Venue</option>
+                                        <optoin value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                        </div>
                         <button id="saveIdeaButton" class="btn">Save</button>
                         <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
