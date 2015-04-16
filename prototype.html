@@ -150,7 +150,7 @@
                 });
 
                 $('#cancelIdeaButton').click(function(){
-                    $("#ideaPopup").attr("style","display: none");
+                    closeAndClearForm();
                 })
 
                 $('#saveIdeaButton').click(function(){
@@ -533,7 +533,8 @@
             }
 
             var checkUserInputs = function(title, cost, category){
-                if (title == "" | cost == "" | category == ""){
+                console.log(category);
+                if (title == "" | cost == "" | category == "" | category == null){
                     return false;
                 } 
                 if (cost != parseInt(cost, 10)){
@@ -583,7 +584,11 @@
             var closeAndClearForm = function(){
                 $("#ideaPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
-                $("")
+                $("#ideaDescriptionInput").val('');
+                $("#ideaCostInput").val('');
+                $("#categoryDropDown").val(['Select a Category']);
+                $("#ideaTagInput").tagsinput("removeAll");
+                
             }
 
             var stickyDown = function(event){
