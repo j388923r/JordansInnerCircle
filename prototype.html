@@ -31,6 +31,7 @@
         <!-- For Cool Tagging -->
         <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
         <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+        
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
@@ -493,7 +494,8 @@
             }
 
             var checkUserInputs = function(title, cost, category){
-                if (title == "" | cost == "" | category == ""){
+                console.log(category);
+                if (title == "" | cost == "" | category == "" | category == null){
                     return false;
                 } 
                 if (cost != parseInt(cost, 10)){
@@ -543,7 +545,11 @@
             var closeAndClearForm = function(){
                 $("#ideaPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
-                $("")
+                $("#ideaDescriptionInput").val('');
+                $("#ideaCostInput").val('');
+                $("#categoryDropDown").val(['Select a Category']);
+                $("#ideaTagInput").tagsinput("removeAll");
+                
             }
 
             var stickyDown = function(event){
