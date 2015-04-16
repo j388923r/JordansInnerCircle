@@ -241,15 +241,16 @@
             }
 
             #ideaView {
+
             }
             
             #trashIcon{
                 position: absolute;
-                left: 0;
-                bottom: 0;
+                left: 20;
+                bottom: 10;
                 margin-bottom: -100px;
                 font-size: 5em;
                 height: 80px;
                 z-index: 15;
-                background-color:white;
+                color:red;
             }
