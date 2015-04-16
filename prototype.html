@@ -38,7 +38,7 @@
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations"];
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
@@ -151,7 +151,7 @@
                 });
 
                 $('#cancelIdeaButton').click(function(){
-                    $("#ideaPopup").attr("style","display: none");
+                    closeAndClearForm();
                 })
 
                 $('#saveIdeaButton').click(function(){
@@ -269,11 +269,6 @@
                     else {
                         tagFilters.push(this.id);
                     }
-                    console.log(categoryFilters);
-                    console.log(costFilters);
-                    console.log(tagFilters);
-
-
                 }
                 else{
                     console.log("remove filter")
@@ -304,9 +299,6 @@
                             }
                         }
                     }
-                    console.log(categoryFilters);
-                    console.log(costFilters);
-                    console.log(tagFilters);
 
                 }
                 updateFilter();
@@ -337,9 +329,6 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
-                console.log(catset);
-                console.log(costset);
-                console.log(tagset);
 
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
@@ -349,6 +338,9 @@
 
                 console.log("allNonDeletedIdeas");
                 console.log(allNonDeletedIdeas);
+
+                console.log("cost dict");
+                console.log(costMapping);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -474,6 +466,19 @@
                 $("#iframeClose").css("display", "none");
             }
 
+            var createIdeaDisplay = function(idea) {
+                var idea = idea;
+                console.log("make idea pop up");
+                var pictures = idea.getPictures();
+                var title = idea.getTitle();
+                var category = idea.getCategory();
+                var description = idea.getDescription();
+                var tags = idea.getTags();
+                var cost = idea.getCost();
+
+                
+            }
+
             var createNewIdea = function(){
                 ideaTitle = $('#ideaTitleInput').val();
                 ideaCost = $('#ideaCostInput').val();
@@ -493,7 +498,7 @@
 
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
-                updateCostMapping();
+                updateCostMapping(idea, ideaCost);
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -517,6 +522,9 @@
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
+
+                idea.setDiv(ideaDiv);
+
                 ideaDiv.mousedown(stickyDown);
                 
                 ideaDiv.mouseup(stickyUp);
@@ -533,7 +541,8 @@
             }
 
             var checkUserInputs = function(title, cost, category){
-                if (title == "" | cost == "" | category == ""){
+                console.log(category);
+                if (title == "" | cost == "" | category == "" | category == null){
                     return false;
                 } 
                 if (cost != parseInt(cost, 10)){
@@ -583,7 +592,11 @@
             var closeAndClearForm = function(){
                 $("#ideaPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
-                $("")
+                $("#ideaDescriptionInput").val('');
+                $("#ideaCostInput").val('');
+                $("#categoryDropDown").val(['Select a Category']);
+                $("#ideaTagInput").tagsinput("removeAll");
+                
             }
 
             var stickyDown = function(event){
