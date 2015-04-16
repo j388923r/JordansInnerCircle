@@ -16,6 +16,12 @@
         <link rel="stylesheet" href="mainLayout.css">
 
         <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+
+        <!-- Deeclaring global budget variables -->
+        <script type='text/javascript' > 
+          var total_budget = 4000; //Dummy data to set total budget to initial value
+          var remaining = 4000; 
+        </script>
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -80,6 +86,8 @@
                 var second = document.getElementById('500To2000');
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
+
+                document.getElementById('budgetRemaining').innerHTML = remaining; //get remaining budget from budget.js?
 
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,costList);
@@ -483,6 +491,7 @@
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
+                    document.getElementById('budgetRemaining').innerHTML = remaining;
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
             }
@@ -846,7 +855,8 @@
                     
                 </div>
                 <div id="budgetTotalRemaining">
-                    Total Remaining: $2580
+                    <a href="#" onclick="load('budget_page')">
+                    Total Remaining: $<span id="budgetRemaining"></span></a>
                 </div>
             </div>
             <div id="ideaPopup" style="display: none;">

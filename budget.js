@@ -4,42 +4,21 @@ $(function() {
 
     var total_budget = 4000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
+    var remaining = total_budget;
     editable();
     calculate();
     delete_confirm();
+    edit_with_btn();
 
     //Editable from edit button
-    $('.edit-btn').click(function(e) {
-        $(this).css("color","steelblue");
-        var $row = $(this).closest('div[class^="row"]'); 
-        $row.children('.editable:first').click();
-    });
-
-    //Highlight textbox of closest box when edit button clicked
-    function focusOnEdit(target) {
-        //Reference the Label.
-        var label = target;
-
-        //Add a TextBox next to the Label.
-        label.after("<input style = 'display:none' />");
-
-        //Reference the TextBox.
-        var textbox = $(this).next();
-        textbox.addClass(label.attr('class'));
-
-        //Set the name attribute of the TextBox.
-        textbox[0].name = this.id.replace("lbl", "txt");
-
-        //Assign the value of Label to TextBox.
-        textbox.val(label.html());
-
-        //When Label is clicked, hide Label and show TextBox.
-        label.click(function() {
-            $(this).hide();
-            $(this).next().show().select();
+    function edit_with_btn() {
+        $('.edit-btn').click(function(e) {
+            $(this).css("color","steelblue");
+            var $row = $(this).closest('div[class^="row"]'); 
+            $row.children('.editable:first').click();
         });
-
     }
+
 
     //Delete confirmation
     function delete_confirm() {
@@ -82,9 +61,10 @@ $(function() {
             var category = ($('#new_category').val() == "") ? 'My new category' : $('#new_category').val();
             populate_list(category, spent, allotted);
             $('.new_entry').val("");
-            $('#new_category').focus();
-            editable();
+            $('#new_category').focus();      
             calculate();
+            editable();
+            //edit_with_btn();
         }
     });
 
@@ -96,8 +76,8 @@ $(function() {
                     .append($('<button>').addClass("btn edit-btn btn-s")
                         .append($('<span>').addClass('glyphicon glyphicon-edit pull-right'))))
                 .append($('<div>').addClass("editable category col-md-4").text(category))
-                .append($('<div>').addClass("editable category col-md-3").text(spent))
-                .append($('<div>').addClass("editable category col-md-3").text(allotted))
+                .append($('<div>').addClass("editable spent col-md-3").text(spent))
+                .append($('<div>').addClass("editable allotted col-md-3").text(allotted))
                 .append($('<div>').addClass("delete_space col-md-1")
                     .append($('<button>').addClass("btn delete_confirm btn-s btn-danger")
                         .attr("title", "delete")
@@ -123,7 +103,7 @@ $(function() {
             var total_allotted = calculateTotal(class_name);
             $("#total_allotted").html(total_allotted);
             
-            var remaining = total_budget - total_allotted;
+            remaining = total_budget - total_allotted;
             $("#remaining_budget").html(remaining);
             if (remaining < 0) {
                 $("#remaining").css({"color":"red"});
@@ -157,8 +137,8 @@ $(function() {
             var textbox = $(this).next();
             textbox.addClass(label.attr('class'));
 
-            //Set the name attribute of the TextBox.
-            textbox[0].name = this.id.replace("lbl", "txt");
+            //Set the id attribute of the TextBox.
+            textbox.id = this.id.replace("lbl", "txt");
 
             //Assign the value of Label to TextBox.
             textbox.val(label.html());
@@ -183,7 +163,16 @@ $(function() {
                 $(this).prev().html($(this).val());
                 $(this).prev().show();
             });
+
+
+            if($(this).is("#total_budget")) { //Change budget variable
+                calculate();
+                total_budget = textbox.val();
+            }
+
         });
+
+        
     }
 
     
