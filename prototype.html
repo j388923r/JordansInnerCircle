@@ -112,8 +112,8 @@
             
             .stickynote {
                 position: absolute;
-                height: 100px;
-                width: 100px;
+                height: 150px;
+                width: 150px;
                 background-color: rgb(230, 194, 0);
                 border: solid 2px black;
                 -moz-user-select: none;
@@ -240,14 +240,14 @@
                 display: none
             }
 
-            #ideaCostInput{
+            #ideaCostInput, #ideaView{
                 position: relative;
                 padding: 10px;
                 width: 100%;
 
             }
 
-            #descriptionAndCost{
+            #descriptionAndCost, #descriptionAndCostView{
                 width: 50%;
                 float: left;
                 padding: 10px;
@@ -264,7 +264,7 @@
                 padding: 10px;
             }
 
-            #tagsAndCategory{
+            #tagsAndCategory, #tagsAndCategoryView{
                 position: relative;
                 padding: 10px;
                 width: 50%;
@@ -276,12 +276,13 @@
                 padding: 10px;
             }
 
-            #cancelIdeaButton{
+            #cancelIdeaButton, #closeIdeaButton{
                 position: relative;
                 padding: 10px;
             }
 
-            
+            #ideaView {
+            }
         </style>
         
         <script>
@@ -300,7 +301,7 @@
             var tagFilters = [];
 
             var allNonDeletedIdeas = [];
-            var deletedIdeas = [];
+            var deletedIdeas = [new Idea("Underwater", "Venue", 2000)];
             var ideasInIdeas = [];
             var ideasInDecisions = [];
 
@@ -383,48 +384,11 @@
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
                 
-                $('.stickynote').mousedown(function(event){
-                    //console.log($("#addIdeaButton").css('height'));
-                    draggedSticky = event.currentTarget;
-                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
-                });
+                $('.stickynote').mousedown(stickyDown);
                 
-                $('.stickynote').mouseup(function(event) {
-                    //console.log(event);
-                    down = undefined;
-                });
+                $('.stickynote').mouseup(stickyUp);
                 
-                $('.stickynote').mousemove(function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        if(page === 'home') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                    console.log('board changed');
-                                    $('#decisionBoard').append($(draggedSticky));
-                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                    //down = undefined;
-                                } else {
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                                }
-                            } else {
-                                console.log(down.stickyLeft + event.clientX - down.x);
-                                if(down.x < decisionLeft)
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                                else
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                            }
-                        } else if(page === 'ideas') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        } else if(page === 'decisions') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        }
-                    }
-                });
+                $('.stickynote').mousemove(stickyMove);
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
@@ -748,46 +712,17 @@
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
                 var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<span style='font-weight:bold'>" + idea.category + "</span>" +
-                               "<span>" + idea.title + "</span>"
+                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
+                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
+                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
                                "</div>";
-                console.log($('#ideaBoard'));
+                               
                 var ideaDiv = $(ideaHtml);
-                ideaDiv.mousedown(function(event){
-                    console.log($("#addIdeaButton").css('height'));
-                    draggedSticky = event.currentTarget;
-                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
-                });
+                ideaDiv.mousedown(stickyDown);
                 
-                ideaDiv.mouseup(function(event) {
-                    //console.log(event);
-                    down = undefined;
-                });
+                ideaDiv.mouseup(stickyUp);
                 
-                ideaDiv.mousemove(function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        //console.log(down.stickyLeft + event.clientX - down.x);
-                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                console.log('board changed');
-                                $('#decisionBoard').append($(draggedSticky));
-                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                //down = undefined;
-                            } else {
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                            }
-                        } else {
-                            console.log(down.stickyLeft + event.clientX - down.x);
-                            if(down.x < decisionLeft)
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                            else
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        }
-                    }
-                });
+                ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
             }
 
@@ -795,11 +730,9 @@
                 if (title == "" | cost == "" | category == ""){
                     return false;
                 } 
-                console.log("passed1");
                 if (cost != parseInt(cost, 10)){
                     return false;
                 }
-                console.log("passed2");
                 return true;
             }
 
@@ -807,6 +740,47 @@
                 return;
             }
 
+            var stickyDown = function(event){
+                //console.log($("#addIdeaButton").css('height'));
+                draggedSticky = event.currentTarget;
+                down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
+            };
+            var stickyUp = function(event) {
+                //console.log(event);
+                down = undefined;
+            };
+            var stickyMove = function(event){
+                    //console.log(decisionLeft);
+                    if(draggedSticky && down) {
+                        if(page === 'home') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                    console.log('board changed');
+                                    $('#decisionBoard').append($(draggedSticky));
+                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                    //down = undefined;
+                                } else {
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                }
+                            } else {
+                                //console.log(down.stickyLeft + event.clientX - down.x);
+                                if(down.x < decisionLeft)
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                                else
+                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                            }
+                        } else if(page === 'ideas') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else if(page === 'decisions') {
+                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        }
+                    }
+                };
+            
          </script>
     </head>
     <body>
@@ -860,15 +834,11 @@
                         
                     </div>
                 </div>
-                <div class="stickynote" unselectable='on'>
-                    <h4>Venue</h4>
-                    <h3>Beach</h3>
+                <div class='stickynote' unselectable='on'>
+                    <h5 style='font-weight:bold;font-size: 24'>Venue</h5>
+                    <h6 style='font-size: 24'>Underwater Palooza</h6>
+                    <h6 style='bottom: 0;font-size: 24'>$20000</h6>
                 </div>
-                <div class="stickynote">
-                    <h4>Venue</h4>
-                    <h3>Church</h3>
-                </div>
-                
             </div>
             <div id='decisionBoard'>
                 <div id="decisionHeader">
@@ -877,6 +847,7 @@
                 <div id="decisionContent">
                     
                 </div>
+                
             </div>
             <div id="ideaPopup" style="display: none;">
                     <form class="form" action="#" id="newIdeaForm">
@@ -914,6 +885,26 @@
                         <button id="cancelIdeaButton" class="btn">Cancel</button>
                     </form>
                 </div>
+        </div>
+        <div id='ideaView' style="display: none;">
+            <View type="text" id="ideaTitleView" placeholder="Title"/>
+            <div id="dragAndDropPicView">
+                <!--<form action="/file-upload" class="dropzone" id="picUploader">
+                    <div class="fallback">
+                        <View name="file" type="file" multiple>
+                    </div>
+                </form>-->
+            </div>
+            <div id="descriptionAndCostView">
+                <textarea rows="4" id="ideaDescriptionView" placeholder="Description"></textarea>
+                <View type="text" id="ideaCostView" placeholder="Cost"/>
+            </div>
+            <div id="tagsAndCategoryView">
+
+                Category: <span id="ideaCategoryView"></span>
+                
+            </div>
+            <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budgetModal" class="modal">
             <div>	<a href="#close" title="Close" class="close">X</a>
