@@ -86,8 +86,9 @@
                 var second = document.getElementById('500To2000');
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
+                
+                document.getElementById("budgetRemaining").innerHTML = remaining;
 
-                document.getElementById('budgetRemaining').innerHTML = remaining; //get remaining budget from budget.js?
 
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,costList);
@@ -197,8 +198,12 @@
                         }
                         deletedItems.push(idea);
 
+                        deletedIdeas.push(idea);
                     }
                 });
+
+                
+            
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -493,9 +498,9 @@
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
-                    document.getElementById('budgetRemaining').innerHTML = remaining;
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
-                }
+
+                    }
             }
 
             function closeWindows() {
@@ -503,6 +508,13 @@
                 var iframe = $('#budget_iframe');
                 iframe.css("display", "none");
                 $("#iframeClose").css("display", "none");
+
+                //Global function to set remaining budget the same
+                (function (global) {
+                    document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
+                    console.log("GLOBAL", global.localStorage.getItem("shared_remaining_budget"));
+                }(window));
+
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "none"); 
@@ -798,7 +810,6 @@
                 updateFilter();
             }
 
-            
          </script>
     </head>
     <body>
