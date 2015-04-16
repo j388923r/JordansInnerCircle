@@ -241,6 +241,8 @@
             var page = 'home';
             var decisionLeft;
 
+            var ideasToShow = [];
+
             $(document).ready(function(){
                 var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
@@ -443,10 +445,11 @@
             var checkboxChange = function() {
                 if(this.checked){
                     checked_arr.push(this.id);
+                    console.log(this.name);
                     if(this.name == "cat"){
                         categoryFilters.push(this.id);
                     }
-                    else if(this.name = "cost"){
+                    else if(this.name == "cost"){
                         costFilters.push(this.id);
                     }
                     else {
@@ -469,7 +472,7 @@
                             }
                         }
                     }
-                    else if(this.name = "cost"){
+                    else if(this.name == "cost"){
                         for(var i = 0; i < costFilters.length; i++){
                             if(costFilters[i]== this.id){
                                 costFilters.splice(i,1);
@@ -477,6 +480,7 @@
                         }
                     }
                     else {
+
                         for(var i = 0; i < tagFilters.length; i++){
                             if(tagFilters[i]== this.id){
                                 tagFilters.splice(i,1);
@@ -492,13 +496,12 @@
                 var costset = [];
                 var catset = [];
                 var tagset = [];
-                var ideasToShow = [];
+                ideasToShow = [];
                 for(var i = 0; i< costFilters.length; i++){
+
                     listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
-                    console.log("tags here")
-                    console.log(tagFilters);
                     listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
@@ -537,7 +540,6 @@
                     retList.push(list1[i]);
                 }
                 var list2 = list2;
-                console.log(list2);
                 for(var i = 0; i < list2.length; i++){
                     var inRetList = false;
                     for(var j = 0; j < retList.length; j++){
