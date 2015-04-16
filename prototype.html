@@ -39,8 +39,8 @@
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations"];
             var tagsList = ["vegas", "prince"];
-            var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
-            var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000']
+            var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
+            var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
 
             var costFilters = [];
             var categoryFilters = [];
@@ -518,6 +518,10 @@
                     } else {
                         tagsMapping[tag] = [idea];
                     }
+
+                    if (!(tag in tagsList)){
+                        tagsList.push(tag);
+                    }
                 }
             }
 
@@ -640,6 +644,9 @@
                     <h5 style='font-weight:bold;font-size: 24'>Venue</h5>
                     <h6 style='font-size: 24'>Underwater Palooza</h6>
                     <h6 style='bottom: 0;font-size: 24'>$20000</h6>
+                </div>
+                <div id="trashIcon">
+                    <span class="glyphicon glyphicon-trash"></span>
                 </div>
             </div>
             <div id='decisionBoard'>
