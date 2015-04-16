@@ -225,6 +225,7 @@
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
+            var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000']
 
             var costFilters = [];
             var categoryFilters = [];
@@ -422,6 +423,16 @@
                         boxes[i].checked = true;
                     }
                 }
+                for(var i = 0; i < categorieslist.length; i++) {
+                    categoryFilters.push(categorieslist[i]);
+                }
+                for(var i = 0; i < tagsList.length; i++) {
+                    tagFilters.push(tagsList[i]);
+                }
+                for(var i = 0; i < costListForCheckAll.length; i++) {
+                    costFilters.push(costListForCheckAll[i]);
+                }
+                updateFilter();
             }
 
             var uncheckAll = function() {
@@ -430,8 +441,14 @@
                     if(boxes[i].type == 'checkbox') {
                         boxes[i].checked = false;
                         checked_arr = []
+
                     }
                 }
+                categoryFilters = [];
+                tagFilters = [];
+                costFilters = [];
+                updateFilter();
+
             }
 
             var checkboxChange = function() {
@@ -490,14 +507,13 @@
                 var tagset = [];
                 ideasToShow = [];
                 for(var i = 0; i< costFilters.length; i++){
-
-                    listUnion(costset,costMapping[costFilters[i]]);
+                    costset = listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
-                    listUnion(tagset, tagsMapping[tagFilters[i]]);
+                    tagset = listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
-                    listUnion(catset, categoryMapping[categoryFilters[i]]);
+                    catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
@@ -508,6 +524,7 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
+
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
@@ -515,6 +532,7 @@
                     allNonDeletedIdeas[i].hide();
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
+                    console.log(ideasToShow);
                     ideasToShow[i].show();
                 }
 
