@@ -240,6 +240,8 @@
             
             var decisionLeft;
 
+            var ideasToShow = [];
+
             $(document).ready(function(){
                 var draggedSticky = undefined;
                 var ideaBoard = document.getElementById('ideaBoard');
@@ -462,7 +464,7 @@
                             }
                         }
                     }
-                    else if(this.name = "cost"){
+                    else if(this.name == "cost"){
                         for(var i = 0; i < costFilters.length; i++){
                             if(costFilters[i]== this.id){
                                 costFilters.splice(i,1);
@@ -486,7 +488,7 @@
                 var costset = [];
                 var catset = [];
                 var tagset = [];
-                var ideasToShow = [];
+                ideasToShow = [];
                 for(var i = 0; i< costFilters.length; i++){
 
                     listUnion(costset,costMapping[costFilters[i]]);
