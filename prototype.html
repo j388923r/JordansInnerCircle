@@ -619,11 +619,11 @@
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
                 var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<p style='font-weight:bold;font-size: 24'>" + idea.category + "</p>" +
-                               "<p style='font-size: 24'>" + idea.title + "</p>" +
-                               "<span style='bottom: 0;font-size: 24'>$" + idea.cost + "</span>" + 
+                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
+                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
+                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
                                "</div>";
-                console.log($('#ideaBoard'));
+                               
                 var ideaDiv = $(ideaHtml);
                 ideaDiv.mousedown(function(event){
                     console.log($("#addIdeaButton").css('height'));
@@ -649,6 +649,7 @@
                                     $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
                                     //down = undefined;
                                 } else {
+                                    
                                     $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                                 }
                             } else {
@@ -739,15 +740,6 @@
                         
                     </div>
                 </div>
-                <div class="stickynote" unselectable='on'>
-                    <h4>Venue</h4>
-                    <h3>Beach</h3>
-                </div>
-                <div class="stickynote">
-                    <h4>Venue</h4>
-                    <h3>Church</h3>
-                </div>
-                
             </div>
             <div id='decisionBoard'>
                 <div id="decisionHeader">
@@ -756,38 +748,39 @@
                 <div id="decisionContent">
                     
                 </div>
+                
             </div>
             <div id="ideaPopup" style="display: none;">
-                    <form class="form" action="#" id="newIdeaForm">
-                        <input type="text" id="ideaTitleInput" placeholder="Title"/>
-                        <div id="dragAndDropPicUploader">
-                            <form action="/file-upload" class="dropzone" id="picUploader">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple>
-                                </div>
-                            </form>
-                        </div>
-                        <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                        <input type="text" id="ideaCostInput" placeholder="Cost"/>
-                        <div id="ideaCategoryPicker">
-                            <div id="categoryPopover">
-                                <select id="categoryDropDown" placeholder="Category">
-                                    <option disabled selected>Select a Category</option>
-                                    <option value="Catering">Catering</option>
-                                    <option value="Clothing">Clothing</option>
-                                    <option value="Entertainment">Entertainment</option>
-                                    <option value="Flowers">Flowers</option>
-                                    <option value="Invitations">Invitations</option>
-                                    <option value="Venue">Venue</option>
-                                    <optoin value="Other">Other</option>
-                                </select>
+                <form class="form" action="#" id="newIdeaForm">
+                    <input type="text" id="ideaTitleInput" placeholder="Title"/>
+                    <div id="dragAndDropPicUploader">
+                        <form action="/file-upload" class="dropzone" id="picUploader">
+                            <div class="fallback">
+                                <input name="file" type="file" multiple>
                             </div>
+                        </form>
+                    </div>
+                    <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
+                    <input type="text" id="ideaCostInput" placeholder="Cost"/>
+                    <div id="ideaCategoryPicker">
+                        <div id="categoryPopover">
+                            <select id="categoryDropDown" placeholder="Category">
+                                <option disabled selected>Select a Category</option>
+                                <option value="Catering">Catering</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Flowers">Flowers</option>
+                                <option value="Invitations">Invitations</option>
+                                <option value="Venue">Venue</option>
+                                <optoin value="Other">Other</option>
+                            </select>
                         </div>
-                        <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
-                        <button id="saveIdeaButton" class="btn">Save</button>
-                        <button id="cancelIdeaButton" class="btn">Cancel</button>
-                    </form>
-                </div>
+                    </div>
+                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                    <button id="saveIdeaButton" class="btn">Save</button>
+                    <button id="cancelIdeaButton" class="btn">Cancel</button>
+                </form>
+            </div>
         </div>
         <div id="budgetModal" class="modal">
             <div>	<a href="#close" title="Close" class="close">X</a>
