@@ -203,6 +203,9 @@
             }
 
             #ideaPopup {
+                position: relative;
+                top: 0%;
+                left: 60%;
                 position: absolute;
                 top: 30%;
                 left: 30%;
@@ -210,9 +213,75 @@
                 border: 1px solid black;
                 padding: 10px;
             }
+
+            #ideaTitleInput {
+                position: relative;
+                padding: 10px;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #dragAndDropPicUploader{
+                position: relative;
+                border: 1px solid black;
+                padding: 10px;
+                width: 100%;
+                height: 20%;
+            }
+
+            #ideaDescriptionInput{
+                position: relative;
+                padding: 10px;
+                width: 100%;
+                height: 10%;  
+            }          
             
             .ui-helper-hidden-accessible {
                 display: none
+            }
+
+            #ideaCostInput, #ideaView{
+                position: relative;
+                padding: 10px;
+                width: 100%;
+
+            }
+
+            #descriptionAndCost, #descriptionAndCostView{
+                width: 50%;
+                float: left;
+                padding: 10px;
+            }
+
+            #ideaCategoryPicker{
+                position: relative;
+                padding: 10px;
+                width: 100%;
+            }
+
+            #ideaTagInput{
+                position: relative;
+                padding: 10px;
+            }
+
+            #tagsAndCategory, #tagsAndCategoryView{
+                position: relative;
+                padding: 10px;
+                width: 50%;
+                float: right;
+            }
+
+            #saveIdeaButton{
+                position: relative;
+                padding: 10px;
+            }
+
+            #cancelIdeaButton, #closeIdeaButton{
+                position: relative;
+                padding: 10px;
+            }
+
+            #ideaView {
             }
         </style>
         
@@ -225,6 +294,7 @@
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"]
+            var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000']
 
             var costFilters = [];
             var categoryFilters = [];
@@ -303,48 +373,11 @@
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
                 
-                $('.stickynote').mousedown(function(event){
-                    //console.log($("#addIdeaButton").css('height'));
-                    draggedSticky = event.currentTarget;
-                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
-                });
+                $('.stickynote').mousedown(stickyDown);
                 
-                $('.stickynote').mouseup(function(event) {
-                    //console.log(event);
-                    down = undefined;
-                });
+                $('.stickynote').mouseup(stickyUp);
                 
-                $('.stickynote').mousemove(function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        if(page === 'home') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                    console.log('board changed');
-                                    $('#decisionBoard').append($(draggedSticky));
-                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                    //down = undefined;
-                                } else {
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                                }
-                            } else {
-                                console.log(down.stickyLeft + event.clientX - down.x);
-                                if(down.x < decisionLeft)
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                                else
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                            }
-                        } else if(page === 'ideas') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        } else if(page === 'decisions') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        }
-                    }
-                });
+                $('.stickynote').mousemove(stickyMove);
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
@@ -430,6 +463,16 @@
                         boxes[i].checked = true;
                     }
                 }
+                for(var i = 0; i < categorieslist.length; i++) {
+                    categoryFilters.push(categorieslist[i]);
+                }
+                for(var i = 0; i < tagsList.length; i++) {
+                    tagFilters.push(tagsList[i]);
+                }
+                for(var i = 0; i < costListForCheckAll.length; i++) {
+                    costFilters.push(costListForCheckAll[i]);
+                }
+                updateFilter();
             }
 
             var uncheckAll = function() {
@@ -438,8 +481,14 @@
                     if(boxes[i].type == 'checkbox') {
                         boxes[i].checked = false;
                         checked_arr = []
+
                     }
                 }
+                categoryFilters = [];
+                tagFilters = [];
+                costFilters = [];
+                updateFilter();
+
             }
 
             var checkboxChange = function() {
@@ -498,14 +547,13 @@
                 var tagset = [];
                 ideasToShow = [];
                 for(var i = 0; i< costFilters.length; i++){
-
-                    listUnion(costset,costMapping[costFilters[i]]);
+                    costset = listUnion(costset,costMapping[costFilters[i]]);
                 }
                 for(var i = 0; i< tagFilters.length; i++){
-                    listUnion(tagset, tagsMapping[tagFilters[i]]);
+                    tagset = listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
-                    listUnion(catset, categoryMapping[categoryFilters[i]]);
+                    catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
@@ -516,6 +564,7 @@
                 if(categoryFilters.length == 0 ) {
                     catset = allNonDeletedIdeas;
                 }
+
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
@@ -523,6 +572,7 @@
                     allNonDeletedIdeas[i].hide();
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
+                    console.log(ideasToShow);
                     ideasToShow[i].show();
                 }
 
@@ -600,7 +650,6 @@
                 ideaCategory = $("#categoryDropDown").val();
                 ideaPics = $("#picUploader").context.URL;
                 ideaDescription = $("#ideaDescriptionInput").val();
-                //ideaTags = ('#ideaTagInput').tagsInput();
 
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
                 console.log(validIdea);
@@ -625,18 +674,38 @@
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
-                ideaDiv.mousedown(function(event){
-                    console.log($("#addIdeaButton").css('height'));
-                    draggedSticky = event.currentTarget;
-                    down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
-                });
+                ideaDiv.mousedown(stickyDown);
                 
-                ideaDiv.mouseup(function(event) {
-                    //console.log(event);
-                    down = undefined;
-                });
+                ideaDiv.mouseup(stickyUp);
                 
-                ideaDiv.mousemove(function(event){
+                ideaDiv.mousemove(stickyMove);
+                $('#ideaBoard').append(ideaDiv);
+            }
+
+            var checkUserInputs = function(title, cost, category){
+                if (title == "" | cost == "" | category == ""){
+                    return false;
+                } 
+                if (cost != parseInt(cost, 10)){
+                    return false;
+                }
+                return true;
+            }
+
+            var missingInputFeedback = function(){
+                return;
+            }
+
+            var stickyDown = function(event){
+                //console.log($("#addIdeaButton").css('height'));
+                draggedSticky = event.currentTarget;
+                down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
+            };
+            var stickyUp = function(event) {
+                //console.log(event);
+                down = undefined;
+            };
+            var stickyMove = function(event){
                     //console.log(decisionLeft);
                     if(draggedSticky && down) {
                         if(page === 'home') {
@@ -649,11 +718,10 @@
                                     $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
                                     //down = undefined;
                                 } else {
-                                    
                                     $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                                 }
                             } else {
-                                console.log(down.stickyLeft + event.clientX - down.x);
+                                //console.log(down.stickyLeft + event.clientX - down.x);
                                 if(down.x < decisionLeft)
                                     $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
                                 else
@@ -667,26 +735,8 @@
                             $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                         }
                     }
-                });
-                $('#ideaBoard').append(ideaDiv);
-            }
-
-            var checkUserInputs = function(title, cost, category){
-                if (title == "" | cost == "" | category == ""){
-                    return false;
-                } 
-                console.log("passed1");
-                if (cost != parseInt(cost, 10)){
-                    return false;
-                }
-                console.log("passed2");
-                return true;
-            }
-
-            var missingInputFeedback = function(){
-                return;
-            }
-
+                };
+            
          </script>
     </head>
     <body>
@@ -751,36 +801,61 @@
                 
             </div>
             <div id="ideaPopup" style="display: none;">
-                <form class="form" action="#" id="newIdeaForm">
-                    <input type="text" id="ideaTitleInput" placeholder="Title"/>
-                    <div id="dragAndDropPicUploader">
-                        <form action="/file-upload" class="dropzone" id="picUploader">
-                            <div class="fallback">
-                                <input name="file" type="file" multiple>
-                            </div>
-                        </form>
-                    </div>
-                    <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                    <input type="text" id="ideaCostInput" placeholder="Cost"/>
-                    <div id="ideaCategoryPicker">
-                        <div id="categoryPopover">
-                            <select id="categoryDropDown" placeholder="Category">
-                                <option disabled selected>Select a Category</option>
-                                <option value="Catering">Catering</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Flowers">Flowers</option>
-                                <option value="Invitations">Invitations</option>
-                                <option value="Venue">Venue</option>
-                                <optoin value="Other">Other</option>
-                            </select>
+                    <form class="form" action="#" id="newIdeaForm">
+                        <input type="text" id="ideaTitleInput" placeholder="Title"/>
+                        <div id="dragAndDropPicUploader">
+                            <form action="/file-upload" class="dropzone" id="picUploader">
+                                <div class="fallback">
+                                    <input name="file" type="file" multiple>
+                                </div>
+                            </form>
                         </div>
+                        <div id="descriptionAndCost">
+                            <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
+                            <input type="text" id="ideaCostInput" placeholder="Cost"/>
+                        </div>
+                        <div id="tagsAndCategory">
+
+                            <div id="ideaCategoryPicker">
+                                <div id="categoryPopover">
+                                    <select id="categoryDropDown" placeholder="Category">
+                                        <option disabled selected>Select a Category</option>
+                                        <option value="Catering">Catering</option>
+                                        <option value="Clothing">Clothing</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Flowers">Flowers</option>
+                                        <option value="Invitations">Invitations</option>
+                                        <option value="Venue">Venue</option>
+                                        <optoin value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                        </div>
+                        <button id="saveIdeaButton" class="btn">Save</button>
+                        <button id="cancelIdeaButton" class="btn">Cancel</button>
+                    </form>
+                </div>
+        </div>
+        <div id='ideaView' style="display: none;">
+            <View type="text" id="ideaTitleView" placeholder="Title"/>
+            <div id="dragAndDropPicView">
+                <!--<form action="/file-upload" class="dropzone" id="picUploader">
+                    <div class="fallback">
+                        <View name="file" type="file" multiple>
                     </div>
-                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
-                    <button id="saveIdeaButton" class="btn">Save</button>
-                    <button id="cancelIdeaButton" class="btn">Cancel</button>
-                </form>
+                </form>-->
             </div>
+            <div id="descriptionAndCostView">
+                <textarea rows="4" id="ideaDescriptionView" placeholder="Description"></textarea>
+                <View type="text" id="ideaCostView" placeholder="Cost"/>
+            </div>
+            <div id="tagsAndCategoryView">
+
+                Category: <span id="ideaCategoryView"></span>
+                
+            </div>
+            <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budgetModal" class="modal">
             <div>	<a href="#close" title="Close" class="close">X</a>
