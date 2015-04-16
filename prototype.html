@@ -171,6 +171,7 @@
                 $('#saveIdeaButton').click(function(){
                     //console.log(true);
                     createNewIdea();
+
                 });
                 
                 $('#trashIcon').mouseup(function(event) {
@@ -195,6 +196,7 @@
                                 break;
                             }
                         }
+
                         deletedIdeas.push(idea);
                     }
                 });
@@ -588,6 +590,19 @@
 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
+
+                // To see an IDEA COMMENT OUT OR COMMENT IT
+                /**
+                var div = document.getElementById("ideaView");
+                console.log(div.html);
+                console.log(div.innerHTML);
+                div.style.display = "block";
+                div.innerhtml = idea.getHtml();
+                $("#ideaView").html(idea.getHtml());
+                console.log("innerHTML");
+                console.log(div.innerhtml);
+                */ 
+
             }
 
             var makeIdeaDiv = function(idea) {
@@ -905,24 +920,6 @@
                 </div>
         </div>
         <div id='ideaView' style="display: none;">
-            <View type="text" id="ideaTitleView" placeholder="Title"/>
-            <div id="dragAndDropPicView">
-                <!--<form action="/file-upload" class="dropzone" id="picUploader">
-                    <div class="fallback">
-                        <View name="file" type="file" multiple>
-                    </div>
-                </form>-->
-            </div>
-            <div id="descriptionAndCostView">
-                <textarea rows="4" id="ideaDescriptionView" placeholder="Description"></textarea>
-                <View type="text" id="ideaCostView" placeholder="Cost"/>
-            </div>
-            <div id="tagsAndCategoryView">
-
-                Category: <span id="ideaCategoryView"></span>
-                
-            </div>
-            <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budget_link" >
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
