@@ -1,5 +1,4 @@
 
-
             body {
                 padding-left:2%;
                 background-color:black;
@@ -8,7 +7,7 @@
             h1 {
                 margin: 0px;
                 padding-right: 2%;
-                font: 100 80px/1.3 'Oleo Script', Helvetica, sans-serif;
+                font: 50px 'Oleo Script', Helvetica, sans-serif;
                 text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
                 display: inline-block;
             }
@@ -103,6 +102,20 @@
                 z-index: 11;
             }
             
+            #budgetTotalRemaining {
+                position: absolute;
+                margin-bottom: -70px;
+                height: 40px;
+                width: 24%;
+                border-radius: 5px;
+                background-color: #EEEEEE;
+                text-align: center;
+                font-size: 2em;
+                bottom: 0;
+                z-index: 11;
+                margin-left: 10%;
+            }
+            
             #ideaHeader {
                 margin-left: 15.5%;
             }
@@ -140,28 +153,6 @@
                 list-style-type: none;
                 padding-left: 1em
             }
-                
-            /*.modal {
-                position: fixed;
-                opacity: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                background: rgba(0, 0, 0, .7);
-                z-index: 99999;
-            }
-                
-            .modal:target {
-                opacity: 1;
-            }*/
-                
-           /* #budgetModal > div {
-                width: 400px;
-                position: relative;
-                margin: 10% auto;
-                padding: 5px 20px 13px 20px;
-            }*/
 
             #addIdeaButton {
                 position: relative;
@@ -250,4 +241,277 @@
             }
 
             #ideaView {
+
             }
+            
+            #trashIcon{
+                position: absolute;
+                left: 20;
+                bottom: 10;
+                margin-bottom: -100px;
+                font-size: 5em;
+                height: 80px;
+                z-index: 15;
+                color:red;
+            }
+=======
+    body {
+        padding-left:2%;
+        background-color:black;
+    }
+    
+    h1 {
+        margin: 0px;
+        padding-right: 2%;
+        font: 100 50px/1.3 'Oleo Script', Helvetica, sans-serif;
+        text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        display: inline-block;
+    }z
+    
+    .navigationbar {
+    
+    }
+    
+    ul.header {
+        display: inline;
+        padding: 0px;
+        margin: 0px;
+    }
+    h1 a {
+        color: rgb(230, 194, 0);
+    }
+    
+    a {
+        color:black;
+    }
+    a:hover {
+        color:black;
+        text-decoration: none;
+    }
+    
+    h1 a:hover {
+        text-decoration: none;
+    }
+    
+    .header li {
+        font: 20pt bold "Pacifico";
+        width:12%;
+        padding: 1%;
+        margin: 1%;
+        display:inline-block;
+        background-color: #E5D058;
+        text-align: center;
+        border-radius: 5px;
+    }
+    
+    #boardBackground {
+        border-radius: 10px;
+        width: 96%;
+        height: 90%;
+        background-color: rgba(230, 194, 0, 0.99);
+        display: inline-block;
+    }
+    
+    #ideaBoard {
+        border-radius: 10px;
+        margin:2%;
+        margin-left: 3%;
+        width: 45%;
+        height: 93%;
+        background-color: rgba(255, 255, 255, 1.0);
+        float: left;
+        z-index: 10;
+    }
+    
+    #decisionBoard {
+        border-radius: 10px;
+        margin:2%;
+        margin-left: 52%;
+        width: 45%;
+        height: 93%;
+        background-color: rgba(255, 255, 255, 1.0);
+        z-index: 10;
+    }
+    
+    .stickynote {
+        position: absolute;
+        height: 150px;
+        width: 150px;
+        background-color: rgb(230, 194, 0);
+        border: solid 2px black;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+        -o-user-select:none;
+    }
+    
+    #decisionHeader, #ideaHeader {
+        position: absolute;
+        margin-top: -20px;
+        height: 40px;
+        width: 12%;
+        border-radius: 5px;
+        background-color: #EEEEEE;
+        text-align: center;
+        font-size: 2em;
+        z-index: 11;
+    }
+    
+    #ideaHeader {
+        margin-left: 15.5%;
+    }
+    
+    #decisionHeader {
+        margin-left: 15.5%;
+    }
+    
+    #ideaContent {
+        padding-top:25px;
+    }
+    
+    #decisionContent {
+        padding-top:59px;
+    }
+    
+    #filterPopover {
+        position: absolute;
+        background-color: rgb(230, 194, 0);
+        border: solid 2px black;
+        border-radius: 5px;
+        padding: 5px;
+        z-index: 9;
+    }
+    
+    #categories {
+        list-style-type: none;
+        padding-left: 1em
+    }
+    #cost {
+        list-style-type: none;
+        padding-left: 1em
+    }
+    #tags {
+        list-style-type: none;
+        padding-left: 1em
+    }
+        
+    /*.modal {
+        position: fixed;
+        opacity: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, .7);
+        z-index: 99999;
+    }
+        
+    .modal:target {
+        opacity: 1;
+    }*/
+        
+   /* #budgetModal > div {
+        width: 400px;
+        position: relative;
+        margin: 10% auto;
+        padding: 5px 20px 13px 20px;
+    }*/
+
+    #addIdeaButton {
+        position: relative;
+        left: 39%;
+        top: 5%;
+        width: 22%;
+    }
+
+    #ideaPopup {
+        position: relative;
+        top: 0%;
+        left: 60%;
+        position: absolute;
+        top: 30%;
+        left: 30%;
+        background: white;
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    #ideaTitleInput {
+        position: relative;
+        padding: 10px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #dragAndDropPicUploader{
+        position: relative;
+        border: 1px solid black;
+        padding: 10px;
+        width: 100%;
+        height: 20%;
+    }
+
+    #ideaDescriptionInput{
+        position: relative;
+        padding: 10px;
+        width: 100%;
+        height: 10%;  
+    }          
+    
+    .ui-helper-hidden-accessible {
+        display: none
+    }
+
+    #ideaCostInput, #ideaView{
+        position: relative;
+        padding: 10px;
+        width: 100%;
+
+    }
+
+    #descriptionAndCost, #descriptionAndCostView{
+        width: 50%;
+        float: left;
+        padding: 10px;
+    }
+
+    #ideaCategoryPicker{
+        position: relative;
+        padding: 10px;
+        width: 100%;
+    }
+
+    #ideaTagInput{
+        position: relative;
+        padding: 10px;
+    }
+
+    #tagsAndCategory, #tagsAndCategoryView{
+        position: relative;
+        padding: 10px;
+        width: 50%;
+        float: right;
+    }
+
+    #saveIdeaButton{
+        position: relative;
+        padding: 10px;
+    }
+
+    #cancelIdeaButton, #closeIdeaButton{
+        position: relative;
+        padding: 10px;
+    }
+
+    #ideaView {
+    }
+
+    iframe {
+        display:none;
+    }
+
+    iframe[seamless] {
+        border: none;
+
+    }

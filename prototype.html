@@ -31,14 +31,14 @@
         <!-- For Cool Tagging -->
         <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
         <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
-        
+
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations"];
+            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
@@ -57,6 +57,8 @@
             
             var page = 'home';
             var decisionLeft;
+            var down = undefined;
+            var draggedSticky = undefined;
 
             var ideasToShow = [];
 
@@ -148,12 +150,16 @@
                 });
 
                 $('#cancelIdeaButton').click(function(){
-                    $("#ideaPopup").attr("style","display: none");
+                    closeAndClearForm();
                 })
 
                 $('#saveIdeaButton').click(function(){
                     console.log(true);
                     createNewIdea();
+                });
+                
+                $('#trashIcon').mouseenter(function(event) {
+                    //console.log(event);
                 });
             });
             //function that takes in categories and tags list and contructs the filter 
@@ -262,8 +268,6 @@
                     else {
                         tagFilters.push(this.id);
                     }
-
-
                 }
                 else{
                     console.log("remove filter")
@@ -307,12 +311,14 @@
                 for(var i = 0; i< costFilters.length; i++){
                     costset = listUnion(costset,costMapping[costFilters[i]]);
                 }
+
                 for(var i = 0; i< tagFilters.length; i++){
                     tagset = listUnion(tagset, tagsMapping[tagFilters[i]]);
                 }
                 for(var i = 0; i< categoryFilters.length; i++){
                     catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
+                console.log("start sets");
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
                 }
@@ -325,13 +331,22 @@
 
                 var temp_arr = listInter(catset, costset);
                 ideasToShow = listInter(temp_arr, tagset);
+
+                console.log("ideasToShow");
+                console.log(ideasToShow);
+
+                console.log("allNonDeletedIdeas");
+                console.log(allNonDeletedIdeas);
+
+                console.log("cost dict");
+                console.log(costMapping);
+
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
-                    console.log(ideasToShow);
-                    ideasToShow[i].show();
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -364,7 +379,7 @@
                 }
                 for(var i = 0; i< ideasToShow.length; i++){
                     console.log(ideasToShow);
-                    ideasToShow[i].show();
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -435,6 +450,14 @@
                 }
             };
 
+            var load = function(page_name) {
+                if(page_name === 'budget_page') {
+                    var iframe = window.frames['budget_iframe'];
+                    iframe.css("display", "block");
+                    iframe.css({"height":"400", "width":"800", "border":"none"});
+                }
+            }
+
             var createNewIdea = function(){
                 ideaTitle = $('#ideaTitleInput').val();
                 ideaCost = $('#ideaCostInput').val();
@@ -454,7 +477,7 @@
 
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
-                updateCostMapping();
+                updateCostMapping(idea, ideaCost);
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -478,6 +501,9 @@
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
+
+                idea.setDiv(ideaDiv);
+
                 ideaDiv.mousedown(stickyDown);
                 
                 ideaDiv.mouseup(stickyUp);
@@ -562,36 +588,36 @@
                 down = undefined;
             };
             var stickyMove = function(event){
-                    //console.log(decisionLeft);
-                    if(draggedSticky && down) {
-                        if(page === 'home') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
-                                if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
-                                    console.log('board changed');
-                                    $('#decisionBoard').append($(draggedSticky));
-                                    $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                    $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                    //down = undefined;
-                                } else {
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                                }
+                //console.log(decisionLeft);
+                if(draggedSticky && down) {
+                    if(page === 'home') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
+                            if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
+                                console.log('board changed');
+                                $('#decisionBoard').append($(draggedSticky));
+                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //down = undefined;
                             } else {
-                                //console.log(down.stickyLeft + event.clientX - down.x);
-                                if(down.x < decisionLeft)
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
-                                else
-                                    $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
-                        } else if(page === 'ideas') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
-                        } else if(page === 'decisions') {
-                            $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                            $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        } else {
+                            //console.log(down.stickyLeft + event.clientX - down.x);
+                            if(down.x < decisionLeft)
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                            else
+                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                         }
+                    } else if(page === 'ideas') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                    } else if(page === 'decisions') {
+                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                     }
-                };
+                }
+            };
             
          </script>
     </head>
@@ -602,7 +628,7 @@
                 <li><a href="#" onclick="show('home')">Main Page</a></li>
                 <li><a href="#" onclick="show('ideas')">Ideas</a></li>
                 <li><a href="#" onclick="show('decisions')">Decisions</a></li>
-                <li><a href="budget.html">Budget</a></li>
+                <li><a href="#" onclick="load('budget_page')">Budget</a></li>
                 <li><a href="#">Deleted <br> Archive</a></li>
             </ul>
         </div>
@@ -650,6 +676,9 @@
                     <h5 style='font-weight:bold;font-size: 24'>Venue</h5>
                     <h6 style='font-size: 24'>Underwater Palooza</h6>
                     <h6 style='bottom: 0;font-size: 24'>$20000</h6>
+                </div>
+                <div id="trashIcon">
+                    <span class="glyphicon glyphicon-trash"></span>
                 </div>
             </div>
             <div id='decisionBoard'>
@@ -720,14 +749,8 @@
             </div>
             <button id="closeIdeaButton" class="btn">Close</button>
         </div>
-        <div id="budgetModal" class="modal">
-            <div>	<a href="#close" title="Close" class="close">X</a>
-
-        	<h2>Modal Box</h2>
-
-            <p>This is a sample modal box that can be created using the powers of CSS3.</p>
-            <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
-            </div>
+        <div id="budget_link" >
+            <iframe name="budget_iframe" src="budget.html" seamless></iframe>
         </div>
     </body>
 </html>
