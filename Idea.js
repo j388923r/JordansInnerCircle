@@ -149,7 +149,7 @@ var Idea = function(title, category, cost){
 
 		html += "<br>"
 		html += "<h3>$" + this.getCost() + "</h3><br>";
-		html += "<button type='button' class='btn'>Edit</button>";
+		html += "<button type='button' class='btn editIdeaView'>Edit</button>";
 		html += "<button type='button' class='btn cancelIdeaView'>Cancel</button></form>";
 
 		return html;

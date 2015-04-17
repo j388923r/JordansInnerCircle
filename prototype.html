@@ -93,6 +93,9 @@
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,costList);
 
+                var editIdea = false;
+                var edittableIdea = undefined;
+
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
                 third.addEventListener("change", checkboxChange);
@@ -161,6 +164,19 @@
                 $('#addIdeaButton').click(function(){
                     var popupIdea = document.getElementById("ideaPopup");
                     popupIdea.style.display = 'block';
+                    console.log("ADD IDEA BUTTON!!")
+
+                    if (editIdea){
+                        $('#ideaTitleInput').val(idea.getTitle());
+                        $('#ideaCostInput').val(idea.getCost());
+                        $("#categoryDropDown").val([idea.getCategory()]);
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        var tags = idea.getTags();
+
+                        for (var tagIndex in tags){
+                            $("#ideaTagInput").tagsinput("add", tags[tagIndex]);
+                        }
+                    }
                 });
 
                 $('#cancelIdeaButton').click(function(){
@@ -170,7 +186,11 @@
 
                 $('#saveIdeaButton').click(function(){
                     //console.log(true);
-                    createNewIdea();
+                    if (!editIdea){
+                        createNewIdea();
+                    } else {
+                        updateIdea(edittableIdea);
+                    }
 
                 });
                 
@@ -598,6 +618,20 @@
                     $("#ideaView").html(idea.getHtml());
                     console.log("double clikc");
 
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                        
+                    });
+
                     // Cancel click listener
                     $('.cancelIdeaView').click(function(event){
                         console.log("CLICK!");
@@ -611,6 +645,96 @@
                 closeAndClearForm();
 
 
+            }
+
+            var updateIdea = function(idea){
+                restoreBorderColor();
+
+                ideaTitle = $('#ideaTitleInput').val();
+                ideaCost = $('#ideaCostInput').val();
+                ideaCategory = $("#categoryDropDown").val();
+                ideaPics = $("#picUploader").context.URL;
+                ideaDescription = $("#ideaDescriptionInput").val();
+                ideaTags = $("#ideaTagInput").tagsinput("items");
+
+                var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
+                console.log(validIdea);
+                if (!validIdea){
+                    missingInputFeedback();
+                    return;
+                }
+
+                idea.updateTitle(ideaTitle);
+                idea.updateCost(ideaCost);
+                idea.updateCategory(ideaCategory);
+
+                // Add attributes to ideas.. except for pic...
+                categoryMapping[ideaCategory].push(idea);
+                updateCostMapping(idea, ideaCost);
+                if (ideaDescription != ""){
+                    idea.updateDescription(ideaDescription);
+                }
+                if (ideaTags.length != 0){
+                    idea.updateTags(ideaTags);
+                    updateTagMapping(idea, ideaTags);
+                }
+                
+                var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
+                var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                //console.log(boardBackgroundLeft);
+                decisionLeft = decisionBoardLeft - boardBackgroundLeft;
+                
+                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
+                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
+                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
+                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
+                               "</div>";
+                               
+                var ideaDiv = $(ideaHtml);
+
+                idea.setDiv(ideaDiv);
+
+                ideaDiv.mousedown(stickyDown);
+                
+                ideaDiv.mouseup(stickyUp);
+                
+                ideaDiv.mousemove(stickyMove);
+                $('#ideaBoard').append(ideaDiv);
+
+                // Listener to see event
+                ideaDiv.dblclick(function(event){
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
+
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                        
+                    });
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
+                });
+
+                // closing and clearing form!! :DD
+                closeAndClearForm();
+                edittableIdea = undefined;
+                editIdea = false;
             }
 
             var makeIdeaDiv = function(idea) {
@@ -636,7 +760,20 @@
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
+                    console.log("DOUBLE CLIKC");
+
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                    });
 
                     // Cancel click listener
                     $('.cancelIdeaView').click(function(event){
@@ -644,10 +781,9 @@
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
                         $("ideaView").html('');
+
                     });
                 });
-
-
             }
 
             var checkUserInputs = function(title, cost, category){
