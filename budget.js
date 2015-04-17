@@ -65,6 +65,7 @@ $(function() {
             $('#new_category').focus();      
             calculate();
             editable();
+            delete_confirm();
             //edit_with_btn();
         }
     });
@@ -86,7 +87,6 @@ $(function() {
 
         );
 
-        delete_confirm();
     }
 
 
