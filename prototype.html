@@ -196,7 +196,7 @@
                                 break;
                             }
                         }
-                        
+
                         // deletedItems.push(idea);
 
                         deletedIdeas.push(idea);
@@ -596,6 +596,7 @@
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
 
                     // Cancel click listener
                     $('.cancelIdeaView').click(function(event){
@@ -630,6 +631,23 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
+
+                ideaDiv.dblclick(function(event){
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
+                });
+
+
             }
 
             var checkUserInputs = function(title, cost, category){
