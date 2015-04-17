@@ -1078,38 +1078,36 @@
                 </div>
             </div>
             <div id="ideaPopup" style="display: none;">
-                    <form class="form" action="#" id="newIdeaForm">
-                        <input type="text" id="ideaTitleInput" placeholder="Title *"/>
-                        <div id="dragAndDropPicUploader">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple>
-                                </div>
+                <input type="text" id="ideaTitleInput" placeholder="Title *"/>
+                <div id="dragAndDropPicUploader">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple>
                         </div>
-                        <div id="descriptionAndCost">
-                            <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                            <input type="text" id="ideaCostInput" placeholder="Cost *"/>
-                        </div>
-                        <div id="tagsAndCategory">
+                </div>
+                <div id="descriptionAndCost">
+                    <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
+                    <input type="text" id="ideaCostInput" placeholder="Cost *"/>
+                </div>
+                <div id="tagsAndCategory">
 
-                            <div id="ideaCategoryPicker">
-                                <div id="categoryPopover">
-                                    <select id="categoryDropDown" placeholder="Category">
-                                        <option disabled selected>Select a Category *</option>
-                                        <option value="Catering">Catering</option>
-                                        <option value="Clothing">Clothing</option>
-                                        <option value="Entertainment">Entertainment</option>
-                                        <option value="Flowers">Flowers</option>
-                                        <option value="Invitations">Invitations</option>
-                                        <option value="Venue">Venue</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                    <div id="ideaCategoryPicker">
+                        <div id="categoryPopover">
+                            <select id="categoryDropDown" placeholder="Category">
+                                <option disabled selected>Select a Category *</option>
+                                <option value="Catering">Catering</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Flowers">Flowers</option>
+                                <option value="Invitations">Invitations</option>
+                                <option value="Venue">Venue</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
-                        <button id="saveIdeaButton" class="btn">Save</button>
-                        <button id="cancelIdeaButton" class="btn">Cancel</button>
-                    </form>
+                    </div>
+                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                </div>
+                <button id="saveIdeaButton" class="btn">Save</button>
+                <button id="cancelIdeaButton" class="btn">Cancel</button>
                 </div>
         </div>
         <div id='ideaView' style="display: none;">
