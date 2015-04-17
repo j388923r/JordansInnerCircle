@@ -197,14 +197,10 @@
                             }
                         }
                         deletedItems.push(idea);
-
-                        deletedIdeas.push(idea);
                     }
                 });
-
-                
-            
             });
+
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
 
@@ -589,20 +585,23 @@
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
 
+                // Listener to see event
+                ideaDiv.dblclick(function(event){
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
+                });
+
                 // closing and clearing form!! :DD
                 closeAndClearForm();
-
-                // To see an IDEA COMMENT OUT OR COMMENT IT
-                /**
-                var div = document.getElementById("ideaView");
-                console.log(div.html);
-                console.log(div.innerHTML);
-                div.style.display = "block";
-                div.innerhtml = idea.getHtml();
-                $("#ideaView").html(idea.getHtml());
-                console.log("innerHTML");
-                console.log(div.innerhtml);
-                */ 
 
             }
 
@@ -713,10 +712,12 @@
                 console.log(draggedSticky);
                 down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
             };
+
             var stickyUp = function(event) {
                 //console.log(event);
                 down = undefined;
             };
+
             var stickyMove = function(event){
                 //console.log(decisionLeft);
                 if(draggedSticky && down) {
