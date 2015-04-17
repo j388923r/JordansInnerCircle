@@ -16,6 +16,12 @@
         <link rel="stylesheet" href="mainLayout.css">
 
         <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+
+        <!-- Deeclaring global budget variables -->
+        <script type='text/javascript' > 
+          var total_budget = 4000; //Dummy data to set total budget to initial value
+          var remaining = 4000; 
+        </script>
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -80,6 +86,9 @@
                 var second = document.getElementById('500To2000');
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
+                
+                document.getElementById("budgetRemaining").innerHTML = remaining;
+
 
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,costList);
@@ -162,6 +171,7 @@
                 $('#saveIdeaButton').click(function(){
                     //console.log(true);
                     createNewIdea();
+
                 });
                 
                 $('#trashIcon').mouseup(function(event) {
@@ -186,9 +196,13 @@
                                 break;
                             }
                         }
+
                         deletedIdeas.push(idea);
                     }
                 });
+
+                
+            
             });
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -484,7 +498,8 @@
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
-                }
+
+                    }
             }
 
             function closeWindows() {
@@ -492,6 +507,13 @@
                 var iframe = $('#budget_iframe');
                 iframe.css("display", "none");
                 $("#iframeClose").css("display", "none");
+
+                //Global function to set remaining budget the same
+                (function (global) {
+                    document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
+                    console.log("GLOBAL", global.localStorage.getItem("shared_remaining_budget"));
+                }(window));
+
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "none"); 
@@ -518,6 +540,7 @@
                 ideaCost = $('#ideaCostInput').val();
                 ideaCategory = $("#categoryDropDown").val();
                 ideaPics = $("#picUploader").context.URL;
+                console.log(ideaPics);
                 ideaDescription = $("#ideaDescriptionInput").val();
                 ideaTags = $("#ideaTagInput").tagsinput("items");
 
@@ -527,7 +550,7 @@
                     missingInputFeedback();
                     return;
                 }
-
+                
                 var idea = new Idea(ideaTitle, ideaCategory, ideaCost);
 
                 // Add attributes to ideas.. except for pic...
@@ -549,6 +572,8 @@
                 //console.log(boardBackgroundLeft);
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
+                console.log(true);
+                
                 var ideaHtml = "<div class='stickynote' unselectable='on'>" +
                                "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
                                "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
@@ -568,6 +593,19 @@
 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
+
+                // To see an IDEA COMMENT OUT OR COMMENT IT
+                
+                var div = document.getElementById("ideaView");
+                console.log(div.html);
+                console.log(div.innerHTML);
+                div.style.display = "block";
+                div.innerhtml = idea.getHtml();
+                $("#ideaView").html(idea.getHtml());
+                console.log("innerHTML");
+                console.log(div.innerhtml);
+                
+
             }
 
             var makeIdeaDiv = function(idea) {
@@ -662,13 +700,14 @@
             }
 
             var closeAndClearForm = function(){
-                $("#ideaPopup").attr("style","display: none");
+                console.log("caC");
+                /*$("#ideaPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
                 $("#ideaDescriptionInput").val('');
                 $("#ideaCostInput").val('');
                 $("#categoryDropDown").val(['Select a Category']);
                 $("#ideaTagInput").tagsinput("removeAll");
-                
+                */
             }
 
             var stickyDown = function(event){
@@ -681,7 +720,10 @@
                 //console.log(event);
                 if(event.clientX === down.x && event.clientY === down.y){
                     var idea = getNonDeletedIdea(draggedSticky);
-                    showIdea(idea);
+                    //showIdea(idea);
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
                 }
                 down = undefined;
             };
@@ -791,7 +833,14 @@
             }
             
             var showIdea = function(idea) {
-            
+                var div = document.getElementById("ideaView");
+                console.log(div.html);
+                console.log(div.innerHTML);
+                div.style.display = "block";
+                div.innerhtml = idea.getHtml();
+                $("#ideaView").html(idea.getHtml());
+                console.log("innerHTML");
+                console.log(div.innerhtml);
             }
          </script>
     </head>
@@ -864,7 +913,8 @@
                     
                 </div>
                 <div id="budgetTotalRemaining">
-                    Total Remaining: $2580
+                    <a href="#" onclick="load('budget_page')">
+                    Total Remaining: $<span id="budgetRemaining"></span></a>
                 </div>
             </div>
             <div id="ideaPopup" style="display: none;">
@@ -903,24 +953,6 @@
                 </div>
         </div>
         <div id='ideaView' style="display: none;">
-            <View type="text" id="ideaTitleView" placeholder="Title"/>
-            <div id="dragAndDropPicView">
-                <!--<form action="/file-upload" class="dropzone" id="picUploader">
-                    <div class="fallback">
-                        <View name="file" type="file" multiple>
-                    </div>
-                </form>-->
-            </div>
-            <div id="descriptionAndCostView">
-                <textarea rows="4" id="ideaDescriptionView" placeholder="Description"></textarea>
-                <View type="text" id="ideaCostView" placeholder="Cost"/>
-            </div>
-            <div id="tagsAndCategoryView">
-
-                Category: <span id="ideaCategoryView"></span>
-                
-            </div>
-            <button id="closeIdeaButton" class="btn">Close</button>
         </div>
         <div id="budget_link" >
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
