@@ -83,7 +83,7 @@
                 height: 125px;
                 width: 125px;
                 background-color: rgb(230, 194, 0);
-                border: solid 2px black;
+                border: solid 1px black;
                 -moz-user-select: none;
                 -webkit-user-select: none;
                 -ms-user-select:none;
@@ -345,10 +345,10 @@
     .stickynote {
         position: absolute;
         font-family: "Gill Sans";
-        height: 150px;
-        width: 150px;
+        height: 125px;
+        width: 125px;
         background-color: #FFF9C9;
-        border: solid 3px #F5D283;
+        border: solid 1px #F5D283;
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select:none;

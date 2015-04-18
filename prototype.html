@@ -19,8 +19,8 @@
 
         <!-- Deeclaring global budget variables -->
         <script type='text/javascript' > 
-          var total_budget = 4000; //Dummy data to set total budget to initial value
-          var remaining = 4000; 
+          total_budget = 4000; //Dummy data to set total budget to initial value
+          remaining = 4000; 
         </script>
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -629,12 +629,16 @@
                         var popupIdea = document.getElementById("ideaPopup");
                         popupIdea.style.display = "block";
                         
-                        $("#ideaTitleInput").value(idea.getTitle());
+                        $("#ideaTitleInput").val(idea.getTitle());
                         //show image
-                        $("#ideaDescriptionInput").value(idea.getDescription());
-                        $("#ideaCostInput").value(idea.getCost());
-                        document.getElementById("categoryDropDown").value = idea.getCategory();
-                        //<input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        $("#ideaCostInput").val(idea.getCost());
+                        $("#categoryDropDown").val(idea.getCategory());
+                        var tagList = idea.getTags();
+                        var tagString = "";
+                        for(var i = 0; i < tagList.length; i++)
+                            tagString += tagList[i] + " ";
+                        $("#ideaTagInput").val(tagString);
                         
                     });
 
@@ -726,6 +730,16 @@
                         var popupIdea = document.getElementById("ideaPopup");
                         popupIdea.style.display = "block";
                         
+                        $("#ideaTitleInput").val(idea.getTitle());
+                        //show image
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        $("#ideaCostInput").val(idea.getCost());
+                        document.getElementById("categoryDropDown").value = idea.getCategory();
+                        var tagList = idea.getTags();
+                        var tagString = "";
+                        for(var i = 0; i < tagList.length; i++)
+                            tagString += tagList[i] + " ";
+                        $("#ideaTagInput").val(tagString);
                     });
 
                     // Cancel click listener
@@ -906,7 +920,12 @@
                         $("#ideaDescriptionInput").val(idea.getDescription());
                         $("#ideaCostInput").val(idea.getCost());
                         document.getElementById("categoryDropDown").value = idea.getCategory();
-                        //<input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                        var tagList = idea.getTags();
+                        console.log(tagList);
+                        var tagString = "";
+                        for(var i = 0; i < tagList.length; i++)
+                            tagString += tagList[i] + "\n";
+                        $("#ideaTagInput").val(tagString);
                     });
 
                     // Cancel click listener
@@ -931,8 +950,10 @@
                                 $('#decisionBoard').append($(draggedSticky));
                                 $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
                                 $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                $(draggedSticky).css('border-color', '#614126');
-                                //down = undefined;
+                                $(draggedSticky).css('border', 'solid 3px #614126');
+                                var children = $(draggedSticky).children();
+                                remaining -= Number($(children[2]).text().substring(1));
+                                $('#budgetRemaining').text(remaining);
                             } else {
                                 $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
