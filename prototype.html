@@ -196,10 +196,9 @@
                 
                 $('#trashIcon').mouseup(function(event) {
                     //console.log($(draggedSticky));
-                    down = undefined;
-                    if(draggedSticky) {
+                    if(draggedSticky && down) {
+                        down = undefined;
                         var children = $(draggedSticky).children();
-                        //console.log($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
                         var idea = new Idea($(children[1]).text(), $(children[0]).text(), Number($(children[2]).text().substring(1)));
                         $(draggedSticky).remove();
                         for(var i = 0; i < allNonDeletedIdeas.length; i++) {
@@ -630,6 +629,13 @@
                         var popupIdea = document.getElementById("ideaPopup");
                         popupIdea.style.display = "block";
                         
+                        $("#ideaTitleInput").value(idea.getTitle());
+                        //show image
+                        $("#ideaDescriptionInput").value(idea.getDescription());
+                        $("#ideaCostInput").value(idea.getCost());
+                        document.getElementById("categoryDropDown").value = idea.getCategory();
+                        //<input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                        
                     });
 
                     // Cancel click listener
@@ -895,6 +901,12 @@
                         var popupIdea = document.getElementById("ideaPopup");
                         popupIdea.style.display = "block";
                         
+                        $("#ideaTitleInput").val(idea.getTitle());
+                        //show image
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        $("#ideaCostInput").val(idea.getCost());
+                        document.getElementById("categoryDropDown").value = idea.getCategory();
+                        //<input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                     });
 
                     // Cancel click listener
@@ -1100,19 +1112,17 @@
                 </div>
             </div>
             <div id="ideaPopup" style="display: none;">
-                    
-                        <input type="text" id="ideaTitleInput" placeholder="Title *"/>
-                        <div id="dragAndDropPicUploader">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple>
-                                </div>
+                <input type="text" id="ideaTitleInput" placeholder="Title *"/>
+                <div id="dragAndDropPicUploader">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple>
                         </div>
+                </div>
                 <div id="descriptionAndCost">
                     <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
                     <input type="text" id="ideaCostInput" placeholder="Cost *"/>
                 </div>
                 <div id="tagsAndCategory">
-
                     <div id="ideaCategoryPicker">
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
