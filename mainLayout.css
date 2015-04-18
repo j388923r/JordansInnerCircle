@@ -80,8 +80,8 @@
             
             .stickynote {
                 position: absolute;
-                height: 150px;
-                width: 150px;
+                height: 125px;
+                width: 125px;
                 background-color: rgb(230, 194, 0);
                 border: solid 2px black;
                 -moz-user-select: none;

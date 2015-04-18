@@ -858,14 +858,13 @@
             }
 
             var closeAndClearForm = function(){
-                console.log("caC");
-                /*$("#ideaPopup").attr("style","display: none");
+                $("#ideaPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
                 $("#ideaDescriptionInput").val('');
                 $("#ideaCostInput").val('');
                 $("#categoryDropDown").val(['Select a Category*']);
                 $("#ideaTagInput").tagsinput("removeAll");
-                */
+                
             }
 
             var stickyDown = function(event){
@@ -879,10 +878,32 @@
                 //console.log(event);
                 if(event.clientX === down.x && event.clientY === down.y){
                     var idea = getNonDeletedIdea(draggedSticky);
-                    //showIdea(idea);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
+
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                        
+                    });
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
                 }
                 down = undefined;
             };
@@ -898,6 +919,7 @@
                                 $('#decisionBoard').append($(draggedSticky));
                                 $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
                                 $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                $(draggedSticky).css('border-color', '#614126');
                                 //down = undefined;
                             } else {
                                 $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
@@ -1078,10 +1100,6 @@
                 </div>
             </div>
             <div id="ideaPopup" style="display: none;">
-                <input type="text" id="ideaTitleInput" placeholder="Title *"/>
-                <div id="dragAndDropPicUploader">
-                        <div class="fallback">
-                            <input name="file" type="file" multiple>
                     
                         <input type="text" id="ideaTitleInput" placeholder="Title *"/>
                         <div id="dragAndDropPicUploader">
@@ -1089,11 +1107,6 @@
                                     <input name="file" type="file" multiple>
                                 </div>
                         </div>
-                        <div id="descriptionAndCost">
-                            <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                            <input type="text" id="ideaCostInput" placeholder="Cost *"/>
-                        </div>
-                </div>
                 <div id="descriptionAndCost">
                     <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
                     <input type="text" id="ideaCostInput" placeholder="Cost *"/>
@@ -1118,7 +1131,7 @@
                 </div>
                 <button id="saveIdeaButton" class="btn">Save</button>
                 <button id="cancelIdeaButton" class="btn">Cancel</button>
-                </div>
+            </div>
         </div>
         <div id='ideaView' style="display: none;">
         </div>
