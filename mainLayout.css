@@ -52,7 +52,7 @@
             #boardBackground {
                 border-radius: 10px;
                 width: 96%;
-                height: 90%;
+                height: 70%;
                 background-color: rgba(230, 194, 0, 0.99);
                 display: inline-block;
             }
@@ -112,7 +112,7 @@
                 background-color: #EEEEEE;
                 text-align: center;
                 font-size: 2em;
-                bottom: 0;
+                bottom: 200;
                 z-index: 11;
                 margin-left: 10%;
             }
@@ -247,7 +247,7 @@
             #trashIcon{
                 position: absolute;
                 left: 20;
-                bottom: 10;
+                bottom: 180;
                 margin-bottom: -100px;
                 font-size: 5em;
                 height: 80px;
@@ -318,7 +318,7 @@
     #boardBackground {
         border-radius: 10px;
         width: 96%; 
-        height: 90%;
+        height: 70%;
         background-color: #F1E5ED;
         display: inline-block;
     }
@@ -390,7 +390,7 @@
         font-family: "Gill Sans";
         font-size: 2em;
         z-index: 11;
-        bottom: 0;
+        bottom: 200;
         margin-left: 10%;
     }
     
@@ -522,7 +522,7 @@
     #trashIcon{
         position: absolute;
         left: 20;
-        bottom: 10;
+        bottom: 180;
         margin-bottom: -100px;
         font-size: 5em;
         height: 80px;
