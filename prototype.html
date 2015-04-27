@@ -156,6 +156,8 @@
                 
                 $('.stickynote').mousemove(stickyMove);
                 
+                $('.stickynote').draggable();
+                
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
                     //console.log(down);
@@ -603,11 +605,13 @@
 
                 idea.setDiv(ideaDiv);
 
-                ideaDiv.mousedown(stickyDown);
+                //ideaDiv.mousedown(stickyDown);
                 
-                ideaDiv.mouseup(stickyUp);
+                //ideaDiv.mouseup(stickyUp);
                 
                 ideaDiv.mousemove(stickyMove);
+                
+                ideaDiv.draggable({ cursor: "hand" });
                 $('#ideaBoard').append(ideaDiv);
 
                 // Listener to see event
