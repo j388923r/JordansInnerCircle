@@ -16,6 +16,8 @@
             .navigationbar {
             
             }
+
+            li a { cursor: pointer; cursor: hand; }
             
             ul.header {
                 display: inline;
