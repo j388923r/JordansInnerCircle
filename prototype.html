@@ -50,7 +50,7 @@
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
-            var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
+            var costList = ["< 500", "500 - 2000", "2000 - 5000", "> 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
 
             var costFilters = [];
@@ -1118,6 +1118,7 @@
                 </div> -->
                 <div id="trashIcon">
                     <span class="glyphicon glyphicon-trash"></span>
+                    <li><a ref="#" onclick="load_deleted()"></a></li>
                 </div>
             </div>
             <div id='decisionBoard'>
