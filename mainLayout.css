@@ -109,14 +109,14 @@
                 position: absolute;
                 margin-bottom: -70px;
                 height: 40px;
-                width: 24%;
+                width: 22%;
                 border-radius: 5px;
                 background-color: #EEEEEE;
                 text-align: center;
                 font-size: 2em;
                 bottom: 0;
-                z-index: 11;
-                margin-left: 10%;
+                z-index: 16;
+                margin-left: 12%;
             }
             
             #ideaHeader {
@@ -381,14 +381,15 @@
     
     #budgetTotalRemaining {
         position: absolute;
-        margin-top: -70px;
+        margin-top: 10px;
+        margin-bottom: 450px;
         height: 40px;
         width: 24%;
         border-radius: 5px;
         background-color: #EEEEEE;
         text-align: center;
-        font-family: "Gill Sans";
-        font-size: 2em;
+        font-family: "Helvetica";
+        font-size: 20px;
         z-index: 11;
         bottom: 0;
         margin-left: 10%;
@@ -427,14 +428,16 @@
     #addIdeaButton {
         position: relative;
         font-family: "Gill Sans";
-        left: 39%;
+        font-size: 14px;
+        left: 36%;
         top: 5%;
-        width: 22%;
+        width: 36%;
     }
 
     #ideaPopup {
         position: relative;
         font-family: "Gill Sans";
+        font-size: 12px;
         top: 0%;
         left: 60%;
         position: absolute;
