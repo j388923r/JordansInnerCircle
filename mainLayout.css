@@ -270,7 +270,7 @@
     }
     
     h2 { 
-          font: 100 60px'Great Vibes', Helvetica, sans-serif;
+          font: 100 60px'Gill Sans';
           text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
           line-height: 1.7em;
           margin-bottom: 10px;
@@ -358,14 +358,14 @@
     
     #decisionHeader, #ideaHeader {
         position: absolute;
-        font-family: "Great Vibes";
+        font: "Helvetica";
         margin-top: -20px;
         height: 40px;
         width: 15%;
         border-radius: 5px;
         background-color: #DBE7F2;
         text-align: center;
-        font-size: 36px;
+        font-size: 26px;
         z-index: 11;
     }
     
