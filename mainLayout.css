@@ -1,5 +1,3 @@
-
-
             body {
                 padding-left:2%;
                 background-color:black;
@@ -16,6 +14,8 @@
             .navigationbar {
             
             }
+
+            li a { cursor: pointer; cursor: hand; }
             
             ul.header {
                 display: inline;
@@ -52,7 +52,7 @@
             #boardBackground {
                 border-radius: 10px;
                 width: 96%;
-                height: 90%;
+                height: 70%;
                 background-color: rgba(230, 194, 0, 0.99);
                 display: inline-block;
             }
@@ -107,15 +107,14 @@
                 position: absolute;
                 margin-bottom: -70px;
                 height: 40px;
-                width: 24%;
+                width: 22%;
                 border-radius: 5px;
                 background-color: #EEEEEE;
                 text-align: center;
                 font-size: 2em;
                 bottom: 0;
-                z-index: 11;
-                margin-left: 10%;
-            }
+                z-index: 16;
+                margin-left: 12%;
             
             #ideaHeader {
                 margin-left: 15.5%;
@@ -247,7 +246,7 @@
             #trashIcon{
                 position: absolute;
                 left: 20;
-                bottom: 10;
+                bottom: 180;
                 margin-bottom: -100px;
                 font-size: 5em;
                 height: 80px;
@@ -270,7 +269,7 @@
     }
     
     h2 { 
-          font: 100 60px'Great Vibes', Helvetica, sans-serif;
+          font: 100 60px'Gill Sans';
           text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
           line-height: 1.7em;
           margin-bottom: 10px;
@@ -316,7 +315,7 @@
     #boardBackground {
         border-radius: 10px;
         width: 96%; 
-        height: 90%;
+        height: 70%;
         background-color: #F1E5ED;
         display: inline-block;
     }
@@ -358,14 +357,14 @@
     
     #decisionHeader, #ideaHeader {
         position: absolute;
-        font-family: "Great Vibes";
+        font: "Helvetica";
         margin-top: -20px;
         height: 40px;
         width: 15%;
         border-radius: 5px;
         background-color: #DBE7F2;
         text-align: center;
-        font-size: 36px;
+        font-size: 26px;
         z-index: 11;
     }
     
@@ -379,16 +378,17 @@
     
     #budgetTotalRemaining {
         position: absolute;
-        margin-top: -70px;
+        margin-top: 10px;
+        margin-bottom: 450px;
         height: 40px;
         width: 24%;
         border-radius: 5px;
         background-color: #EEEEEE;
         text-align: center;
-        font-family: "Gill Sans";
-        font-size: 2em;
+        font-family: "Helvetica";
+        font-size: 20px;
         z-index: 11;
-        bottom: 0;
+        bottom: 200;
         margin-left: 10%;
     }
     
@@ -425,14 +425,16 @@
     #addIdeaButton {
         position: relative;
         font-family: "Gill Sans";
-        left: 39%;
+        font-size: 14px;
+        left: 36%;
         top: 5%;
-        width: 22%;
+        width: 36%;
     }
 
     #ideaPopup {
         position: relative;
         font-family: "Gill Sans";
+        font-size: 12px;
         top: 0%;
         left: 60%;
         position: absolute;
