@@ -1,17 +1,4 @@
-li a { cursor: pointer; cursor: hand; }
-            
-.stickynote {
-    position: absolute;
-    height: 125px;
-    width: 125px;
-    background-color: rgb(230, 194, 0);
-    border: solid 1px black;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select:none;
-    user-select:none;
-    -o-user-select:none;
-}    
+li a { cursor: pointer; cursor: hand; }    
 
 body {
     padding-left:2%;
@@ -36,7 +23,6 @@ h2 {
     }
 
 .navigationbar {
-
 }
 
 ul.header {
