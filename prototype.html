@@ -1067,11 +1067,11 @@
         <div class="navigationbar">
             <h1><a ref="#" onclick="show('home')">Simple as Love</a></h1>
             <ul class="header">
-                <li><a ref="#" onclick="show('home')">Main Page</a></li>
+                <li id="mainpageheader"><a ref="#" onclick="show('home')">Main Page</a></li>
                 <li><a ref="#" onclick="show('ideas')">Ideas</a></li>
                 <li><a ref="#" onclick="show('decisions')">Decisions</a></li>
                 <li><a ref="#" onclick="load('budget_page')">Budget</a></li>
-                <li><a ref="#" onclick="load_deleted()">Archive</a></li>
+                <li id="archiveheader"><a ref="#" onclick="load_deleted()">Archive</a></li>
             </ul>
             <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
@@ -1106,29 +1106,28 @@
         </div>
         <div id="boardBackground">
             <div id='ideaBoard'>
-                <div id="ideaHeader">
-                    <a href="#" onclick="show('ideas')">Ideas</a>
-                </div>
+                <a href="#" onclick="show('ideas')">
+                    <div id="ideaHeader">
+                        Ideas
+                    </div>
+                </a>
                 <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add a new sticky note</button>
                     <div>
                         
                     </div>
                 </div>
-                <!-- <div class='stickynote' unselectable='on'>
-                    <h5 style='font-weight:bold;font-size: 24'>Venue</h5>
-                    <h6 style='font-size: 24'>Underwater Palooza</h6>
-                    <h6 style='bottom: 0;font-size: 24'>$20000</h6>
-                </div> -->
                 <div id="trashIcon">
                     <span class="glyphicon glyphicon-trash"></span>
                     
                 </div>
             </div>
             <div id='decisionBoard'>
-                <div id="decisionHeader">
-                    <a href="#" onclick="show('decisions')">Decisions</a>
-                </div>
+                <a href="#" onclick="show('decisions')">
+                    <div id="decisionHeader">
+                    Decisions
+                    </div>
+                </a>
                 <div id="budgetTotalRemaining">
                     <a href="#" onclick="load('budget_page')">
                     Total Remaining: $<span id="budgetRemaining"></span></a>
