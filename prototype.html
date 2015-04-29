@@ -47,11 +47,13 @@
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
+            var titleMapping = {};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
+            var titleList = [];
 
             var costFilters = [];
             var categoryFilters = [];
@@ -169,8 +171,7 @@
                 });
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
-                    down = undefined;
-                    //console.log(down);
+                    //down = undefined;
                 });
 
                 $('#addIdeaButton').click(function(){
@@ -500,6 +501,10 @@
                 }
                 return retList;
             }
+
+            var stringContains = function(that) {
+                return this.indexOf(that) > -1;
+            }
             
             var show = function(boardName) {
                 page = boardName;
@@ -626,16 +631,16 @@
                     cursor: "hand",
                     containment: "#boardBackground",
                     start: function(a) {
-                        console.log(a);
+                        down = {x: event.clientX, y: event.clientY};
+                        console.log(down);
                     },
+                    //grid: [125, 125],
                     drag: function(e) {
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                                console.log(e.clientX - e.target.offsetWidth - decisionLeft, 1);
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
                                 $(draggedSticky).css('border', 'solid 3px #614126');
                             } else {
-                                console.log(e.clientX - e.target.offsetWidth - decisionLeft, 2);
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
                                 $(draggedSticky).css('border', 'solid 1px #614126');
                             }
@@ -646,15 +651,16 @@
                         }
                     },
                     stop: function(e) {
-                        down = undefined;
                         if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                            if(down && down.x < decisionLeft) {
                                 $('#decisionBoard').append($(e.target));
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
                                 var children = $(draggedSticky).children();
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
                                 console.log("Decision drop");
-                        } else {
+                             }
+                        } else if(down && down.x > decisionLeft) {
                             $('#ideasBoard').append($(e.target));
                             $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
                             var children = $(draggedSticky).children();
@@ -662,6 +668,7 @@
                             $('#budgetRemaining').text(remaining);
                             console.log("Idea drop");
                         }
+                        down = undefined;
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);
@@ -843,7 +850,7 @@
 
             var stickyUp = function(event) {
                 console.log(event);
-                if(event.clientX === down.x && event.clientY === down.y){
+                if(down && event.clientX === down.x && event.clientY === down.y){
                     var idea = getNonDeletedIdea(draggedSticky);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
@@ -883,7 +890,7 @@
                         $("ideaView").html('');
                     });
                 }
-                down = undefined;
+                //down = undefined;
             };
 
             var stickyMove = function(event){

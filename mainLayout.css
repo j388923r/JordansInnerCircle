@@ -100,7 +100,7 @@ h1 a:hover {
     height: 125px;
     width: 125px;
     background-color: #EEDC82;
-    border: solid 1px #EEE850;
+    border: solid 1px black;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select:none;
@@ -137,7 +137,6 @@ h1 a:hover {
 #budgetTotalRemaining {
     position: absolute;
     margin-top: 10px;
-    margin-bottom: 450px;
     height: 40px;
     width: 24%;
     border-radius: 5px;
@@ -146,7 +145,7 @@ h1 a:hover {
     font-family: "Helvetica";
     font-size: 20px;
     z-index: 11;
-    bottom: 200;
+    bottom: -7%;
     margin-left: 10%;
 }
 
