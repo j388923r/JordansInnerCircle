@@ -31,7 +31,13 @@ body {
 	font-family: "Gill Sans", sans-serif;
 	margin: 10px;
 }
+
+.list.row {
+	margin-left: 30px;
+}
+
 #totals {
+	margin-left: 30px;
 	color: steelblue;
 	
 }
@@ -45,4 +51,14 @@ body {
 }
 .btn.edit-btn {
 	color: steelblue;
+}
+
+.btn {
+	display: none;
+}
+
+
+.editable {
+	cursor: hand;
+	cursor: pointer;
 }

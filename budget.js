@@ -5,21 +5,18 @@ $(function() {
     var total_budget = 4000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
     var remaining = total_budget;
-    editable();
+    default_budget();
     calculate();
-    delete_confirm();
-    edit_with_btn();
     calculateRemaining();
+    editable();
+    delete_confirm();
 
-    //Editable from edit button
-    function edit_with_btn() {
-        $('.edit-btn').click(function(e) {
-            $(this).css("color","steelblue");
-            var $row = $(this).closest('div[class^="row"]'); 
-            $row.children('.editable:first').click();
-        });
+
+    //Populate with default numbers
+    function default_budget() {
+        $(".editable.spent").html(0);
+        $(".editable.allotted").html(Math.floor(total_budget/7));
     }
-
 
     //Delete confirmation
     function delete_confirm() {
@@ -54,44 +51,9 @@ $(function() {
           $(this).val(sanitized);
       });
 
-    //Textboxes for adding new category
-    $('.new_entry').keyup(function(event) {
-        if (event.keyCode == 13) {
-            var spent = ($('#new_spent').val() == "") ? 0 : $('#new_spent').val();
-            var allotted = ($('#new_allotted').val() == "") ? 0 : $('#new_allotted').val();
-            var category = ($('#new_category').val() == "") ? 'My new category' : $('#new_category').val();
-            populate_list(category, spent, allotted);
-            $('.new_entry').val("");
-            $('#new_category').focus();      
-            calculate();
-            editable();
-            delete_confirm();
-            //edit_with_btn();
-        }
-    });
-
-    //Add row for entered item
-    function populate_list(category, spent, allotted) {
-        $next_row = $(".items")
-            .append($('<div>').addClass("row")
-                .append($('<div>').addClass("col-md-1")
-                    .append($('<button>').addClass("btn edit-btn btn-s")
-                        .append($('<span>').addClass('glyphicon glyphicon-edit pull-right'))))
-                .append($('<div>').addClass("editable category col-md-4").text(category))
-                .append($('<div>').addClass("editable spent col-md-3").text(spent))
-                .append($('<div>').addClass("editable allotted col-md-3").text(allotted))
-                .append($('<div>').addClass("delete_space col-md-1")
-                    .append($('<button>').addClass("btn delete_confirm btn-s btn-danger")
-                        .attr("title", "delete")
-                        .append($('<span>').addClass('glyphicon glyphicon-trash'))))
-
-        );
-
-    }
-
-
     //Get totals
     function calculate() {
+
         $(".editable.spent").each(function() {
             var class_name = ".editable.spent";
             total_spent = calculateTotal(class_name);
@@ -114,8 +76,9 @@ $(function() {
             (function (global) {
                 global.localStorage.setItem("shared_remaining_budget", remaining);
             }(window));
+
+
         });
-                
     }
 
     function calculateRemaining() {
@@ -148,6 +111,10 @@ $(function() {
     //Switch between span and textbox
     function editable() {
         $(".editable").click(function() {
+
+            //When clicked, show trash icon
+            $(this).closest('button[class^="btn"]').show();
+
             //Reference the Label.
             var label = $(this);
 
@@ -176,6 +143,7 @@ $(function() {
                     $(this).hide();
                     $(this).prev().html($(this).val());
                     $(this).prev().show();
+                    // $(this).closest('button[class^="btn"]').hide(); 
                 }
             });
 
@@ -183,16 +151,60 @@ $(function() {
                 $(this).hide();
                 $(this).prev().html($(this).val());
                 $(this).prev().show();
+                // $(this).closest('button[class^="btn"]').hide(); 
             });
 
-
-            if($(this).is("#total_budget")) { //Change budget variable
-                total_budget = textbox.val();
-                calculateRemaining();
-            }
-
         });
-    
+
+
+
     }
 
 });
+
+
+    // //Add row for entered item
+    // function populate_list(category, spent, allotted) {
+    //     $next_row = $(".items")
+    //         .append($('<div>').addClass("row")
+    //             .append($('<div>').addClass("col-md-1")
+    //                 .append($('<button>').addClass("btn edit-btn btn-s")
+    //                     .append($('<span>').addClass('glyphicon glyphicon-edit pull-right'))))
+    //             .append($('<div>').addClass("editable category col-md-4").text(category))
+    //             .append($('<div>').addClass("editable spent col-md-3").text(spent))
+    //             .append($('<div>').addClass("editable allotted col-md-3").text(allotted))
+    //             .append($('<div>').addClass("delete_space col-md-1")
+    //                 .append($('<button>').addClass("btn delete_confirm btn-s btn-danger")
+    //                     .attr("title", "delete")
+    //                     .append($('<span>').addClass('glyphicon glyphicon-trash'))))
+
+    //     );
+    // }
+    // 
+    
+    // //Editable from edit button
+    // function edit_with_btn() {
+    //     $('.edit-btn').click(function(e) {
+    //         $(this).css("color","steelblue");
+    //         var $row = $(this).closest('div[class^="row"]'); 
+    //         $row.children('.editable:first').click();
+    //     });
+    // }
+
+
+    // //Textboxes for adding new category
+    // $('.new_entry').keyup(function(event) {
+    //     if (event.keyCode == 13) {
+    //         var spent = ($('#new_spent').val() == "") ? 0 : $('#new_spent').val();
+    //         var allotted = ($('#new_allotted').val() == "") ? 0 : $('#new_allotted').val();
+    //         var category = ($('#new_category').val() == "") ? 'My new category' : $('#new_category').val();
+    //         populate_list(category, spent, allotted);
+    //         $('.new_entry').val("");
+    //         $('#new_category').focus();      
+    //         calculate();
+    //         editable();
+    //         delete_confirm();
+    //         //edit_with_btn();
+    //     }
+    // });
+
