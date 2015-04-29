@@ -209,7 +209,7 @@
                             }
                         }
                         for(var i = 0; i < ideasInIdeas.length; i++) {
-                            var ideaToDelete = allNonDeletedIdeas[i];
+                            var ideaToDelete = ideasInIdeas[i];
                             if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
                                 ideasInIdeas.splice(i, 1);
                                 break;
