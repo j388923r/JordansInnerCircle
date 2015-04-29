@@ -1,0 +1,369 @@
+li a { cursor: pointer; cursor: hand; }    
+
+body {
+    padding-left:2%;
+    padding-top:2%;
+    background-color:#F9FFFF;
+}
+
+h1 {
+    margin: 0px;
+    padding-right: 2%;
+    font: 100 60px'Great Vibes', Helvetica, sans-serif;
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    display: inline-block;
+}
+
+h2 { 
+      font: 100 60px'Gill Sans';
+      text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+      line-height: 1.7em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+.navigationbar {
+}
+
+ul.header {
+    display: inline;
+    padding: 0px;
+    margin: 0px;
+}
+h1 a {
+    color: #A8A396;
+}
+
+a {
+    color: black;
+}
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+h1 a:hover {
+    text-decoration: none;
+}
+
+.header li {
+    font: 18pt bold "Gill Sans";
+    width:12%;
+    padding: 1%;
+    margin: 1%;
+    display:inline-block;
+    background-color: #F1E5ED;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#boardBackground {
+    border-radius: 10px;
+    width: 96%; 
+    height: 70%;
+    background-color: #F1E5ED;
+    display: inline-block;
+}
+
+#ideaBoard {
+    border-radius: 10px;
+    margin:2%;
+    margin-left: 3%;
+    width: 45%;
+    height: 93%;
+    background-color: rgba(255, 255, 255, 1.0);
+    float: left;
+    z-index: 10;
+}
+
+#decisionBoard {
+    border-radius: 10px;
+    margin:2%;
+    margin-left: 52%;
+    width: 45%;
+    height: 93%;
+    background-color: rgba(255, 255, 255, 1.0);
+    z-index: 10;
+}
+
+.stickynote {
+    position: absolute;
+    font-family: "Gill Sans";
+    height: 125px;
+    width: 125px;
+    background-color: #FFF9C9;
+    border: solid 1px #F5D283;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+    -o-user-select:none;
+}
+
+#decisionHeader, #ideaHeader {
+    position: absolute;
+    font: "Helvetica";
+    margin-top: -20px;
+    height: 40px;
+    width: 15%;
+    border-radius: 5px;
+    background-color: #DBE7F2;
+    text-align: center;
+    font-size: 26px;
+    z-index: 11;
+}
+
+#ideaHeader {
+    margin-left: 15.5%;
+}
+
+#decisionHeader {
+    margin-left: 15.5%;
+}
+
+#budgetTotalRemaining {
+    position: absolute;
+    margin-top: 10px;
+    margin-bottom: 450px;
+    height: 40px;
+    width: 24%;
+    border-radius: 5px;
+    background-color: #EEEEEE;
+    text-align: center;
+    font-family: "Helvetica";
+    font-size: 20px;
+    z-index: 11;
+    bottom: 200;
+    margin-left: 10%;
+}
+
+#ideaContent {
+    padding-top:25px;
+}
+
+#decisionContent {
+    padding-top:59px;
+}
+
+#filterPopover {
+    position: absolute;
+    background-color: #F1E5ED;
+    border: solid 2px black;
+    border-radius: 5px;
+    padding: 5px;
+    z-index: 9;
+}
+
+#categories {
+    list-style-type: none;
+    padding-left: 1em
+}
+#cost {
+    list-style-type: none;
+    padding-left: 1em
+}
+#tags {
+    list-style-type: none;
+    padding-left: 1em
+}
+
+#addIdeaButton {
+    position: relative;
+    font-family: "Gill Sans";
+    font-size: 14px;
+    left: 36%;
+    top: 5%;
+    width: 36%;
+}
+
+#ideaPopup {
+    position: relative;
+    font-family: "Gill Sans";
+    font-size: 12px;
+    top: 0%;
+    left: 60%;
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    background: white;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+#ideaTitleInput {
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#dragAndDropPicUploader{
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    height: 20%;
+}
+
+#ideaDescriptionInput{
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    height: 10%;  
+}          
+
+.ui-helper-hidden-accessible {
+    display: none
+}
+
+#ideaCostInput, #ideaView{
+    position: relative;
+    padding: 10px;
+    width: 100%;
+
+}
+
+#descriptionAndCost, #descriptionAndCostView{
+    width: 50%;
+    float: left;
+    padding: 10px;
+}
+
+#ideaCategoryPicker{
+    position: relative;
+    padding: 10px;
+    width: 100%;
+}
+
+#ideaTagInput{
+    position: relative;
+    padding: 10px;
+}
+
+#tagsAndCategory, #tagsAndCategoryView{
+    position: relative;
+    padding: 10px;
+    width: 50%;
+    float: right;
+}
+
+#saveIdeaButton{
+    position: relative;
+    padding: 10px;
+}
+
+#cancelIdeaButton, #closeIdeaButton{
+    position: relative;
+    padding: 10px;
+}
+
+#ideaView {
+    position: absolute;
+    z-index: 15;
+    top: 0;
+    background: white;
+    border: 1px solid black;
+}
+
+#trashIcon{
+    position: absolute;
+    left: 20;
+    bottom: 10;
+    margin-bottom: -70px;
+    font-size: 5em;
+    height: 80px;
+    z-index: 15;
+    color: #BF7D91;
+}
+
+#iframeClose {
+    font-size: 30px;
+    color: white;
+    display:none;
+}
+
+iframe {
+    display:none;
+    position: absolute;
+    top: 0;
+    width: 94%;
+    height: 100%;
+    z-index: 15
+}
+
+iframe[seamless] {
+    border: none;
+
+}
+
+.deleted_archive_view {
+    display:none;
+    position: absolute;
+    top: 0;
+    width: 94%;
+    height: 100%;
+    z-index: 16;
+}
+
+#wrapper {
+  background: #eee;
+  margin: 0 auto;
+  padding: 10px 17px;
+}
+
+#keywords {
+  margin: 0 auto;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+
+
+#keywords thead {
+  cursor: pointer;
+  background: #c9dff0;
+}
+#keywords thead tr th { 
+  font-weight: bold;
+  padding: 12px 30px;
+  padding-left: 42px;
+}
+#keywords thead tr th span { 
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+
+#keywords thead tr th.headerSortUp, #keywords thead tr th.headerSortDown {
+  background: #acc8dd;
+}
+
+#keywords thead tr th.headerSortUp span {
+  background-image: url('up-arrow.png');
+}
+#keywords thead tr th.headerSortDown span {
+  background-image: url('down-arrow.png');
+}
+
+#keywords tbody tr { 
+  color: #555;
+}
+#keywords tbody tr td {
+  text-align: center;
+  padding: 15px 10px;
+}
+#keywords tbody tr td.lalign {
+  text-align: left;
+}
+
+.ui-menu {
+    width: 14%;
+    background-color: #F1E5ED;
+    border-radius: 2px;
+    border: solid 1px black;
+}
+
+.ui-menu .ui-menu-item a{
+    color: black;
+    border-radius: 0px;
+    z-index: 10;
+}
+
