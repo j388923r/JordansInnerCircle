@@ -47,11 +47,13 @@
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
+            var titleMapping = {};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
+            var titleList = [];
 
             var costFilters = [];
             var categoryFilters = [];
@@ -499,6 +501,10 @@
                 }
                 return retList;
             }
+
+            var stringContains = function(that) {
+                return this.indexOf(that) > -1;
+            }
             
             var show = function(boardName) {
                 page = boardName;
@@ -599,6 +605,7 @@
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                
                 //console.log(boardBackgroundLeft);
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
@@ -666,47 +673,6 @@
                 });
                 $('#ideaBoard').append(ideaDiv);
 
-                // Listener to see event
-                ideaDiv.dblclick(function(event){
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                        
-                        $("#ideaTitleInput").val(idea.getTitle());
-                        //show image
-                        $("#ideaDescriptionInput").val(idea.getDescription());
-                        $("#ideaCostInput").val(idea.getCost());
-                        $("#categoryDropDown").val(idea.getCategory());
-                        var tagList = idea.getTags();
-                        var tagString = "";
-                        for(var i = 0; i < tagList.length; i++)
-                            tagString += tagList[i] + " ";
-                        $("#ideaTagInput").val(tagString);
-                        
-                    });
-
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-                    });
-                });
-
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
@@ -768,46 +734,6 @@
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
 
-                // Listener to see event
-                ideaDiv.dblclick(function(event){
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                        
-                        $("#ideaTitleInput").val(idea.getTitle());
-                        //show image
-                        $("#ideaDescriptionInput").val(idea.getDescription());
-                        $("#ideaCostInput").val(idea.getCost());
-                        document.getElementById("categoryDropDown").value = idea.getCategory();
-                        var tagList = idea.getTags();
-                        var tagString = "";
-                        for(var i = 0; i < tagList.length; i++)
-                            tagString += tagList[i] + " ";
-                        $("#ideaTagInput").val(tagString);
-                    });
-
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-                    });
-                });
-
                 // closing and clearing form!! :DD
                 closeAndClearForm();
                 edittableIdea = undefined;
@@ -832,35 +758,6 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
-
-                ideaDiv.dblclick(function(event){
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("DOUBLE CLIKC");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                    });
-
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                    });
-                });
             }
 
             var checkUserInputs = function(title, cost, category){
@@ -939,7 +836,7 @@
                 $("#ideaTitleInput").val('');
                 $("#ideaDescriptionInput").val('');
                 $("#ideaCostInput").val('');
-                $("#categoryDropDown").val(['Select a Category*']);
+                $('#categoryDropDown').val(['']);
                 $("#ideaTagInput").tagsinput("removeAll");
                 
             }
@@ -1204,7 +1101,7 @@
                     <div id="ideaCategoryPicker">
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
-                                <option disabled selected>Select a Category *</option>
+                                <option value="" disabled selected>Select a Category*</option>
                                 <option value="Catering">Catering</option>
                                 <option value="Clothing">Clothing</option>
                                 <option value="Entertainment">Entertainment</option>
@@ -1214,7 +1111,6 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                    </div>
                     <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                 </div>
                 <button id="saveIdeaButton" class="btn">Save</button>
