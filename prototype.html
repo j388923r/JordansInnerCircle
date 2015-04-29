@@ -47,11 +47,13 @@
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
+            var titleMapping = {};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
+            var titleList = [];
 
             var costFilters = [];
             var categoryFilters = [];
@@ -499,6 +501,10 @@
                     }
                 }
                 return retList;
+            }
+
+            var stringContains = function(that) {
+                return this.indexOf(that) > -1;
             }
             
             var show = function(boardName) {
