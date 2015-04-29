@@ -66,7 +66,7 @@
             var checked_arr = [];
             
             var page = 'home';
-            var decisionLeft;
+            var decisionLeft, ideaLeft;
             var down = undefined;
             var draggedSticky = undefined;
 
@@ -615,22 +615,52 @@
 
                 idea.setDiv(ideaDiv);
 
-                //ideaDiv.mousedown(stickyDown);
+                ideaDiv.mousedown(stickyDown);
                 
-                //ideaDiv.mouseup(stickyUp);
+                ideaDiv.mouseup(stickyUp);
                 
                 ideaDiv.mousemove(stickyMove);
                 
                 ideaDiv.draggable({ 
                     cursor: "hand",
+                    containment: "#boardBackground",
                     start: function(a) {
                         console.log(a);
                     },
-                    drag: function(a) {
-                        console.log(a);
+                    drag: function(e) {
+                        if(page === 'home') {
+                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                                console.log(e.clientX - e.target.offsetWidth - decisionLeft, 1);
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                                $(draggedSticky).css('border', 'solid 3px #614126');
+                            } else {
+                                console.log(e.clientX - e.target.offsetWidth - decisionLeft, 2);
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                                $(draggedSticky).css('border', 'solid 1px #614126');
+                            }
+                        } else if(page === 'ideas') {
+                            
+                        } else if(page === 'decisions') {
+                            
+                        }
                     },
-                    stop: function(a) {
-                        console.log(a);
+                    stop: function(e) {
+                        down = undefined;
+                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                                $('#decisionBoard').append($(e.target));
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                                var children = $(draggedSticky).children();
+                                remaining -= Number($(children[2]).text().substring(1));
+                                $('#budgetRemaining').text(remaining);
+                                console.log("Decision drop");
+                        } else {
+                            $('#ideasBoard').append($(e.target));
+                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            var children = $(draggedSticky).children();
+                            remaining += Number($(children[2]).text().substring(1));
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Idea drop");
+                        }
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);
@@ -717,7 +747,8 @@
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
                 //console.log(boardBackgroundLeft);
-                decisionLeft = decisionBoardLeft - boardBackgroundLeft;
+                decisionLeft = decisionBoardLeft;
+                ideaLeft = boardBackgroundLeft;
                 
                 var ideaHtml = "<div class='stickynote' unselectable='on'>" +
                                "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
@@ -968,33 +999,33 @@
                 //console.log(decisionLeft);
                 if(draggedSticky && down) {
                     if(page === 'home') {
-                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        //$(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
                         if($(draggedSticky).parent().attr('id') === 'ideaBoard') {
                             if(decisionLeft < Math.max(0, down.stickyLeft + event.clientX - down.x)) {
                                 console.log('board changed');
                                 $('#decisionBoard').append($(draggedSticky));
-                                $(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
-                                $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                                //$(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
+                                //$(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
                                 $(draggedSticky).css('border', 'solid 3px #614126');
                                 var children = $(draggedSticky).children();
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
                             } else {
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                //$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
                         } else {
                             //console.log(down.stickyLeft + event.clientX - down.x);
                             if(down.x < decisionLeft)
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
+                                ;//$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x - decisionLeft));
                             else
-                                $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                                ;//$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                         }
                     } else if(page === 'ideas') {
-                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        //$(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        //$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                     } else if(page === 'decisions') {
-                        $(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                        $(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
+                        //$(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
+                        //$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                     }
                 }
             };
