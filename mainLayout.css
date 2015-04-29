@@ -1,9 +1,16 @@
 li a { cursor: pointer; cursor: hand; }    
 
+.stickynote:hover {
+    border-radius: 0em 0em 1.5em 0em;
+    cursor: pointer;
+    cursor: hand;
+    shadow: 4px 4px 0px rgba(0,0,0,0.1);
+}
+
 body {
     padding-left:2%;
     padding-top:2%;
-    background-color:#F9FFFF;
+    background-color:silver;
 }
 
 h1 {
@@ -27,11 +34,12 @@ h2 {
 
 ul.header {
     display: inline;
-    padding: 0px;
+    padding: 10px 0px;
     margin: 0px;
+    background-color:silver;
 }
 h1 a {
-    color: #A8A396;
+    color: blue;
 }
 
 a {
@@ -50,18 +58,18 @@ h1 a:hover {
     font: 18pt bold "Gill Sans";
     width:12%;
     padding: 1%;
-    margin: 1%;
     display:inline-block;
-    background-color: #F1E5ED;
+    color: #EEDC82;
+    border-right: 2px solid black;
+    /*background-color: #F1E5ED;*/
     text-align: center;
-    border-radius: 5px;
 }
 
 #boardBackground {
     border-radius: 10px;
     width: 96%; 
-    height: 70%;
-    background-color: #F1E5ED;
+    height: 90%;
+    background-color: #EEDC82;
     display: inline-block;
 }
 
@@ -91,13 +99,17 @@ h1 a:hover {
     font-family: "Gill Sans";
     height: 125px;
     width: 125px;
-    background-color: #FFF9C9;
-    border: solid 1px #F5D283;
+    background-color: #EEDC82;
+    border: solid 1px #EEE850;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select:none;
     user-select:none;
     -o-user-select:none;
+}
+
+#archiveheader {
+    border-right: 0px solid black;
 }
 
 #decisionHeader, #ideaHeader {
@@ -107,7 +119,8 @@ h1 a:hover {
     height: 40px;
     width: 15%;
     border-radius: 5px;
-    background-color: #DBE7F2;
+    border: solid 2px silver;
+    background-color: #EEDC82;
     text-align: center;
     font-size: 26px;
     z-index: 11;
@@ -147,7 +160,7 @@ h1 a:hover {
 
 #filterPopover {
     position: absolute;
-    background-color: #F1E5ED;
+    background-color: #EEDC82;
     border: solid 2px black;
     border-radius: 5px;
     padding: 5px;
@@ -366,4 +379,3 @@ iframe[seamless] {
     border-radius: 0px;
     z-index: 10;
 }
-
