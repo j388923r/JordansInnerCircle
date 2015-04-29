@@ -156,7 +156,17 @@
                 
                 $('.stickynote').mousemove(stickyMove);
                 
-                $('.stickynote').draggable();
+                $('.stickynote').draggable({
+                    start: function(a) {
+                        console.log(a);
+                    },
+                    drag: function(a) {
+                        console.log(a);
+                    },
+                    stop: function(a) {
+                        console.log(a);
+                    }
+                });
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     down = undefined;
@@ -611,7 +621,18 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 
-                ideaDiv.draggable({ cursor: "hand" });
+                ideaDiv.draggable({ 
+                    cursor: "hand",
+                    start: function(a) {
+                        console.log(a);
+                    },
+                    drag: function(a) {
+                        console.log(a);
+                    },
+                    stop: function(a) {
+                        console.log(a);
+                    }
+                });
                 $('#ideaBoard').append(ideaDiv);
 
                 // Listener to see event
@@ -894,12 +915,12 @@
             var stickyDown = function(event){
                 //console.log($("#addIdeaButton").css('height'));
                 draggedSticky = event.currentTarget;
-                console.log(draggedSticky);
+                //console.log(draggedSticky);
                 down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
             };
 
             var stickyUp = function(event) {
-                //console.log(event);
+                console.log(event);
                 if(event.clientX === down.x && event.clientY === down.y){
                     var idea = getNonDeletedIdea(draggedSticky);
                     var div = document.getElementById("ideaView");

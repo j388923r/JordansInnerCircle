@@ -3,7 +3,8 @@ li a { cursor: pointer; cursor: hand; }
 .stickynote:hover {
     border-radius: 0em 0em 1.5em 0em;
     cursor: pointer;
-    cursor: hand
+    cursor: hand;
+    shadow: 4px 4px 0px rgba(0,0,0,0.1);
 }
 
 body {
@@ -38,7 +39,7 @@ ul.header {
     background-color:silver;
 }
 h1 a {
-    color: #A8A396;
+    color: blue;
 }
 
 a {
@@ -67,7 +68,7 @@ h1 a:hover {
 #boardBackground {
     border-radius: 10px;
     width: 96%; 
-    height: 70%;
+    height: 80%;
     background-color: #EEDC82;
     display: inline-block;
 }
@@ -118,6 +119,7 @@ h1 a:hover {
     height: 40px;
     width: 15%;
     border-radius: 5px;
+    border: solid 2px silver;
     background-color: #EEDC82;
     text-align: center;
     font-size: 26px;
