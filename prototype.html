@@ -666,47 +666,6 @@
                 });
                 $('#ideaBoard').append(ideaDiv);
 
-                // Listener to see event
-                ideaDiv.dblclick(function(event){
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                        
-                        $("#ideaTitleInput").val(idea.getTitle());
-                        //show image
-                        $("#ideaDescriptionInput").val(idea.getDescription());
-                        $("#ideaCostInput").val(idea.getCost());
-                        $("#categoryDropDown").val(idea.getCategory());
-                        var tagList = idea.getTags();
-                        var tagString = "";
-                        for(var i = 0; i < tagList.length; i++)
-                            tagString += tagList[i] + " ";
-                        $("#ideaTagInput").val(tagString);
-                        
-                    });
-
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-                    });
-                });
-
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
@@ -768,46 +727,6 @@
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
 
-                // Listener to see event
-                ideaDiv.dblclick(function(event){
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                        
-                        $("#ideaTitleInput").val(idea.getTitle());
-                        //show image
-                        $("#ideaDescriptionInput").val(idea.getDescription());
-                        $("#ideaCostInput").val(idea.getCost());
-                        document.getElementById("categoryDropDown").value = idea.getCategory();
-                        var tagList = idea.getTags();
-                        var tagString = "";
-                        for(var i = 0; i < tagList.length; i++)
-                            tagString += tagList[i] + " ";
-                        $("#ideaTagInput").val(tagString);
-                    });
-
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-                    });
-                });
-
                 // closing and clearing form!! :DD
                 closeAndClearForm();
                 edittableIdea = undefined;
@@ -832,35 +751,6 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 $('#ideaBoard').append(ideaDiv);
-
-                ideaDiv.dblclick(function(event){
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("DOUBLE CLIKC");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                    });
-
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-
-                    });
-                });
             }
 
             var checkUserInputs = function(title, cost, category){
