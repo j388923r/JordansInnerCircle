@@ -600,6 +600,7 @@
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                
                 //console.log(boardBackgroundLeft);
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
@@ -907,7 +908,7 @@
                 $("#ideaTitleInput").val('');
                 $("#ideaDescriptionInput").val('');
                 $("#ideaCostInput").val('');
-                $("#categoryDropDown").val(['Select a Category*']);
+                $('#categoryDropDown').val(['']);
                 $("#ideaTagInput").tagsinput("removeAll");
                 
             }
@@ -1172,7 +1173,7 @@
                     <div id="ideaCategoryPicker">
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
-                                <option disabled selected>Select a Category *</option>
+                                <option value="" disabled selected>Select a Category*</option>
                                 <option value="Catering">Catering</option>
                                 <option value="Clothing">Clothing</option>
                                 <option value="Entertainment">Entertainment</option>
@@ -1182,7 +1183,6 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                    </div>
                     <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                 </div>
                 <button id="saveIdeaButton" class="btn">Save</button>
