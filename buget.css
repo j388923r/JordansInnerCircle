@@ -58,7 +58,12 @@ body {
 }
 
 
-.editable {
+.editable.spent{
+	cursor: hand;
+	cursor: pointer;
+}
+
+.editable.alloted{
 	cursor: hand;
 	cursor: pointer;
 }
