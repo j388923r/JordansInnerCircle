@@ -282,9 +282,15 @@ h1 a:hover {
     bottom: 10;
     margin-bottom: -70px;
     font-size: 5em;
-    height: 80px;
+    width: 125px;
+    height: 125px;
     z-index: 15;
     color: #BF7D91;
+    background-image: url('trashclose.jpg');
+}
+
+#trashIcon:hover{
+    background-image: url('trashopen.jpg');
 }
 
 #iframeClose {
