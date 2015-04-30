@@ -219,12 +219,19 @@
                 
                 $('#trashIcon').mouseover(function(event) {
                     var trashcan = $(event.target);
-                    trashcan.css("background-image", "trashopen.jpg");
+                    console.log(trashcan);
+
+                    if (draggedSticky){
+                        $("#trashIcon").css("background-image", "url('full_trash.png')");
+                    }
                 })
                 
                 $('#trashIcon').mouseleave(function(event) {
                     var trashcan = $(event.target);
-                    trashcan.css("background-image", "trashclose.jpg");
+
+                    if (draggedSticky && deletedIdeas.length == 0){
+                        $("#trashIcon").css("background-image", "url('empty_trash.png')");
+                    }
                 })
                 
                 $('#trashIcon').mouseup(function(event) {
@@ -252,6 +259,8 @@
                         // deletedItems.push(idea);
 
                         deletedIdeas.push(idea);
+
+                        $("#trashIcon").css("background-image", "url('full_trash.png')");
                     }
                 });
             });

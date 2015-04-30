@@ -18,7 +18,6 @@ var Idea = function(title, category, cost){
 	this.deleted = false;
 	this.decided= false;
 	this.ideaDiv = undefined;
-    this.ideaRow = undefined;
 
 	// Public Functions
 
@@ -150,7 +149,7 @@ var Idea = function(title, category, cost){
 		// html += "<br>"
 		html += "<h3 style='font-size:200%'>Cost $" + this.getCost() + "</h3>";
 		html += "<div style='text-align:center'>"
-		html += "<button type='button' class='btn editIdeaView'>Edit</button></div>";
+		html += "<button type='button' class='btn editIdeaView'>Edit</button>";
 		return html;
 	}
 
