@@ -1000,7 +1000,7 @@
             var stickyUp = function(event) {
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
-                    var idea = getNonDeletedIdea(draggedSticky);
+                    var idea = getNonDeletedIdea(event.target);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaView").html(idea.getHtml());
