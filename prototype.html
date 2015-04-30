@@ -76,6 +76,13 @@
 
             var searchedFor = [];
 
+            var shorten = function(input, length) {
+                if(input.length < length)
+                    return input;
+                 else
+                    input.substring(0, length - 3) + "...";
+            }
+            
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 
@@ -692,6 +699,13 @@
                 });
                 $('#ideaBoard').append(ideaDiv);
 
+                var ideaRow = "<tr>" +
+                               "<td style='font-weight:bold;font-size: 24'>" + idea.category + "</td>" +
+                               "<td style='font-size: 24'>" + idea.title + "</td>" +
+                               "<td style='bottom: 0;font-size: 24'>$" + idea.cost + "</td>" + 
+                               "</tr>";
+                //$('#ideaListView').append($(ideaRow));
+                
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
@@ -1100,13 +1114,12 @@
                 </a>
                 <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add a new sticky note</button>
-                    <div>
+                    <table id="ideaListView">
                         
-                    </div>
+                    </table>
                 </div>
                 <div id="trashIcon">
                     <span class="glyphicon glyphicon-trash"></span>
-                    
                 </div>
             </div>
             <div id='decisionBoard'>
@@ -1115,12 +1128,11 @@
                     Decisions
                     </div>
                 </a>
-                <div id="budgetTotalRemaining">
-                    <a href="#" onclick="load('budget_page')">
-                    Total Remaining: $<span id="budgetRemaining"></span></a>
-                </div>
                 <div id="decisionContent">
-                    
+                    <div id="budgetTotalRemaining">
+                        <a href="#" onclick="load('budget_page')">
+                        Total Remaining: $<span id="budgetRemaining"></span></a>
+                    </div>
                 </div>            
             </div>
             <div id="ideaPopup" style="display: none;">
