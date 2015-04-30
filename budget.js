@@ -5,6 +5,8 @@ $(function() {
     var total_budget = 4000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
     var remaining = total_budget;
+    var total_spent = 0;
+    var total_allotted = Math.floor(total_budget/7);
     default_budget();
     calculate();
     calculateRemaining();
@@ -14,8 +16,8 @@ $(function() {
 
     //Populate with default numbers
     function default_budget() {
-        $(".editable.spent").html(0);
-        $(".editable.allotted").html(Math.floor(total_budget/7));
+        $(".editable.spent").html(total_spent);
+        $(".editable.allotted").html(total_allotted);
     }
 
     //Delete confirmation
@@ -32,14 +34,7 @@ $(function() {
     }
 
     // Only numbers allowed
-      $('#new_spent').on('change keyup', function() {
-          // Remove invalid characters
-          var sanitized = $(this).val().replace(/[^0-9.]/g, '');
-          // Remove the first point if there is more than one
-          sanitized = sanitized.replace(/\.(?=.*\.)/, '');
-          // Update value
-          $(this).val(sanitized);
-      });
+      
 
       // Only numbers allowed
       $('#new_allotted').on('change keyup', function() {
@@ -58,32 +53,41 @@ $(function() {
             var class_name = ".editable.spent";
             total_spent = calculateTotal(class_name);
             $("#total_spent").html(total_spent);
+            if (total_spent > total_budget) {
+                $("#total_spent").css({"color":"red"});
+                $("#totals_title").css({"color":"red"});
+            }
         });
 
 
         $(".editable.allotted").each(function() {
             var class_name = ".editable.allotted";
-            var total_allotted = calculateTotal(class_name);
-            $("#total_allotted").html(total_allotted);
-            
-            remaining = total_budget - total_allotted;
-            $("#remaining_budget").html(remaining);
-            if (remaining < 0) {
-                $("#remaining").css({"color":"red"});
-                $("#total_allotted").css({"color":"red"});
-            }
-
-            (function (global) {
-                global.localStorage.setItem("shared_remaining_budget", remaining);
-            }(window));
-
+            calculateRemaining();
 
         });
     }
 
+    //Calculate after update
+    function calculateUpdate(class_name) {
+        if (class_name.match("spent")) {
+            class_name = ".editable.spent";
+            total_spent = calculateTotal(class_name);
+            $("#total_spent").html(total_spent);
+            if (total_spent > total_budget) {
+                $("#total_spent").css({"color":"red"});
+                $("#totals_title").css({"color":"red"});
+            }
+        }
+
+        if (class_name.match("allotted")) {
+            class_name = ".editable.allotted";
+            calculateRemaining(); 
+        }
+    }
+
     function calculateRemaining() {
         var class_name = ".editable.allotted";
-        var total_allotted = calculateTotal(class_name);
+        total_allotted = calculateTotal(class_name);
         $("#total_allotted").html(total_allotted);
         
         remaining = total_budget - total_allotted;
@@ -100,20 +104,29 @@ $(function() {
 
     function calculateTotal(class_name) {
         var sum = 0;
-        $(class_name).each(function() {
+        $("div"+ class_name).each(function() {
             var value = parseFloat(this.innerHTML);
             sum += value;
         });
-    return sum;
+        return sum;
     }
 
 
     //Switch between span and textbox
     function editable() {
-        $(".editable").click(function() {
+        $(".editable").mouseover(function() {
 
-            //When clicked, show trash icon
-            $(this).closest('button[class^="btn"]').show();
+            //Only numbers allowed
+            $('.editable').on('change keyup', function() {
+                 // Remove invalid characters
+                 var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+                 // Remove the first point if there is more than one
+                 sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+                 // Update value
+                 $(this).val(sanitized);
+             });
+
+            var class_name = $(this).attr("class");
 
             //Reference the Label.
             var label = $(this);
@@ -143,20 +156,20 @@ $(function() {
                     $(this).hide();
                     $(this).prev().html($(this).val());
                     $(this).prev().show();
-                    // $(this).closest('button[class^="btn"]').hide(); 
+                    calculateUpdate(class_name);
                 }
             });
 
-             textbox.blur(function(event) {
+            textbox.blur(function(event) {
                 $(this).hide();
                 $(this).prev().html($(this).val());
                 $(this).prev().show();
-                // $(this).closest('button[class^="btn"]').hide(); 
+                calculateUpdate(class_name);
             });
 
+             
+
         });
-
-
 
     }
 

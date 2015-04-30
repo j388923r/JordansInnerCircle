@@ -11,7 +11,7 @@ body {
 
 #label {
 	font-size: 24px;
-	font-family: "Gill Sans", sans-serif;
+	font-family: "Open Sans", sans-serif;
 	color: #8D9DB2;
 	margin-bottom: 20px;
 }
@@ -28,7 +28,7 @@ body {
 
 .row {
 	font-size: 22px;
-	font-family: "Gill Sans", sans-serif;
+	font-family: "Open Sans", sans-serif;
 	margin: 10px;
 }
 
@@ -63,7 +63,7 @@ body {
 	cursor: pointer;
 }
 
-.editable.alloted{
+.editable.allotted{
 	cursor: hand;
 	cursor: pointer;
 }
