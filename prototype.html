@@ -69,6 +69,7 @@
             
             var page = 'home';
             var decisionLeft, ideaLeft;
+            var ideaViewState = 'bulletin', decisionViewState = 'bulletin';
             var down = undefined;
             var draggedSticky = undefined;
 
@@ -80,7 +81,7 @@
                 if(input.length < length)
                     return input;
                  else
-                    input.substring(0, length - 3) + "...";
+                    return input.substring(0, length - 3) + "...";
             }
             
             $(document).ready(function(){
@@ -214,8 +215,18 @@
 
                 });
                 
+                $('#trashIcon').mouseover(function(event) {
+                    var trashcan = $(event.target);
+                    trashcan.css("background-image", "trashopen.jpg");
+                })
+                
+                $('#trashIcon').mouseleave(function(event) {
+                    var trashcan = $(event.target);
+                    trashcan.css("background-image", "trashclose.jpg");
+                })
+                
                 $('#trashIcon').mouseup(function(event) {
-                    //console.log($(draggedSticky));
+                    
                     if(draggedSticky && down) {
                         down = undefined;
                         var children = $(draggedSticky).children();
@@ -535,6 +546,43 @@
                 }
             };
 
+            var switchView = function(boardName) {
+                if(boardName === 'ideas') {
+                    console.log(ideaViewState);
+                    if(ideaViewState === 'list') {
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var idea = ideasInIdeas[i];
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                        }
+                        ideaViewState = 'bulletin';
+                    } else {
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var idea = ideasInIdeas[i];
+                            idea.ideaDiv.hide();
+                            $('#ideaListView').append(idea.ideaRow);
+                        }
+                        ideaViewState = 'list';
+                    }
+                } else if(boardName === 'decisions') {
+                    if(decisionViewState === 'list') {
+                        decisionViewState = 'bulletin';
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var idea = ideasInDecisions[i];
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                        }
+                    } else {
+                        decisionViewState = 'list';
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var idea = ideasInDecisions[i];
+                            idea.ideaDiv.hide();
+                            $('#ideaListView').append(idea.ideaRow);
+                        }
+                    }
+                }
+            }
+            
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
                     var iframe = $('#budget_iframe');
@@ -666,6 +714,9 @@
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
                                 console.log("Decision drop");
+                                var idea = getNonDeletedIdea(draggedSticky);
+                                ideasInIdeas.remove(idea);
+                                ideasInDecisions.add(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
                             $('#ideasBoard').append($(e.target));
@@ -674,18 +725,65 @@
                             remaining += Number($(children[2]).text().substring(1));
                             $('#budgetRemaining').text(remaining);
                             console.log("Idea drop");
+                            ideasInIdeas.add(idea);
+                            ideasInDecisions.remove(idea);
                         }
                         down = undefined;
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);
 
-                var ideaRow = "<tr>" +
-                               "<td style='font-weight:bold;font-size: 24'>" + idea.category + "</td>" +
+                var ideaRowHTML = "<tr>" +
+                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
                                "<td style='font-size: 24'>" + idea.title + "</td>" +
                                "<td style='bottom: 0;font-size: 24'>$" + idea.cost + "</td>" + 
                                "</tr>";
-                //$('#ideaListView').append($(ideaRow));
+                var ideaRow = $(ideaRowHTML);
+                
+                ideaRow.click(function(e){
+                    var idea = getNonDeletedIdea(e.target);
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
+
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                        
+                        $("#ideaTitleInput").val(idea.getTitle());
+                        //show image
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        $("#ideaCostInput").val(idea.getCost());
+                        document.getElementById("categoryDropDown").value = idea.getCategory();
+                        var tagList = idea.getTags();
+                        console.log(tagList);
+                        var tagString = "";
+                        for(var i = 0; i < tagList.length; i++)
+                            tagString += tagList[i] + "\n";
+                        $("#ideaTagInput").val(tagString);
+                    });
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
+                });
+                
+                idea.ideaRow = ideaRow;
+                               
+                //$('#ideaListView').append(ideaRow);
                 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
@@ -1004,8 +1102,11 @@
             }
 
             var getNonDeletedIdea = function(sticky) {
-                var children = $(draggedSticky).children();
+                //console.log($(sticky).parent());
+                var children = $(sticky).parent().children();
+                console.log(children);
                 var title = $(children[1]).text();
+                //console.log(title);
                 var category = $(children[0]).text();
                 for(var i = 0; i < allNonDeletedIdeas.length; i++) {
                     var idea = allNonDeletedIdeas[i];
@@ -1070,7 +1171,7 @@
         </div>
         <div id="boardBackground">
             <div id='ideaBoard'>
-                <a href="#" onclick="show('ideas')">
+                <a href="#" onclick="switchView('ideas')">
                     <div id="ideaHeader">
                         Ideas
                     </div>
@@ -1082,11 +1183,10 @@
                     </table>
                 </div>
                 <div id="trashIcon">
-                    <span class="glyphicon glyphicon-trash"></span>
                 </div>
             </div>
             <div id='decisionBoard'>
-                <a href="#" onclick="show('decisions')">
+                <a href="#" onclick="switchView('decisions')">
                     <div id="decisionHeader">
                     Decisions
                     </div>
