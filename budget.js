@@ -127,6 +127,7 @@ $(function() {
              });
 
             var class_name = $(this).attr("class");
+            var id_name = $(this).attr("id");
 
             //Reference the Label.
             var label = $(this);
@@ -157,6 +158,12 @@ $(function() {
                     $(this).prev().html($(this).val());
                     $(this).prev().show();
                     calculateUpdate(class_name);
+
+                    if(id_name === "total_budget") {
+                        total_budget = $(this).val();
+                        calculateRemaining();
+                    }
+                    
                 }
             });
 
@@ -165,13 +172,18 @@ $(function() {
                 $(this).prev().html($(this).val());
                 $(this).prev().show();
                 calculateUpdate(class_name);
-            });
 
-             
+                if(id_name === "total_budget") {
+                    total_budget = $(this).val();
+                    calculateRemaining();
+                }
+            });
 
         });
 
     }
+
+
 
 });
 

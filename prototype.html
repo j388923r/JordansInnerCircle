@@ -48,6 +48,7 @@
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
             var titleMapping = {};
+            var categoriesAndCostsInDecisions = {};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
@@ -559,8 +560,22 @@
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
-
+                    
+                    
+                    for(int i=0; i<ideasInDecisions.length, i++) {
+                        var current_idea = ideasInDecisions[i];
+                        var category = current_idea.getCategory();
+                        var cost = current_idea.getCost(); 
+                        categoriesAndCostsInDecisions(category) = cost;
                     }
+                    
+                    //Global function to set remaining budget the same
+                    (function (global) {
+
+                        global.localStorage.setItem("shared_categories_costs", categoriesAndCostsInDecisions);
+                        console.log("GLOBAL", global.localStorage.getItem("shared_remaining_budget"));
+                    }(window));
+                }
             }
 
             function closeWindows() {
