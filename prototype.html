@@ -688,12 +688,12 @@
                 
                 console.log(true);
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "''>" +
-                               "<div style='background: #" +categoryColors[idea.category][1]+ "'>" +
-                               "<h2 style='font-size: 125%'t>" + idea.category + "</h2>" +
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" +categoryColors[idea.category][1]+ ";pointer-events:none'>" +
+                               "<h2 style='font-size: 125%; pointer-events:none'>" + idea.category + "</h2>" +
                                "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;'>$" + idea.cost + "</h6>" + 
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -859,12 +859,12 @@
                 decisionLeft = decisionBoardLeft;
                 ideaLeft = boardBackgroundLeft;
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "''>" +
-                               "<div style='background: #" + categoryColors[idea.category][1] + "''>" +
-                               "<h2 style='font-size: 125%'>" + idea.category + "</h2>" +
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" + categoryColors[idea.category][1] + "; pointerEvents: none'>" +
+                               "<h2 style='font-size: 125%; pointer-events: none'>" + idea.category + "</h2>" +
                                "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;'>$" + idea.cost + "</h6>" + 
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -886,12 +886,12 @@
 
             var makeIdeaDiv = function(idea) {
 
-                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "''>" +
-                               "<div style='background: #" + categoryColors[idea.category][1] + "'>" +
-                               "<h2 style='font-size: 125%'>" + idea.category + "</h2>" +
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" + categoryColors[idea.category][1] + ";pointer-events:none'>" +
+                               "<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>" +
                                "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;'>$" + idea.cost + "</h6>" + 
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -1014,10 +1014,10 @@
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
                     var idea = getNonDeletedIdea(event.target);
+                    console.log(idea);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaBody").html(idea.getHtml());
-                    console.log("double clikc");
 
                     // Edit Click Listener
                     $('.editIdeaView').click(function(event){
