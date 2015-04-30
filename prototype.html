@@ -734,8 +734,9 @@
                                 $('#budgetRemaining').text(remaining);
                                 console.log("Decision drop");
                                 var idea = getNonDeletedIdea(draggedSticky);
-                                ideasInIdeas.remove(idea);
-                                ideasInDecisions.add(idea);
+                                var ideaIndex = ideasInIdeas.indexOf(idea);
+                                ideasInIdeas.splice(ideaIndex, 1, 0);
+                                ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
                             $('#ideasBoard').append($(e.target));
@@ -744,8 +745,9 @@
                             remaining += Number($(children[2]).text().substring(1));
                             $('#budgetRemaining').text(remaining);
                             console.log("Idea drop");
-                            ideasInIdeas.add(idea);
-                            ideasInDecisions.remove(idea);
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            ideasInDecisions.splice(ideaIndex, 1, 0);
                         }
                         down = undefined;
                     }
