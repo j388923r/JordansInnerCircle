@@ -21,6 +21,7 @@
         <script type='text/javascript' > 
           total_budget = 4000; //Dummy data to set total budget to initial value
           remaining = 4000; 
+          categoriesAndCostsInDecisions = {};
         </script>
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -604,24 +605,18 @@
             
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
+
+
+
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
-                    
-                    
-                    for(int i=0; i<ideasInDecisions.length, i++) {
-                        var current_idea = ideasInDecisions[i];
-                        var category = current_idea.getCategory();
-                        var cost = current_idea.getCost(); 
-                        categoriesAndCostsInDecisions(category) = cost;
-                    }
-                    
+                
                     //Global function to set remaining budget the same
                     (function (global) {
-
                         global.localStorage.setItem("shared_categories_costs", categoriesAndCostsInDecisions);
-                        console.log("GLOBAL", global.localStorage.getItem("shared_remaining_budget"));
+                        console.log("Proto: ", global.localStorage.setItem("shared_categories_costs",categoriesAndCostsInDecisions));
                     }(window));
                 }
             }
@@ -635,7 +630,6 @@
                 //Global function to set remaining budget the same
                 (function (global) {
                     document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
-                    console.log("GLOBAL", global.localStorage.getItem("shared_remaining_budget"));
                 }(window));
 
 
@@ -765,6 +759,16 @@
                             ideasInDecisions.splice(ideaIndex, 1, 0);
                         }
                         down = undefined;
+                        console.log("IDEASINDECISIONS:", ideasInDecisions);
+
+                        for(var i=0; i< ideasInDecisions.length; i++) {
+                            var current_idea = ideasInDecisions[i];
+                            console.log("IDEA:", current_idea);
+                            var category = current_idea.getCategory();
+                            var cost = current_idea.getCost(); 
+                            categoriesAndCostsInDecisions[category] = cost;
+                            console.log("CATS:",categoriesAndCostsInDecisions);
+                        }
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);

@@ -7,6 +7,7 @@ $(function() {
     var remaining = total_budget;
     var total_spent = 0;
     var total_allotted = Math.floor(total_budget/7);
+    var categoriesAndCosts = {};
     default_budget();
     calculate();
     calculateRemaining();
@@ -16,7 +17,22 @@ $(function() {
 
     //Populate with default numbers
     function default_budget() {
-        $(".editable.spent").html(total_spent);
+        (function (global) {
+            categoriesAndCosts = global.localStorage.getItem("shared_categories_costs");
+            console.log("Budget:", global.localStorage.getItem("shared_categories_costs"));
+
+        }(window));
+
+        if (categoriesAndCosts.length == 0) {
+           $(".editable.spent").html(total_spent);
+        } else {
+            console.log(Object.keys(categoriesAndCosts));
+            for(var i=0; i<Object.keys(categoriesAndCosts).length; i++) {
+                var key = Object.keys(categoriesAndCosts)[i];
+                document.getElementById("#" + key).innerHTML(key);
+                document.getElementById("#spent" + key).innerHTML(categoriesAndCosts[key]);
+            }
+        }
         $(".editable.allotted").html(total_allotted);
     }
 
