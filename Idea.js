@@ -135,23 +135,21 @@ var Idea = function(title, category, cost){
 	this.getHtml = function(){
 		var ideaTags = this.getTags();
 
-		var html = "<form action='#'>";
-		html += "<h1>"+this.getTitle()+"</h1><br>";
-		html += "<h3>"+this.getCategory()+"</h3><br>"
-		html += "<img src='Jellyfish.jpg' height='50%' width='50%'><br>";
-		html += "<p>"+this.getDescription()+"</p><br>";
+		var html = "<h2 style='font-size:300%;margin-top:0px'>"+this.getTitle()+"</h1>";
+		html += "<img src='Jellyfish.jpg' width='100%' style='display:block;margin-right:auto;margin-left:auto'>";
+		html += "<h3 style='font-size:200%'>Category: "+this.getCategory()+"</h3>"
+		html += "<p style='font-size:200%'>"+this.getDescription()+"</p>";
 		
 		for (var tagIndex in ideaTags){
-			html += "<p style='border: 1px solid black; border-radius: 10px;'>";
+			html += "<p style='border: 1px solid black; border-radius: 10px; font-size:100%'>";
 			html += ideaTag(tagIndex);
 			html += "</p>";
 		}
 
-		html += "<br>"
-		html += "<h3>$" + this.getCost() + "</h3><br>";
-		html += "<button type='button' class='btn editIdeaView'>Edit</button>";
-		html += "<button type='button' class='btn cancelIdeaView'>Cancel</button></form>";
-
+		// html += "<br>"
+		html += "<h3 style='font-size:200%'>Cost $" + this.getCost() + "</h3>";
+		html += "<div style='text-align:center'>"
+		html += "<button type='button' class='btn editIdeaView'>Edit</button></div>";
 		return html;
 	}
 

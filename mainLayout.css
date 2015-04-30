@@ -1,10 +1,35 @@
 li a { cursor: pointer; cursor: hand; }    
 
 .stickynote:hover {
-    border-radius: 0em 0em 1.5em 0em;
     cursor: pointer;
     cursor: hand;
-    shadow: 4px 4px 0px rgba(0,0,0,0.1);
+
+    border-bottom-right-radius: 20%;
+    
+    -moz-transform: rotate(7deg);
+    -webkit-transform: rotate(7deg);
+    -o-transform: rotate(7deg);
+    -ms-transform: rotate(7deg);
+    transform: rotate(7deg);
+
+/*    -webkit-box-shadow: 0px 4px 6px #888888;
+    -moz-box-shadow: 0px 4px 6px #888888;
+    box-shadow: 0px 4px 6px #888888;*/
+
+}
+
+.stickynote:hover:before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-width: 0 0 20px 20px;
+    border-style: solid;
+    border-color: #888888 #EEDC82;
+    border-bottom-right-radius: 200%;
+    box-shadow: 0px 0px 6px #888888;
+    display: block;
+    width: 0;    
 }
 
 body {
@@ -23,7 +48,7 @@ h1 {
 
 h2 { 
       font: 100 60px'Gill Sans';
-      text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+      text-shadow: 0px 0px 1px rgba(0,0,0,0.1);
       line-height: 1.7em;
       margin-bottom: 10px;
       text-align: center;
@@ -100,7 +125,9 @@ h1 a:hover {
     height: 125px;
     width: 125px;
     background-color: #EEDC82;
-    border: solid 1px black;
+    box-shadow: 4px 4px 6px #888888;
+
+
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select:none;
@@ -189,17 +216,22 @@ h1 a:hover {
 }
 
 #ideaPopup {
-    position: relative;
     font-family: "Gill Sans";
     font-size: 12px;
-    top: 0%;
-    left: 60%;
     position: absolute;
-    top: 30%;
-    left: 30%;
     background: white;
     border: 1px solid black;
     padding: 10px;
+}
+
+.ideaInfo{
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    height: 75%;
+    background: white;
+    border: 1px solid black;
 }
 
 #ideaTitleInput {
@@ -227,7 +259,7 @@ h1 a:hover {
     display: none
 }
 
-#ideaCostInput, #ideaView{
+#ideaCostInput{
     position: relative;
     padding: 10px;
     width: 100%;
@@ -271,9 +303,11 @@ h1 a:hover {
 #ideaView {
     position: absolute;
     z-index: 15;
-    top: 0;
+    top: 20%;
     background: white;
     border: 1px solid black;
+    width: 30%;
+    box-shadow: 10px 10px 20px #888888;
 }
 
 #trashIcon{
@@ -377,4 +411,26 @@ iframe[seamless] {
     color: black;
     border-radius: 0px;
     z-index: 10;
+}
+
+.divider{
+    width: 50%;
+    display: inline-block;
+}
+
+#ideaBody{
+    padding: 10px;
+}
+
+.cancelIdeaView{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.ideaHeader{
+    background-color: #8A6F4E;
 }
