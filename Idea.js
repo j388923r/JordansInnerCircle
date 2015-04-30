@@ -18,6 +18,7 @@ var Idea = function(title, category, cost){
 	this.deleted = false;
 	this.decided= false;
 	this.ideaDiv = undefined;
+    this.ideaRow = undefined;
 
 	// Public Functions
 

@@ -71,13 +71,21 @@
             
             var page = 'home';
             var decisionLeft, ideaLeft;
+            var ideaViewState = 'bulletin', decisionViewState = 'bulletin';
             var down = undefined;
             var draggedSticky = undefined;
 
             var ideasToShow = [];
 
-            var searchedFor = "";
+            var searchedFor = [];
 
+            var shorten = function(input, length) {
+                if(input.length < length)
+                    return input;
+                 else
+                    return input.substring(0, length - 3) + "...";
+            }
+            
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 
@@ -209,8 +217,18 @@
 
                 });
                 
+                $('#trashIcon').mouseover(function(event) {
+                    var trashcan = $(event.target);
+                    trashcan.css("background-image", "trashopen.jpg");
+                })
+                
+                $('#trashIcon').mouseleave(function(event) {
+                    var trashcan = $(event.target);
+                    trashcan.css("background-image", "trashclose.jpg");
+                })
+                
                 $('#trashIcon').mouseup(function(event) {
-                    //console.log($(draggedSticky));
+                    
                     if(draggedSticky && down) {
                         down = undefined;
                         var children = $(draggedSticky).children();
@@ -243,7 +261,11 @@
 
             var buildFilter = function(cat_arr, tag_arr) {
                 var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,costList);
+                var searchSource = listUnion(temp,titleList);
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -430,24 +452,38 @@
 
             var searching = function(term) {
                 var term = term;
+                var searchList = []
                 for(var i= 0; i< costList.length; i++){
                     if(term == costList[i]){
-                        searchedFor = costListForCheckAll[i];
-                        ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
+                        searchedFor.push(costListForCheckAll[i]);
+                        searchList = listUnion(searchList, costMapping[costListForCheckAll[i]])
+                        // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
                     }
                 }
                 for(var i = 0; i< tagsList.length; i++ ){
                     if(term == tagsList[i]){
-                        searchedFor = tagsList[i];
-                        ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
+                        searchedFor.push(tagsList[i]);
+                        searchList = listUnion(searchList, tagsMapping[tagsList[i]])
+                        // ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
                     }
                 }
                 for(var i = 0; i< categorieslist.length; i++){
                     if(term == categorieslist[i]){
-                        searchedFor = categorieslist[i];
-                        ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
+                        searchedFor.push(categorieslist[i]);
+                        searchList = listUnion(searchList, categoryMapping[categorieslist[i]])
+                        // ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
                     }
                 }
+
+                for(var i = 0; i < titleList.length; i++){
+
+                    if(stringContains(titleList[i],term)){
+                        searchedFor.push(titleList[i]);
+                        searchList = listUnion(searchList, titleMapping[titleList[i]])
+                    }
+                }
+
+                ideasToShow = listInter(ideasToShow,searchList)
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -462,7 +498,7 @@
 
             var clearing = function(){
                 updateFilter();
-                searchedFor = "";
+                searchedFor = [];
             }
 
             var listUnion = function(list1, list2) {
@@ -504,8 +540,8 @@
                 return retList;
             }
 
-            var stringContains = function(that) {
-                return this.indexOf(that) > -1;
+            var stringContains = function(title, term) {
+                return title.indexOf(term) > -1;
             }
             
             var show = function(boardName) {
@@ -530,6 +566,44 @@
                 }
             };
 
+            var switchView = function(boardName) {
+                if(boardName === 'ideas') {
+                    console.log(ideaViewState);
+                    if(ideaViewState === 'list') {
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var idea = ideasInIdeas[i];
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                        }
+                        ideaViewState = 'bulletin';
+                    } else {
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var idea = ideasInIdeas[i];
+                            console.log(idea);
+                            idea.ideaDiv.hide();
+                            $('#ideaListView').append(idea.ideaRow);
+                        }
+                        ideaViewState = 'list';
+                    }
+                } else if(boardName === 'decisions') {
+                    if(decisionViewState === 'list') {
+                        decisionViewState = 'bulletin';
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var idea = ideasInDecisions[i];
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                        }
+                    } else {
+                        decisionViewState = 'list';
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var idea = ideasInDecisions[i];
+                            idea.ideaDiv.hide();
+                            $('#ideaListView').append(idea.ideaRow);
+                        }
+                    }
+                }
+            }
+            
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
                     var iframe = $('#budget_iframe');
@@ -594,6 +668,7 @@
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
                 updateCostMapping(idea, ideaCost);
+                updateTitleMapping(idea, ideaTitle);
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -661,6 +736,12 @@
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
                                 console.log("Decision drop");
+                                var idea = getNonDeletedIdea(e.target);
+                                console.log(idea);
+                                var ideaIndex = ideasInIdeas.indexOf(idea);
+                                ideasInIdeas.splice(ideaIndex, 1);
+                                idea.ideaDiv = $(e.target);
+                                ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
                             $('#ideasBoard').append($(e.target));
@@ -669,12 +750,69 @@
                             remaining += Number($(children[2]).text().substring(1));
                             $('#budgetRemaining').text(remaining);
                             console.log("Idea drop");
+                            var idea = getNonDeletedIdea(e.target);
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            idea.ideaDiv = $(e.target);
+                            ideasInDecisions.splice(ideaIndex, 1);
                         }
                         down = undefined;
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);
 
+                var ideaRowHTML = "<tr>" +
+                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
+                               "<td style='font-size: 24'>" + idea.title + "</td>" +
+                               "<td style='bottom: 0;font-size: 24'>$" + idea.cost + "</td>" + 
+                               "</tr>";
+                var ideaRow = $(ideaRowHTML);
+                
+                ideaRow.click(function(e){
+                    var idea = getNonDeletedIdeaTable(e.target);
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
+
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                        
+                        $("#ideaTitleInput").val(idea.getTitle());
+                        //show image
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        $("#ideaCostInput").val(idea.getCost());
+                        document.getElementById("categoryDropDown").value = idea.getCategory();
+                        var tagList = idea.getTags();
+                        console.log(tagList);
+                        var tagString = "";
+                        for(var i = 0; i < tagList.length; i++)
+                            tagString += tagList[i] + "\n";
+                        $("#ideaTagInput").val(tagString);
+                    });
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
+                });
+                
+                idea.ideaRow = ideaRow;
+                               
+                //$('#ideaListView').append(ideaRow);
+                
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
@@ -705,6 +843,8 @@
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
                 updateCostMapping(idea, ideaCost);
+                updateTitleMapping(idea, ideaTitle);
+
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -822,6 +962,22 @@
                 }
             }
 
+            var updateTitleMapping = function(idea, title){
+                if (title in Object.keys(titleMapping)){
+                    if(!(idea in titleMapping[title])){
+                        titleMapping[title].push(idea);
+                    }
+                } else {
+                    titleMapping[title] = [idea];
+                }
+
+                if (!(title in titleList)){
+                    titleList.push(title);
+                }
+
+
+            }
+
             var updateCostMapping = function(idea, cost){
                 var numberCost = parseInt(cost, 10);
 
@@ -857,7 +1013,7 @@
             var stickyUp = function(event) {
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
-                    var idea = getNonDeletedIdea(draggedSticky);
+                    var idea = getNonDeletedIdea(event.target);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaBody").html(idea.getHtml());
@@ -995,8 +1151,26 @@
             }
 
             var getNonDeletedIdea = function(sticky) {
-                var children = $(draggedSticky).children();
+                //console.log($(sticky).parent());
+                var children = $(sticky).children();
+                console.log(children);
                 var title = $(children[1]).text();
+                //console.log(title);
+                var category = $(children[0]).text();
+                for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                    var idea = allNonDeletedIdeas[i];
+                    if(title === idea.getTitle() && category === idea.getCategory()) {
+                        return idea;
+                    }
+                }
+            }
+            
+            var getNonDeletedIdeaTable = function(sticky) {
+                //console.log($(sticky).parent());
+                var children = $(sticky).parent().children();
+                console.log(children);
+                var title = $(children[1]).text();
+                //console.log(title);
                 var category = $(children[0]).text();
                 for(var i = 0; i < allNonDeletedIdeas.length; i++) {
                     var idea = allNonDeletedIdeas[i];
@@ -1060,34 +1234,31 @@
         </div>
         <div id="boardBackground">
             <div id='ideaBoard'>
-                <a href="#" onclick="show('ideas')">
+                <a href="#" onclick="switchView('ideas')">
                     <div id="ideaHeader">
                         Ideas
                     </div>
                 </a>
                 <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add a new sticky note</button>
-                    <div>
+                    <table id="ideaListView">
                         
-                    </div>
+                    </table>
                 </div>
                 <div id="trashIcon">
-                    <span class="glyphicon glyphicon-trash"></span>
-                    
                 </div>
             </div>
             <div id='decisionBoard'>
-                <a href="#" onclick="show('decisions')">
+                <a href="#" onclick="switchView('decisions')">
                     <div id="decisionHeader">
                     Decisions
                     </div>
                 </a>
-                <div id="budgetTotalRemaining">
-                    <a href="#" onclick="load('budget_page')">
-                    Total Remaining: $<span id="budgetRemaining"></span></a>
-                </div>
                 <div id="decisionContent">
-                    
+                    <div id="budgetTotalRemaining">
+                        <a href="#" onclick="load('budget_page')">
+                        Total Remaining: $<span id="budgetRemaining"></span></a>
+                    </div>
                 </div>            
             </div>
             <div id="ideaPopup" class="ideaInfo" style="display: none;">
