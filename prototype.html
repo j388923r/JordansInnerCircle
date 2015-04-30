@@ -74,7 +74,7 @@
 
             var ideasToShow = [];
 
-            var searchedFor = "";
+            var searchedFor = [];
 
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
@@ -241,7 +241,11 @@
 
             var buildFilter = function(cat_arr, tag_arr) {
                 var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,costList);
+                var searchSource = listUnion(temp,titleList);
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -428,24 +432,38 @@
 
             var searching = function(term) {
                 var term = term;
+                var searchList = []
                 for(var i= 0; i< costList.length; i++){
                     if(term == costList[i]){
-                        searchedFor = costListForCheckAll[i];
-                        ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
+                        searchedFor.push(costListForCheckAll[i]);
+                        searchList = listUnion(searchList, costMapping[costListForCheckAll[i]])
+                        // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
                     }
                 }
                 for(var i = 0; i< tagsList.length; i++ ){
                     if(term == tagsList[i]){
-                        searchedFor = tagsList[i];
-                        ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
+                        searchedFor.push(tagsList[i]);
+                        searchList = listUnion(searchList, tagsMapping[tagsList[i]])
+                        // ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
                     }
                 }
                 for(var i = 0; i< categorieslist.length; i++){
                     if(term == categorieslist[i]){
-                        searchedFor = categorieslist[i];
-                        ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
+                        searchedFor.push(categorieslist[i]);
+                        searchList = listUnion(searchList, categoryMapping[categorieslist[i]])
+                        // ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
                     }
                 }
+
+                for(var i = 0; i < titleList.length; i++){
+
+                    if(stringContains(titleList[i],term)){
+                        searchedFor.push(titleList[i]);
+                        searchList = listUnion(searchList, titleMapping[titleList[i]])
+                    }
+                }
+
+                ideasToShow = listInter(ideasToShow,searchList)
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -460,7 +478,7 @@
 
             var clearing = function(){
                 updateFilter();
-                searchedFor = "";
+                searchedFor = [];
             }
 
             var listUnion = function(list1, list2) {
@@ -502,8 +520,8 @@
                 return retList;
             }
 
-            var stringContains = function(that) {
-                return this.indexOf(that) > -1;
+            var stringContains = function(title, term) {
+                return title.indexOf(term) > -1;
             }
             
             var show = function(boardName) {
@@ -592,6 +610,7 @@
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
                 updateCostMapping(idea, ideaCost);
+                updateTitleMapping(idea, ideaTitle);
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -703,6 +722,8 @@
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
                 updateCostMapping(idea, ideaCost);
+                updateTitleMapping(idea, ideaTitle);
+
                 if (ideaDescription != ""){
                     idea.updateDescription(ideaDescription);
                 }
@@ -814,6 +835,22 @@
                         tagsList.push(tag);
                     }
                 }
+            }
+
+            var updateTitleMapping = function(idea, title){
+                if (title in Object.keys(titleMapping)){
+                    if(!(idea in titleMapping[title])){
+                        titleMapping[title].push(idea);
+                    }
+                } else {
+                    titleMapping[title] = [idea];
+                }
+
+                if (!(title in titleList)){
+                    titleList.push(title);
+                }
+
+
             }
 
             var updateCostMapping = function(idea, cost){
