@@ -1,40 +1,110 @@
 // This allows the Javascript code inside this block to only run when the page
 // has finished loading in the browser.
-$(function() {
+$(document).ready(function(){
 
     var total_budget = 4000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
     var remaining = total_budget;
     var total_spent = 0;
     var total_allotted = Math.floor(total_budget/7);
-    var categoriesAndCosts = {};
     default_budget();
     calculate();
     calculateRemaining();
     editable();
     delete_confirm();
 
-
     //Populate with default numbers
     function default_budget() {
-        (function (global) {
-            categoriesAndCosts = global.localStorage.getItem("shared_categories_costs");
-            console.log("Budget:", global.localStorage.getItem("shared_categories_costs"));
 
-        }(window));
-
-        if (categoriesAndCosts.length == 0) {
-           $(".editable.spent").html(total_spent);
-        } else {
-            console.log(Object.keys(categoriesAndCosts));
-            for(var i=0; i<Object.keys(categoriesAndCosts).length; i++) {
-                var key = Object.keys(categoriesAndCosts)[i];
-                document.getElementById("#" + key).innerHTML(key);
-                document.getElementById("#spent" + key).innerHTML(categoriesAndCosts[key]);
+        if(window.categoriesAndCosts.hasOwnProperty("Catering")) {
+            console.log("Worked!", categoriesAndCosts, window.categoriesAndCosts);
+            for(var key in categoriesAndCosts) {
+                console.log("Key:",categoriesAndCosts[key]);
+                document.getElementById("#" + key).innerHTML = key;
+                document.getElementById("#spent" + key).innerHTML = categoriesAndCosts[key];
             }
+        } else {
+            console.log("0s here");
+            $(".editable.spent").html(total_spent);
         }
         $(".editable.allotted").html(total_allotted);
+
     }
+    
+}); 
+
+
+    //Switch between span and textbox
+    function editable() {
+        $(".editable").mouseover(function() {
+
+            //Only numbers allowed
+            $('.editable').on('change keyup', function() {
+                 // Remove invalid characters
+                 var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+                 // Remove the first point if there is more than one
+                 sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+                 // Update value
+                 $(this).val(sanitized);
+             });
+
+            var class_name = $(this).attr("class");
+            var id_name = $(this).attr("id");
+
+            //Reference the Label.
+            var label = $(this);
+
+            //Add a TextBox next to the Label.
+            label.after("<input style = 'display:none' />");
+
+            //Reference the TextBox.
+            var textbox = $(this).next();
+            textbox.addClass(label.attr('class'));
+
+            //Set the id attribute of the TextBox.
+            textbox.id = this.id.replace("lbl", "txt");
+
+            //Assign the value of Label to TextBox.
+            textbox.val(label.html());
+
+            //When Label is clicked, hide Label and show TextBox.
+            label.click(function() {
+                $(this).hide();
+                $(this).next().show().select();
+            });
+
+            //When focus is lost from TextBox, hide TextBox and show Label.
+            textbox.keyup(function(event) {
+                if(event.keyCode == 13) {
+                    $(this).hide();
+                    $(this).prev().html($(this).val());
+                    $(this).prev().show();
+                    calculateUpdate(class_name);
+
+                    if(id_name === "total_budget") {
+                        total_budget = $(this).val();
+                        calculateRemaining();
+                    }
+                    
+                }
+            });
+
+            textbox.blur(function(event) {
+                $(this).hide();
+                $(this).prev().html($(this).val());
+                $(this).prev().show();
+                calculateUpdate(class_name);
+
+                if(id_name === "total_budget") {
+                    total_budget = $(this).val();
+                    calculateRemaining();
+                }
+            });
+
+        });
+
+    }
+
 
     //Delete confirmation
     function delete_confirm() {
@@ -48,8 +118,6 @@ $(function() {
             } 
         });
     }
-
-    // Only numbers allowed
       
 
       // Only numbers allowed
@@ -128,80 +196,6 @@ $(function() {
     }
 
 
-    //Switch between span and textbox
-    function editable() {
-        $(".editable").mouseover(function() {
-
-            //Only numbers allowed
-            $('.editable').on('change keyup', function() {
-                 // Remove invalid characters
-                 var sanitized = $(this).val().replace(/[^0-9.]/g, '');
-                 // Remove the first point if there is more than one
-                 sanitized = sanitized.replace(/\.(?=.*\.)/, '');
-                 // Update value
-                 $(this).val(sanitized);
-             });
-
-            var class_name = $(this).attr("class");
-            var id_name = $(this).attr("id");
-
-            //Reference the Label.
-            var label = $(this);
-
-            //Add a TextBox next to the Label.
-            label.after("<input style = 'display:none' />");
-
-            //Reference the TextBox.
-            var textbox = $(this).next();
-            textbox.addClass(label.attr('class'));
-
-            //Set the id attribute of the TextBox.
-            textbox.id = this.id.replace("lbl", "txt");
-
-            //Assign the value of Label to TextBox.
-            textbox.val(label.html());
-
-            //When Label is clicked, hide Label and show TextBox.
-            label.click(function() {
-                $(this).hide();
-                $(this).next().show().select();
-            });
-
-            //When focus is lost from TextBox, hide TextBox and show Label.
-            textbox.keyup(function(event) {
-                if(event.keyCode == 13) {
-                    $(this).hide();
-                    $(this).prev().html($(this).val());
-                    $(this).prev().show();
-                    calculateUpdate(class_name);
-
-                    if(id_name === "total_budget") {
-                        total_budget = $(this).val();
-                        calculateRemaining();
-                    }
-                    
-                }
-            });
-
-            textbox.blur(function(event) {
-                $(this).hide();
-                $(this).prev().html($(this).val());
-                $(this).prev().show();
-                calculateUpdate(class_name);
-
-                if(id_name === "total_budget") {
-                    total_budget = $(this).val();
-                    calculateRemaining();
-                }
-            });
-
-        });
-
-    }
-
-
-
-});
 
 
     // //Add row for entered item

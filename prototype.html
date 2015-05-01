@@ -1,7 +1,20 @@
 <html>
     <head>
         <title>Simple As Love</title>
+
+       
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+        <!-- Deeclaring global budget variables -->
+        <script type='text/javascript' > 
+          total_budget = 4000; //Dummy data to set total budget to initial value
+          remaining = 4000; 
+          (function(global) {
+            window.categoriesAndCosts = {};
+          }(window));
+          
+        </script>
+
 
         <!-- Fonts -->
         <link href="http://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet" type="text/css">
@@ -17,12 +30,7 @@
 
         <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
 
-        <!-- Deeclaring global budget variables -->
-        <script type='text/javascript' > 
-          total_budget = 4000; //Dummy data to set total budget to initial value
-          remaining = 4000; 
-          categoriesAndCostsInDecisions = {};
-        </script>
+      
         
         <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -49,7 +57,7 @@
             var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
             var titleMapping = {};
-            var categoriesAndCostsInDecisions = {};
+            //var window.categoriesAndCosts = {};
 
             var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
             var tagsList = ["vegas", "prince"];
@@ -85,7 +93,8 @@
                  else
                     return input.substring(0, length - 3) + "...";
             }
-            
+
+
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 
@@ -226,7 +235,7 @@
                     var trashcan = $(event.target);
                     trashcan.css("background-image", "trashclose.jpg");
                 })
-                
+
                 $('#trashIcon').mouseup(function(event) {
                     
                     if(draggedSticky && down) {
@@ -254,6 +263,7 @@
                         deletedIdeas.push(idea);
                     }
                 });
+
             });
 
             //function that takes in categories and tags list and contructs the filter 
@@ -606,19 +616,12 @@
             
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
-
-
-
+                    
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 
-                    //Global function to set remaining budget the same
-                    (function (global) {
-                        global.localStorage.setItem("shared_categories_costs", categoriesAndCostsInDecisions);
-                        console.log("Proto: ", global.localStorage.setItem("shared_categories_costs",categoriesAndCostsInDecisions));
-                    }(window));
                 }
             }
 
@@ -628,7 +631,7 @@
                 iframe.css("display", "none");
                 $("#iframeClose").css("display", "none");
 
-                //Global function to set remaining budget the same
+                // function to set remaining budget the same
                 (function (global) {
                     document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
                 }(window));
@@ -764,15 +767,14 @@
                             ideasInDecisions.splice(ideaIndex, 1);
                         }
                         down = undefined;
-                        console.log("IDEASINDECISIONS:", ideasInDecisions);
 
-                        for(var i=0; i< ideasInDecisions.length; i++) {
+                        for(var i=0; i < ideasInDecisions.length; i++) {
                             var current_idea = ideasInDecisions[i];
                             console.log("IDEA:", current_idea);
                             var category = current_idea.getCategory();
                             var cost = current_idea.getCost(); 
-                            categoriesAndCostsInDecisions[category] = cost;
-                            console.log("CATS:",categoriesAndCostsInDecisions);
+                            window.categoriesAndCosts[category] = cost;
+                            console.log("CATS:", window.categoriesAndCosts);
                         }
                     }
                 });
