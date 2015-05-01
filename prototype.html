@@ -1,21 +1,15 @@
 <html>
     <head>
         <title>Simple As Love</title>
-
+        <!-- Deeclaring global budget variables -->
        
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-
-        <!-- Deeclaring global budget variables -->
-        <script type='text/javascript' > 
+         <script type='text/javascript' > 
           total_budget = 4000; //Dummy data to set total budget to initial value
           remaining = 4000; 
-          (function(global) {
-            window.categoriesAndCosts = {};
-          }(window));
-          
+          window.categoriesAndCosts = {};     
         </script>
-
-
+        
         <!-- Fonts -->
         <link href="http://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet" type="text/css">
         <link href="http://fonts.googleapis.com/css?family=Great+Vibes" rel="stylesheet" type="text/css">
@@ -57,7 +51,7 @@
             var categoryMapping = {'Cake':[],'Clothing':[],'Decorations':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Wedding Gifts':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
             var titleMapping = {};
-            //var window.categoriesAndCosts = {};
+            //window.categoriesAndCosts = {};
 
             var categorieslist = ["Cake","Catering","Clothing","Decorations","Entertainment","Flowers","Venue","Invitations","Wedding Gifts", "Other"];
             var tagsList = ["vegas", "prince"];
@@ -274,6 +268,16 @@
                         $("#trashIcon").css("background-image", "url('full_trash.png')");
                     }
                 });
+
+                
+                $("#budget_button").click(function() { 
+                    var iframe = $('#budget_iframe');
+                    $('#budget_iframe').attr('src', $('#budget_iframe').attr('src'));
+                    iframe.css("display", "block");
+                    $("#iframeClose").css("display", "block");
+                    //iframe.css({"height":"400", "width":"800", "border":"none"});
+                });
+
 
             });
 
@@ -624,16 +628,16 @@
                     }
                 }
             }
-            
+
             var load = function(page_name) {
-                if(page_name === 'budget_page') {
-                    
+
+                if(page_name === 'budget_page') {                  
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
                     $("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
-                
                 }
+
             }
 
             function closeWindows() {
@@ -781,13 +785,20 @@
 
                         for(var i=0; i < ideasInDecisions.length; i++) {
                             var current_idea = ideasInDecisions[i];
-                            console.log("IDEA:", current_idea);
                             var category = current_idea.getCategory();
                             var cost = current_idea.getCost(); 
                             window.categoriesAndCosts[category] = cost;
-                            console.log("CATS:", window.categoriesAndCosts);
+                            console.log("Categories:", window.categoriesAndCosts);
                         }
+
+                        (function (global) {
+                            console.log("Right before:", window.categoriesAndCosts);
+                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(window.categoriesAndCosts));
+                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
+                        }(window));  
+                        
                     }
+
                 });
                 $('#ideaBoard').append(ideaDiv);
 
@@ -1228,7 +1239,7 @@
                 <li id="mainpageheader"><a ref="#" onclick="show('home')">Main Page</a></li>
                 <li><a ref="#" onclick="show('ideas')">Ideas</a></li>
                 <li><a ref="#" onclick="show('decisions')">Decisions</a></li>
-                <li><a ref="#" onclick="load('budget_page')">Budget</a></li>
+                <li id="budget_button"><a ref="#" onclick="load('budget_page')">Budget</a></li>
                 <li id="archiveheader"><a ref="#" onclick="load_deleted()">Archive</a></li>
             </ul>
             <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>

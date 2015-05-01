@@ -16,12 +16,17 @@ $(document).ready(function(){
     //Populate with default numbers
     function default_budget() {
 
-        if(window.categoriesAndCosts.hasOwnProperty("Catering")) {
-            console.log("Worked!", categoriesAndCosts, window.categoriesAndCosts);
+        (function (global) {
+            categoriesAndCosts = JSON.parse(global.localStorage.getItem("shared_categories_costs"));
+            console.log("budget has:", categoriesAndCosts);
+        }(window));
+
+        if(categoriesAndCosts) {
+            console.log("Worked!", categoriesAndCosts);
             for(var key in categoriesAndCosts) {
-                console.log("Key:",categoriesAndCosts[key]);
-                document.getElementById("#" + key).innerHTML = key;
-                document.getElementById("#spent" + key).innerHTML = categoriesAndCosts[key];
+                console.log("Key:",key);
+                document.getElementById(key).innerHTML = key;
+                document.getElementById("spent" + key).innerHTML = categoriesAndCosts[key];
             }
         } else {
             console.log("0s here");
@@ -30,9 +35,23 @@ $(document).ready(function(){
         $(".editable.allotted").html(total_allotted);
 
     }
-    
-}); 
 
+    function calculateRemaining() {
+        var class_name = ".editable.allotted";
+        total_allotted = calculateTotal(class_name);
+        $("#total_allotted").html(total_allotted);
+        
+        remaining = total_budget - total_allotted;
+        $("#remaining_budget").html(remaining);
+        if (remaining < 0) {
+            $("#remaining").css({"color":"red"});
+            $("#total_allotted").css({"color":"red"});
+        }
+        
+        (function (global) {
+            global.localStorage.setItem("shared_remaining_budget", remaining);
+        }(window));
+    }
 
     //Switch between span and textbox
     function editable() {
@@ -169,23 +188,7 @@ $(document).ready(function(){
         }
     }
 
-    function calculateRemaining() {
-        var class_name = ".editable.allotted";
-        total_allotted = calculateTotal(class_name);
-        $("#total_allotted").html(total_allotted);
-        
-        remaining = total_budget - total_allotted;
-        $("#remaining_budget").html(remaining);
-        if (remaining < 0) {
-            $("#remaining").css({"color":"red"});
-            $("#total_allotted").css({"color":"red"});
-        }
-        
-        (function (global) {
-            global.localStorage.setItem("shared_remaining_budget", remaining);
-        }(window));
-    }
-
+    
     function calculateTotal(class_name) {
         var sum = 0;
         $("div"+ class_name).each(function() {
@@ -195,7 +198,7 @@ $(document).ready(function(){
         return sum;
     }
 
-
+});
 
 
     // //Add row for entered item
