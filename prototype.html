@@ -263,8 +263,6 @@
                             }
                         }
 
-                        // deletedItems.push(idea);
-
                         deletedIdeas.push(idea);
 
                         $("#trashIcon").css("background-image", "url('full_trash.png')");
@@ -279,8 +277,7 @@
                     $("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 });
-
-
+                
             });
 
             //function that takes in categories and tags list and contructs the filter 
@@ -625,7 +622,7 @@
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
                             idea.ideaDiv.hide();
-                            $('#ideaListView').append(idea.ideaRow);
+                            $('#decisionListView').append(idea.ideaRow);
                         }
                     }
                 }
@@ -801,60 +798,69 @@
                     }
 
                 });
-                $('#ideaBoard').append(ideaDiv);
 
+                $('#ideaBoard').append(ideaDiv);
+                
                 var ideaRowHTML = "<tr>" +
+                               "<td style='font-size: 24'> <input type='checkbox'></input> </td>" + 
                                "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
                                "<td style='font-size: 24'>" + idea.title + "</td>" +
-                               "<td style='bottom: 0;font-size: 24'>$" + idea.cost + "</td>" + 
+                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
+                               //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
+                               //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
                                "</tr>";
                 var ideaRow = $(ideaRowHTML);
                 
                 ideaRow.click(function(e){
-                    var idea = getNonDeletedIdeaTable(e.target);
-                    var div = document.getElementById("ideaView");
-                    div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
-
-                    // Edit Click Listener
-                    $('.editIdeaView').click(function(event){
-                        console.log("Edit!");
+                    if($(e.target).parent().children().length > 2) {
+                        var idea = getNonDeletedIdeaTable(e.target);
                         var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
+                        div.style.display = "block";
+                        $("#ideaView").html(idea.getHtml());
+                        console.log("double clikc");
 
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
-                        
-                        $("#ideaTitleInput").val(idea.getTitle());
-                        //show image
-                        $("#ideaDescriptionInput").val(idea.getDescription());
-                        $("#ideaCostInput").val(idea.getCost());
-                        document.getElementById("categoryDropDown").value = idea.getCategory();
-                        var tagList = idea.getTags();
-                        console.log(tagList);
-                        var tagString = "";
-                        for(var i = 0; i < tagList.length; i++)
-                            tagString += tagList[i] + "\n";
-                        $("#ideaTagInput").val(tagString);
-                    });
+                        // Edit Click Listener
+                        $('.editIdeaView').click(function(event){
+                            console.log("Edit!");
+                            var div = document.getElementById("ideaView");
+                            div.style.display = "none";
+                            $("ideaView").html('');
 
-                    // Cancel click listener
-                    $('.cancelIdeaView').click(function(event){
-                        console.log("CLICK!");
-                        var div = document.getElementById("ideaView");
-                        div.style.display = "none";
-                        $("ideaView").html('');
-                    });
+                            editIdea = true;
+                            edittableIdea = idea;
+                            var popupIdea = document.getElementById("ideaPopup");
+                            popupIdea.style.display = "block";
+                            
+                            $("#ideaTitleInput").val(idea.getTitle());
+                            //show image
+                            $("#ideaDescriptionInput").val(idea.getDescription());
+                            $("#ideaCostInput").val(idea.getCost());
+                            document.getElementById("categoryDropDown").value = idea.getCategory();
+                            var tagList = idea.getTags();
+                            console.log(tagList);
+                            var tagString = "";
+                            for(var i = 0; i < tagList.length; i++)
+                                tagString += tagList[i] + "\n";
+                            $("#ideaTagInput").val(tagString);
+                        });
+
+                        // Cancel click listener
+                        $('.cancelIdeaView').click(function(event){
+                            console.log("CLICK!");
+                            var div = document.getElementById("ideaView");
+                            div.style.display = "none";
+                            $("ideaView").html('');
+                        });
+                    }
                 });
                 
                 idea.ideaRow = ideaRow;
                                
-                //$('#ideaListView').append(ideaRow);
-                
+                if(ideaViewState === 'list') {
+                    $('#ideaListView').append(ideaRow);
+                    ideaDiv.hide();
+                }
+                    
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
@@ -1208,12 +1214,13 @@
             }
             
             var getNonDeletedIdeaTable = function(sticky) {
+                console.log(sticky);
                 //console.log($(sticky).parent());
                 var children = $(sticky).parent().children();
                 console.log(children);
-                var title = $(children[1]).text();
+                var title = $(children[2]).text();
                 //console.log(title);
-                var category = $(children[0]).text();
+                var category = $(children[1]).text();
                 for(var i = 0; i < allNonDeletedIdeas.length; i++) {
                     var idea = allNonDeletedIdeas[i];
                     if(title === idea.getTitle() && category === idea.getCategory()) {
@@ -1283,7 +1290,7 @@
                 </a>
                 <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add a new sticky note</button>
-                    <table id="ideaListView">
+                    <table id="ideaListView" class="table table-hover">
                         
                     </table>
                 </div>
@@ -1300,6 +1307,9 @@
                     <div id="budgetTotalRemaining">
                         <a href="#" onclick="load('budget_page')">
                         Total Remaining: $<span id="budgetRemaining"></span></a>
+                        <table id="decisionListView" class="table table-hover">
+                        
+                        </table>
                     </div>
                 </div>            
             </div>
