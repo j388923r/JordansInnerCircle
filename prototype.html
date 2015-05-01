@@ -45,15 +45,17 @@
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
-            var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
+            var categoryMapping = {'Cake':[],'Clothing':[],'Decorations':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Wedding Gifts':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
             var titleMapping = {};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
+            var categorieslist = ["Cake","Catering","Clothing","Decorations","Entertainment","Flowers","Venue","Invitations","Wedding Gifts", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
             var titleList = [];
+
+            var categoryColors = {'Cake':['E6E6E6','D9D9D9'],'Catering':['D9C7B0','CCBBA5'],'Clothing':['A1D8E6','98CCD9'],'Decorations':['CDBDD9','C1B1CC'], 'Entertainment':['9EBCE6','96B2D9'], 'Flowers':['BFE6A1','B5D998'], 'Invitations':['D9A7A7','CC9D9D'], 'Venue':['FFC59C','F2BB94'], 'Wedding Gifts':['A8E6CD','9ED9C1'], 'Other':['E6D97C','D9CD75']};
 
             var costFilters = [];
             var categoryFilters = [];
@@ -69,6 +71,7 @@
             
             var page = 'home';
             var decisionLeft, ideaLeft;
+            var ideaViewState = 'bulletin', decisionViewState = 'bulletin';
             var down = undefined;
             var draggedSticky = undefined;
 
@@ -80,7 +83,7 @@
                 if(input.length < length)
                     return input;
                  else
-                    input.substring(0, length - 3) + "...";
+                    return input.substring(0, length - 3) + "...";
             }
             
             $(document).ready(function(){
@@ -214,8 +217,25 @@
 
                 });
                 
+                $('#trashIcon').mouseover(function(event) {
+                    var trashcan = $(event.target);
+                    console.log(trashcan);
+
+                    if (draggedSticky){
+                        $("#trashIcon").css("background-image", "url('full_trash.png')");
+                    }
+                })
+                
+                $('#trashIcon').mouseleave(function(event) {
+                    var trashcan = $(event.target);
+
+                    if (draggedSticky && deletedIdeas.length == 0){
+                        $("#trashIcon").css("background-image", "url('empty_trash.png')");
+                    }
+                })
+                
                 $('#trashIcon').mouseup(function(event) {
-                    //console.log($(draggedSticky));
+                    
                     if(draggedSticky && down) {
                         down = undefined;
                         var children = $(draggedSticky).children();
@@ -239,6 +259,8 @@
                         // deletedItems.push(idea);
 
                         deletedIdeas.push(idea);
+
+                        $("#trashIcon").css("background-image", "url('full_trash.png')");
                     }
                 });
             });
@@ -553,6 +575,44 @@
                 }
             };
 
+            var switchView = function(boardName) {
+                if(boardName === 'ideas') {
+                    console.log(ideaViewState);
+                    if(ideaViewState === 'list') {
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var idea = ideasInIdeas[i];
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                        }
+                        ideaViewState = 'bulletin';
+                    } else {
+                        for(var i = 0; i < ideasInIdeas.length; i++) {
+                            var idea = ideasInIdeas[i];
+                            console.log(idea);
+                            idea.ideaDiv.hide();
+                            $('#ideaListView').append(idea.ideaRow);
+                        }
+                        ideaViewState = 'list';
+                    }
+                } else if(boardName === 'decisions') {
+                    if(decisionViewState === 'list') {
+                        decisionViewState = 'bulletin';
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var idea = ideasInDecisions[i];
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                        }
+                    } else {
+                        decisionViewState = 'list';
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var idea = ideasInDecisions[i];
+                            idea.ideaDiv.hide();
+                            $('#ideaListView').append(idea.ideaRow);
+                        }
+                    }
+                }
+            }
+            
             var load = function(page_name) {
                 if(page_name === 'budget_page') {
                     var iframe = $('#budget_iframe');
@@ -637,10 +697,12 @@
                 
                 console.log(true);
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
-                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
-                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" +categoryColors[idea.category][1]+ ";pointer-events:none'>" +
+                               "<h2 style='font-size: 125%; pointer-events:none'>" + idea.category + "</h2>" +
+                               "</div>" +
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -665,10 +727,8 @@
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                                $(draggedSticky).css('border', 'solid 3px #614126');
                             } else {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                                $(draggedSticky).css('border', 'solid 1px #614126');
                             }
                         } else if(page === 'ideas') {
                             
@@ -685,6 +745,12 @@
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
                                 console.log("Decision drop");
+                                var idea = getNonDeletedIdea(e.target);
+                                console.log(idea);
+                                var ideaIndex = ideasInIdeas.indexOf(idea);
+                                ideasInIdeas.splice(ideaIndex, 1);
+                                idea.ideaDiv = $(e.target);
+                                ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
                             $('#ideasBoard').append($(e.target));
@@ -693,18 +759,68 @@
                             remaining += Number($(children[2]).text().substring(1));
                             $('#budgetRemaining').text(remaining);
                             console.log("Idea drop");
+                            var idea = getNonDeletedIdea(e.target);
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            idea.ideaDiv = $(e.target);
+                            ideasInDecisions.splice(ideaIndex, 1);
                         }
                         down = undefined;
                     }
                 });
                 $('#ideaBoard').append(ideaDiv);
 
-                var ideaRow = "<tr>" +
-                               "<td style='font-weight:bold;font-size: 24'>" + idea.category + "</td>" +
+                var ideaRowHTML = "<tr>" +
+                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
                                "<td style='font-size: 24'>" + idea.title + "</td>" +
                                "<td style='bottom: 0;font-size: 24'>$" + idea.cost + "</td>" + 
                                "</tr>";
-                //$('#ideaListView').append($(ideaRow));
+                var ideaRow = $(ideaRowHTML);
+                
+                ideaRow.click(function(e){
+                    var idea = getNonDeletedIdeaTable(e.target);
+                    var div = document.getElementById("ideaView");
+                    div.style.display = "block";
+                    $("#ideaView").html(idea.getHtml());
+                    console.log("double clikc");
+
+                    // Edit Click Listener
+                    $('.editIdeaView').click(function(event){
+                        console.log("Edit!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+
+                        editIdea = true;
+                        edittableIdea = idea;
+                        var popupIdea = document.getElementById("ideaPopup");
+                        popupIdea.style.display = "block";
+                        
+                        $("#ideaTitleInput").val(idea.getTitle());
+                        //show image
+                        $("#ideaDescriptionInput").val(idea.getDescription());
+                        $("#ideaCostInput").val(idea.getCost());
+                        document.getElementById("categoryDropDown").value = idea.getCategory();
+                        var tagList = idea.getTags();
+                        console.log(tagList);
+                        var tagString = "";
+                        for(var i = 0; i < tagList.length; i++)
+                            tagString += tagList[i] + "\n";
+                        $("#ideaTagInput").val(tagString);
+                    });
+
+                    // Cancel click listener
+                    $('.cancelIdeaView').click(function(event){
+                        console.log("CLICK!");
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "none";
+                        $("ideaView").html('');
+                    });
+                });
+                
+                idea.ideaRow = ideaRow;
+                               
+                //$('#ideaListView').append(ideaRow);
                 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
@@ -752,10 +868,12 @@
                 decisionLeft = decisionBoardLeft;
                 ideaLeft = boardBackgroundLeft;
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
-                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
-                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" + categoryColors[idea.category][1] + "; pointerEvents: none'>" +
+                               "<h2 style='font-size: 125%; pointer-events: none'>" + idea.category + "</h2>" +
+                               "</div>" +
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -777,11 +895,13 @@
 
             var makeIdeaDiv = function(idea) {
 
-                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
-               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
-               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
-               "</div>";
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" + categoryColors[idea.category][1] + ";pointer-events:none'>" +
+                               "<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>" +
+                               "</div>" +
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
+                               "</div>";
                                
                 var ideaDiv = $(ideaHtml);
 
@@ -902,18 +1022,18 @@
             var stickyUp = function(event) {
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
-                    var idea = getNonDeletedIdea(draggedSticky);
+                    var idea = getNonDeletedIdea(event.target);
+                    console.log(idea);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
+                    $("#ideaBody").html(idea.getHtml());
 
                     // Edit Click Listener
                     $('.editIdeaView').click(function(event){
                         console.log("Edit!");
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
-                        $("ideaView").html('');
+                        $("#ideaBody").html('');
 
                         editIdea = true;
                         edittableIdea = idea;
@@ -938,7 +1058,7 @@
                         console.log("CLICK!");
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
-                        $("ideaView").html('');
+                        $("#ideaBody").html('');
                     });
                 }
                 //down = undefined;
@@ -955,7 +1075,6 @@
                                 $('#decisionBoard').append($(draggedSticky));
                                 //$(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
                                 //$(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                $(draggedSticky).css('border', 'solid 3px #614126');
                                 var children = $(draggedSticky).children();
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
@@ -1043,8 +1162,26 @@
             }
 
             var getNonDeletedIdea = function(sticky) {
-                var children = $(draggedSticky).children();
+                //console.log($(sticky).parent());
+                var children = $(sticky).children();
+                console.log(children);
                 var title = $(children[1]).text();
+                //console.log(title);
+                var category = $(children[0]).text();
+                for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                    var idea = allNonDeletedIdeas[i];
+                    if(title === idea.getTitle() && category === idea.getCategory()) {
+                        return idea;
+                    }
+                }
+            }
+            
+            var getNonDeletedIdeaTable = function(sticky) {
+                //console.log($(sticky).parent());
+                var children = $(sticky).parent().children();
+                console.log(children);
+                var title = $(children[1]).text();
+                //console.log(title);
                 var category = $(children[0]).text();
                 for(var i = 0; i < allNonDeletedIdeas.length; i++) {
                     var idea = allNonDeletedIdeas[i];
@@ -1059,8 +1196,7 @@
                 console.log(div.html);
                 console.log(div.innerHTML);
                 div.style.display = "block";
-                div.innerhtml = idea.getHtml();
-                $("#ideaView").html(idea.getHtml());
+                $("#ideaBody").html(idea.getHtml());
                 console.log("innerHTML");
                 console.log(div.innerhtml);
             }
@@ -1109,7 +1245,7 @@
         </div>
         <div id="boardBackground">
             <div id='ideaBoard'>
-                <a href="#" onclick="show('ideas')">
+                <a href="#" onclick="switchView('ideas')">
                     <div id="ideaHeader">
                         Ideas
                     </div>
@@ -1121,11 +1257,10 @@
                     </table>
                 </div>
                 <div id="trashIcon">
-                    <span class="glyphicon glyphicon-trash"></span>
                 </div>
             </div>
             <div id='decisionBoard'>
-                <a href="#" onclick="show('decisions')">
+                <a href="#" onclick="switchView('decisions')">
                     <div id="decisionHeader">
                     Decisions
                     </div>
@@ -1137,7 +1272,7 @@
                     </div>
                 </div>            
             </div>
-            <div id="ideaPopup" style="display: none;">
+            <div id="ideaPopup" class="ideaInfo" style="display: none;">
                 <input type="text" id="ideaTitleInput" placeholder="Title *"/>
                 <div id="dragAndDropPicUploader">
                         <div class="fallback">
@@ -1153,12 +1288,15 @@
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
                                 <option value="" disabled selected>Select a Category*</option>
+                                <option value="Cake">Cake</option>
                                 <option value="Catering">Catering</option>
                                 <option value="Clothing">Clothing</option>
+                                <option value="Decorations">Decorations</option>
                                 <option value="Entertainment">Entertainment</option>
                                 <option value="Flowers">Flowers</option>
                                 <option value="Invitations">Invitations</option>
                                 <option value="Venue">Venue</option>
+                                <option value="Wedding Gifts">Wedding Gifts</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -1168,7 +1306,11 @@
                 <button id="cancelIdeaButton" class="btn">Cancel</button>
             </div>
         </div>
-        <div id='ideaView' style="display: none;">
+        <div id='ideaView' class="ideaInfo" style="display: none;" >
+            <div class="stickyNoteHeader" style='text-align:right'> 
+                <button type='button' class='cancelIdeaView'>X</button>
+            </div>
+            <div id='ideaBody'></div>
         </div>
         <div id="budget_link" >
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
