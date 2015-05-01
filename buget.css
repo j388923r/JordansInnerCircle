@@ -67,3 +67,8 @@ body {
 	cursor: hand;
 	cursor: pointer;
 }
+
+.editable.allotted:hover {
+	text-decoration: underline;
+	color:steelblue;
+}

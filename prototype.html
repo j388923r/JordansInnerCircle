@@ -6,8 +6,7 @@
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
          <script type='text/javascript' > 
           total_budget = 4000; //Dummy data to set total budget to initial value
-          remaining = 4000; 
-          window.categoriesAndCosts = {};     
+          remaining = 4000;   
         </script>
         
         <!-- Fonts -->
@@ -51,7 +50,10 @@
             var categoryMapping = {'Cake':[],'Clothing':[],'Decorations':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Wedding Gifts':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
             var titleMapping = {};
-            //window.categoriesAndCosts = {};
+            var categoriesAndCosts = {"Cake":[],"Catering":[],"Clothing":[],"Decorations":[],"Entertainment":[],"Flowers":[],"Venue":[],"Invitations":[],"Wedding Gifts":[], "Other":[]};
+            for (key in categoriesAndCosts) {
+                categoriesAndCosts[key] = 0;
+            }
 
             var categorieslist = ["Cake","Catering","Clothing","Decorations","Entertainment","Flowers","Venue","Invitations","Wedding Gifts", "Other"];
             var tagsList = ["vegas", "prince"];
@@ -787,13 +789,12 @@
                             var current_idea = ideasInDecisions[i];
                             var category = current_idea.getCategory();
                             var cost = current_idea.getCost(); 
-                            window.categoriesAndCosts[category] = cost;
-                            console.log("Categories:", window.categoriesAndCosts);
+                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                            console.log("Categories:", categoriesAndCosts);
                         }
 
                         (function (global) {
-                            console.log("Right before:", window.categoriesAndCosts);
-                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(window.categoriesAndCosts));
+                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
                             console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
                         }(window));  
                         

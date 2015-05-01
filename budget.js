@@ -2,14 +2,14 @@
 // has finished loading in the browser.
 $(document).ready(function(){
 
-    var total_budget = 4000; //Set total budget here -- dummy data
+    var total_budget = 8000; //Set total budget here -- dummy data
     document.getElementById('total_budget').innerHTML = total_budget;
     var remaining = total_budget;
     var total_spent = 0;
-    var total_allotted = Math.floor(total_budget/7);
+    var total_allotted = total_budget;
+    var each_allotted = Math.floor(total_budget/10);
     default_budget();
     calculate();
-    calculateRemaining();
     editable();
     delete_confirm();
 
@@ -18,22 +18,17 @@ $(document).ready(function(){
 
         (function (global) {
             categoriesAndCosts = JSON.parse(global.localStorage.getItem("shared_categories_costs"));
-            console.log("budget has:", categoriesAndCosts);
         }(window));
 
-        if(categoriesAndCosts) {
-            console.log("Worked!", categoriesAndCosts);
-            for(var key in categoriesAndCosts) {
-                console.log("Key:",key);
-                document.getElementById(key).innerHTML = key;
-                document.getElementById("spent" + key).innerHTML = categoriesAndCosts[key];
-            }
-        } else {
-            console.log("0s here");
-            $(".editable.spent").html(total_spent);
-        }
-        $(".editable.allotted").html(total_allotted);
+        $(".editable.spent").html(total_spent);
+        $(".editable.allotted").html(each_allotted);
 
+        if(categoriesAndCosts) {
+            for(var key in categoriesAndCosts) {
+                key_name = key.replace(/\s/g, '');
+                document.getElementById("spent" + key_name).innerHTML = categoriesAndCosts[key];
+            }
+        }
     }
 
     function calculateRemaining() {
@@ -49,7 +44,7 @@ $(document).ready(function(){
         }
         
         (function (global) {
-            global.localStorage.setItem("shared_remaining_budget", remaining);
+            global.localStorage.setItem("shared_remaining_budget", total_budget);
         }(window));
     }
 
@@ -159,6 +154,8 @@ $(document).ready(function(){
             if (total_spent > total_budget) {
                 $("#total_spent").css({"color":"red"});
                 $("#totals_title").css({"color":"red"});
+                $("#over_budget_amount").html(total_budget - total_spent);
+                $("#remaining").css({"color":"red"});
             }
         });
 
@@ -179,6 +176,8 @@ $(document).ready(function(){
             if (total_spent > total_budget) {
                 $("#total_spent").css({"color":"red"});
                 $("#totals_title").css({"color":"red"});
+                $("#over_budget_amount").html(total_budget - total_spent);
+                $("#remaining").css({"color":"red"});
             }
         }
 
