@@ -981,6 +981,10 @@
 
             function load_deleted() {
                 
+                $('#keywords').tablesorter(); 
+                $("#keywords").find('tbody').html("");
+                $("#keywords").trigger('update');
+                
                 for(var i=0; i < deletedIdeas.length; i++){
                     var idea = deletedIdeas[i];
                     populate_list(idea.title, idea.category, idea.cost,idea);
@@ -991,8 +995,6 @@
                 deleted_frame.css("display", "block"); 
                 $("#iframeClose").css("display", "block");
             
-                $('#keywords').tablesorter(); 
-
             }
             
             //Add row for entered item
@@ -1172,19 +1174,19 @@
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
         <div id="wrapper" class="deleted_archive_view">
-        <h2>Deleted Archive</h2>
-        <table id="keywords" cellspacing="0" cellpadding="0">
-            <thead>
-                <tr>
-                    <th><span>Title</span></th>
-                    <th><span>Category</span></th>
-                    <th><span>Cost</span></th>
-                    <th>Restore?</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+            <h2>Deleted Archive</h2>
+            <table id="keywords" cellspacing="0" cellpadding="0" class="tablesorter">
+                <thead>
+                    <tr>
+                        <th><span>Title</span></th>
+                        <th><span>Category</span></th>
+                        <th><span>Cost</span></th>
+                        <th>Restore?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
