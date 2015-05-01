@@ -54,16 +54,18 @@
         <script>
 
             var costMapping = {'lessThan500':[], '500To2000':[], '2000To5000':[], 'moreThan5000': []};
-            var categoryMapping = {'Clothing':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Catering':[], 'Invitations':[], 'Other':[]};
+            var categoryMapping = {'Cake':[],'Clothing':[],'Decorations':[], 'Entertainment':[],'Flowers':[], 'Venue':[], 'Wedding Gifts':[], 'Catering':[], 'Invitations':[], 'Other':[]};
             var tagsMapping = {'vegas':[], 'prince':[]};
             var titleMapping = {};
             //var window.categoriesAndCosts = {};
 
-            var categorieslist = ["Clothing","Entertainment","Flowers","Venue", "Catering", "Invitations", "Other"];
+            var categorieslist = ["Cake","Catering","Clothing","Decorations","Entertainment","Flowers","Venue","Invitations","Wedding Gifts", "Other"];
             var tagsList = ["vegas", "prince"];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
             var titleList = [];
+
+            var categoryColors = {'Cake':['E6E6E6','D9D9D9'],'Catering':['D9C7B0','CCBBA5'],'Clothing':['A1D8E6','98CCD9'],'Decorations':['CDBDD9','C1B1CC'], 'Entertainment':['9EBCE6','96B2D9'], 'Flowers':['BFE6A1','B5D998'], 'Invitations':['D9A7A7','CC9D9D'], 'Venue':['FFC59C','F2BB94'], 'Wedding Gifts':['A8E6CD','9ED9C1'], 'Other':['E6D97C','D9CD75']};
 
             var costFilters = [];
             var categoryFilters = [];
@@ -228,12 +230,19 @@
                 
                 $('#trashIcon').mouseover(function(event) {
                     var trashcan = $(event.target);
-                    trashcan.css("background-image", "trashopen.jpg");
+                    console.log(trashcan);
+
+                    if (draggedSticky){
+                        $("#trashIcon").css("background-image", "url('full_trash.png')");
+                    }
                 })
                 
                 $('#trashIcon').mouseleave(function(event) {
                     var trashcan = $(event.target);
-                    trashcan.css("background-image", "trashclose.jpg");
+
+                    if (draggedSticky && deletedIdeas.length == 0){
+                        $("#trashIcon").css("background-image", "url('empty_trash.png')");
+                    }
                 })
 
                 $('#trashIcon').mouseup(function(event) {
@@ -261,6 +270,8 @@
                         // deletedItems.push(idea);
 
                         deletedIdeas.push(idea);
+
+                        $("#trashIcon").css("background-image", "url('full_trash.png')");
                     }
                 });
 
@@ -698,10 +709,12 @@
                 
                 console.log(true);
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
-                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
-                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" +categoryColors[idea.category][1]+ ";pointer-events:none'>" +
+                               "<h2 style='font-size: 125%; pointer-events:none'>" + idea.category + "</h2>" +
+                               "</div>" +
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -726,10 +739,8 @@
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                                $(draggedSticky).css('border', 'solid 3px #614126');
                             } else {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                                $(draggedSticky).css('border', 'solid 1px #614126');
                             }
                         } else if(page === 'ideas') {
                             
@@ -878,10 +889,12 @@
                 decisionLeft = decisionBoardLeft;
                 ideaLeft = boardBackgroundLeft;
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-                               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
-                               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
-                               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" + categoryColors[idea.category][1] + "; pointerEvents: none'>" +
+                               "<h2 style='font-size: 125%; pointer-events: none'>" + idea.category + "</h2>" +
+                               "</div>" +
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -903,11 +916,13 @@
 
             var makeIdeaDiv = function(idea) {
 
-                var ideaHtml = "<div class='stickynote' unselectable='on'>" +
-               "<h5 style='font-weight:bold;font-size: 24'>" + idea.category + "</h5>" +
-               "<h6 style='font-size: 24'>" + idea.title + "</h6>" +
-               "<h6 style='bottom: 0;font-size: 24'>$" + idea.cost + "</h6>" + 
-               "</div>";
+                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
+                               "<div style='background: #" + categoryColors[idea.category][1] + ";pointer-events:none'>" +
+                               "<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>" +
+                               "</div>" +
+                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
+                               "</div>";
                                
                 var ideaDiv = $(ideaHtml);
 
@@ -1029,17 +1044,17 @@
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
                     var idea = getNonDeletedIdea(event.target);
+                    console.log(idea);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
-                    $("#ideaView").html(idea.getHtml());
-                    console.log("double clikc");
+                    $("#ideaBody").html(idea.getHtml());
 
                     // Edit Click Listener
                     $('.editIdeaView').click(function(event){
                         console.log("Edit!");
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
-                        $("ideaView").html('');
+                        $("#ideaBody").html('');
 
                         editIdea = true;
                         edittableIdea = idea;
@@ -1064,7 +1079,7 @@
                         console.log("CLICK!");
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
-                        $("ideaView").html('');
+                        $("#ideaBody").html('');
                     });
                 }
                 //down = undefined;
@@ -1081,7 +1096,6 @@
                                 $('#decisionBoard').append($(draggedSticky));
                                 //$(draggedSticky).css('margin-left', down.stickyLeft + event.clientX - down.x - decisionLeft);
                                 //$(draggedSticky).css('margin-top', Math.max(0, down.stickyTop + event.clientY - down.y));
-                                $(draggedSticky).css('border', 'solid 3px #614126');
                                 var children = $(draggedSticky).children();
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
@@ -1201,8 +1215,7 @@
                 console.log(div.html);
                 console.log(div.innerHTML);
                 div.style.display = "block";
-                div.innerhtml = idea.getHtml();
-                $("#ideaView").html(idea.getHtml());
+                $("#ideaBody").html(idea.getHtml());
                 console.log("innerHTML");
                 console.log(div.innerhtml);
             }
@@ -1278,7 +1291,7 @@
                     </div>
                 </div>            
             </div>
-            <div id="ideaPopup" style="display: none;">
+            <div id="ideaPopup" class="ideaInfo" style="display: none;">
                 <input type="text" id="ideaTitleInput" placeholder="Title *"/>
                 <div id="dragAndDropPicUploader">
                         <div class="fallback">
@@ -1294,12 +1307,15 @@
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
                                 <option value="" disabled selected>Select a Category*</option>
+                                <option value="Cake">Cake</option>
                                 <option value="Catering">Catering</option>
                                 <option value="Clothing">Clothing</option>
+                                <option value="Decorations">Decorations</option>
                                 <option value="Entertainment">Entertainment</option>
                                 <option value="Flowers">Flowers</option>
                                 <option value="Invitations">Invitations</option>
                                 <option value="Venue">Venue</option>
+                                <option value="Wedding Gifts">Wedding Gifts</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -1309,7 +1325,11 @@
                 <button id="cancelIdeaButton" class="btn">Cancel</button>
             </div>
         </div>
-        <div id='ideaView' style="display: none;">
+        <div id='ideaView' class="ideaInfo" style="display: none;" >
+            <div class="stickyNoteHeader" style='text-align:right'> 
+                <button type='button' class='cancelIdeaView'>X</button>
+            </div>
+            <div id='ideaBody'></div>
         </div>
         <div id="budget_link" >
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
