@@ -261,8 +261,6 @@
                             }
                         }
 
-                        // deletedItems.push(idea);
-
                         deletedIdeas.push(idea);
 
                         $("#trashIcon").css("background-image", "url('full_trash.png')");
@@ -623,7 +621,7 @@
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
                             idea.ideaDiv.hide();
-                            $('#ideaListView').append(idea.ideaRow);
+                            $('#decisionListView').append(idea.ideaRow);
                         }
                     }
                 }
@@ -800,12 +798,15 @@
                     }
 
                 });
-                $('#ideaBoard').append(ideaDiv);
 
-                var ideaRowHTML = "<tr>" +
+                $('#ideaBoard').append(ideaDiv);
+                
+                var ideaRowHTML = "<tr unselectable='on' >" +
                                "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
                                "<td style='font-size: 24'>" + idea.title + "</td>" +
-                               "<td style='bottom: 0;font-size: 24'>$" + idea.cost + "</td>" + 
+                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
+                               "<td style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </td>" + 
+                               "<td style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </td>" + 
                                "</tr>";
                 var ideaRow = $(ideaRowHTML);
                 
@@ -852,8 +853,11 @@
                 
                 idea.ideaRow = ideaRow;
                                
-                //$('#ideaListView').append(ideaRow);
-                
+                if(ideaViewState === 'list') {
+                    $('#ideaListView').append(ideaRow);
+                    ideaDiv.hide();
+                }
+                    
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
@@ -1282,7 +1286,7 @@
                 </a>
                 <div id="ideaContent">
                     <button id="addIdeaButton" class="btn">Add a new sticky note</button>
-                    <table id="ideaListView">
+                    <table id="ideaListView" class="table table-hover">
                         
                     </table>
                 </div>
@@ -1299,6 +1303,9 @@
                     <div id="budgetTotalRemaining">
                         <a href="#" onclick="load('budget_page')">
                         Total Remaining: $<span id="budgetRemaining"></span></a>
+                        <table id="decisionListView" class="table table-hover">
+                        
+                        </table>
                     </div>
                 </div>            
             </div>
