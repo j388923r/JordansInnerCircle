@@ -31,7 +31,7 @@ li a { cursor: pointer; cursor: hand; }
 body {
     padding-left:2%;
     padding-top:2%;
-    background-color:silver;
+    background-color: #FFFFFF;
 }
 
 h1 {
@@ -87,31 +87,31 @@ h1 a:hover {
 }
 
 #boardBackground {
-    border-radius: 10px;
+    border-radius: 5px;
     width: 96%; 
     height: 90%;
-    background-color: #EEDC82;
+    background-image: url('pics/blueRusticMetal.jpg');
     display: inline-block;
 }
 
 #ideaBoard {
-    border-radius: 10px;
-    margin:2%;
-    margin-left: 3%;
-    width: 45%;
-    height: 93%;
-    background-color: rgba(255, 255, 255, 1.0);
+    border-radius: 2px;
+    margin:1%;
+    margin-left: 1%;
+    width: 48.5%;
+    height: 96%;
+    background-image: url('pics/cotton.jpg');
     float: left;
     z-index: 10;
 }
 
 #decisionBoard {
-    border-radius: 10px;
-    margin:2%;
-    margin-left: 52%;
-    width: 45%;
-    height: 93%;
-    background-color: rgba(255, 255, 255, 1.0);
+    border-radius: 2px;
+    margin:1%;
+    margin-left: 50.5%;
+    width: 48.5%;
+    height: 96%;
+    background-image: url('pics/cotton.jpg');
     z-index: 10;
 }
 
@@ -137,12 +137,11 @@ h1 a:hover {
 
 #decisionHeader, #ideaHeader {
     position: absolute;
-    font: "Helvetica";
+    font: "Gill Sans";
     margin-top: -20px;
     height: 40px;
     width: 15%;
-    border-radius: 5px;
-    border: solid 2px silver;
+    border-radius: 1px;
     background-color: #EEDC82;
     text-align: center;
     font-size: 26px;
@@ -151,10 +150,20 @@ h1 a:hover {
 
 #ideaHeader {
     margin-left: 15.5%;
+    -moz-transform: rotate(2deg);
+    -webkit-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
+    -ms-transform: rotate(2deg);
+    transform: rotate(2deg);
 }
 
 #decisionHeader {
     margin-left: 15.5%;
+    -moz-transform: rotate(-2deg);
+    -webkit-transform: rotate(-2deg);
+    -o-transform: rotate(-2deg);
+    -ms-transform: rotate(-2deg);
+    transform: rotate(-2deg);
 }
 
 #budgetTotalRemaining {
@@ -437,7 +446,7 @@ iframe[seamless] {
     outline:none;
 }
 
-.ideaHeader{
+.stickyNoteHeader{
     background-color: #8A6F4E;
 }
 
