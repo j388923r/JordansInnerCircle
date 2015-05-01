@@ -116,14 +116,13 @@ h1 a:hover {
 }
 
 .stickynote {
-    position: absolute;
     font-family: "Gill Sans";
     height: 125px;
     width: 125px;
     background-color: #EEDC82;
     box-shadow: 4px 4px 6px #888888;
-
-
+    float:left;
+    margin: 6px;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select:none;
@@ -479,6 +478,24 @@ a.wiggle-me:hover{
     -moz-animation:wiggle .3s 2;
     -webkit-animation:wiggle .3s 2;
     animation:wiggle .3s 2;
+}
+
+ul
+{
+    list-style-type: none;
+    padding: 0;
+}
+
+.one {
+    background-color: rgba(130, 130, 139, 0.5);
+}
+
+.one:hover, .two:hover{
+    background-color: rgba(239, 220, 130, 0.5);
+}
+
+.two {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
