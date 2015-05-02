@@ -5,8 +5,8 @@
        
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
          <script type='text/javascript' > 
-          total_budget = 4000; //Dummy data to set total budget to initial value
-          remaining = 4000;   
+          total_budget = 8000; //Dummy data to set total budget to initial value
+          remaining = 8000;   
         </script>
         
         <!-- Fonts -->
@@ -572,20 +572,21 @@
                 page = boardName;
                 if(boardName === 'ideas') {
                     $('#ideaBoard').show();
-                    $('#ideaBoard').css('width', '94%');
-                    $('#ideaBoard').css('margin-left', '3%');
+                    $('#ideaBoard').css('width', '96%');
+                    $('#ideaBoard').css('margin-left', '2%');
                     $('#ideaHeader').css('margin-left', '38%');
                     $('#decisionBoard').hide();
                 } else if(boardName === 'decisions') {
                     $('#decisionBoard').show();
-                    $('#decisionBoard').css('width', '94%');
-                    $('#decisionBoard').css('margin-left', '3%');
+                    $('#decisionBoard').css('width', '96%');
+                    $('#decisionBoard').css('margin-left', '2%');
                     $('#decisionHeader').css('margin-left', '38%');
                     $('#ideaBoard').hide();
                 } else {
                     $('#decisionBoard, #ideaBoard').show();
-                    $('#decisionBoard, #ideaBoard').css('width', '45%');
-                    $('#decisionBoard').css('margin-left', '52%');
+                    $('#ideaBoard').css('margin-left', '1%');
+                    $('#decisionBoard, #ideaBoard').css('width', '48.5%');
+                    $('#decisionBoard').css('margin-left', '50.5%');
                     $('#decisionHeader, #ideaHeader').css('margin-left', '15.5%');
                 }
             };
@@ -739,6 +740,7 @@
                     },
                     //grid: [125, 125],
                     drag: function(e) {
+                        console.log(e);
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
@@ -765,6 +767,10 @@
                                 var ideaIndex = ideasInIdeas.indexOf(idea);
                                 ideasInIdeas.splice(ideaIndex, 1);
                                 idea.ideaDiv = $(e.target);
+                                if(decisionViewState === 'list') {
+                                    $('#decisionListView').append(idea.ideaRow);
+                                    idea.ideaDiv.hide();
+                                }
                                 ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
@@ -776,8 +782,12 @@
                             console.log("Idea drop");
                             var idea = getNonDeletedIdea(e.target);
                             ideasInIdeas.push(idea);
-                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
                             idea.ideaDiv = $(e.target);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
                             ideasInDecisions.splice(ideaIndex, 1);
                         }
                         down = undefined;
@@ -1308,10 +1318,10 @@
                     <div id="budgetTotalRemaining">
                         <a href="#" onclick="load('budget_page')">
                         Total Remaining: $<span id="budgetRemaining"></span></a>
-                        <table id="decisionListView" class="table table-hover">
-                        
-                        </table>
                     </div>
+                    <table id="decisionListView" class="table table-hover">
+                        
+                    </table>                    
                 </div>            
             </div>
             <div id="ideaPopup" class="ideaInfo" style="display: none;">

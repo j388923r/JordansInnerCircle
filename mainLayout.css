@@ -166,10 +166,8 @@ h1 a:hover {
 }
 
 #budgetTotalRemaining {
-    position: absolute;
-    /*margin-top: 10px;*/
     height: 40px;
-    width: 24%;
+    width: 60%;
     border-radius: 5px;
     background-color: #EEEEEE;
     text-align: center;
@@ -177,7 +175,7 @@ h1 a:hover {
     font-size: 20px;
     z-index: 11;
     /*bottom: -7%;*/
-    margin-left: 10%;
+    margin: auto;
 }
 
 #ideaContent {
