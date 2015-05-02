@@ -229,7 +229,7 @@
                     console.log(trashcan);
 
                     if (draggedSticky){
-                        $("#trashIcon").css("background-image", "url('full_trash.png')");
+                        $("#trashPic").attr("src", "full_trash.png");
                     }
                 })
                 
@@ -237,7 +237,7 @@
                     var trashcan = $(event.target);
 
                     if (draggedSticky && deletedIdeas.length == 0){
-                        $("#trashIcon").css("background-image", "url('empty_trash.png')");
+                        $("#trashPic").attr("src", "empty_trash.png");
                     }
                 })
 
@@ -265,7 +265,7 @@
 
                         deletedIdeas.push(idea);
 
-                        $("#trashIcon").css("background-image", "url('full_trash.png')");
+                        $("#trashPic").attr("src", "full_trash.png")
                     }
                 });
 
@@ -1295,6 +1295,7 @@
                     </table>
                 </div>
                 <div id="trashIcon">
+                    <img id="trashPic" src="empty_trash.png">
                 </div>
             </div>
             <div id='decisionBoard'>
