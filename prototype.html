@@ -56,7 +56,7 @@
             }
 
             var categorieslist = ["Cake","Catering","Clothing","Decorations","Entertainment","Flowers","Venue","Invitations","Wedding Gifts", "Other"];
-            var tagsList = ["vegas", "prince"];
+            var tagsList = [];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
             var titleList = [];
@@ -1281,10 +1281,10 @@
                     <li><input type="checkbox" name="cost" id="2000To5000" />  $2000 - $5000 </li>
                     <li><input type="checkbox" name="cost" id="moreThan5000" />  > $5000 </li>
                 </ul>
-                <h4>Tags:</h4>
+                <!--<h4>Tags:</h4>
                 <ul id="tags">
 
-                </ul>
+                </ul>-->
 
                 <input id="btnCheckAll" type="button" name="checkAll" value="Check All"/>
                 <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All"/>
@@ -1299,7 +1299,9 @@
                     </div>
                 </a>
                 <div id="ideaContent">
-                    <button id="addIdeaButton" class="btn">Add a new sticky note</button>
+                    <center>
+                        <button id="addIdeaButton" class="btn">Add a new sticky note</button>
+                    </center>
                     <table id="ideaListView" class="table table-hover">
                         
                     </table>
