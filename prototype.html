@@ -85,6 +85,8 @@
 
             var searchedFor = [];
 
+            var deletedInt = 0
+
             var shorten = function(input, length) {
                 if(input.length < length)
                     return input;
@@ -1108,16 +1110,28 @@
             };
 
             function load_deleted() {
+                do{
+                    $('#keywords').tablesorter(); 
+                    $("#keywords").find('tbody').html("");
+                    $("#keywords").trigger('update');
                 
-                $('#keywords').tablesorter(); 
-                $("#keywords").find('tbody').html("");
-                $("#keywords").trigger('update');
+                    for(var i=0; i < deletedIdeas.length; i++){
+                        var idea = deletedIdeas[i];
+                        populate_list(idea.title, idea.category, idea.cost,idea);
+                        console.log(idea.title, idea.category, idea.cost);
+                    }
+                    deletedInt += 1
+
+                }while( deletedInt % 2 == 0)
+                // $('#keywords').tablesorter(); 
+                // $("#keywords").find('tbody').html("");
+                // $("#keywords").trigger('update');
                 
-                for(var i=0; i < deletedIdeas.length; i++){
-                    var idea = deletedIdeas[i];
-                    populate_list(idea.title, idea.category, idea.cost,idea);
-                    console.log(idea.title, idea.category, idea.cost);
-                }
+                // for(var i=0; i < deletedIdeas.length; i++){
+                //     var idea = deletedIdeas[i];
+                //     populate_list(idea.title, idea.category, idea.cost,idea);
+                //     console.log(idea.title, idea.category, idea.cost);
+                // }
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "block"); 
