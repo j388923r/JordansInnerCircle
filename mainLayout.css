@@ -222,6 +222,7 @@ h1 a:hover {
     background: white;
     border: 1px solid black;
     padding: 10px;
+    z-index: 12;
 }
 
 .ideaInfo{
@@ -483,18 +484,6 @@ ul
 {
     list-style-type: none;
     padding: 0;
-}
-
-.one {
-    background-color: rgba(130, 130, 139, 0.5);
-}
-
-.one:hover, .two:hover{
-    background-color: rgba(239, 220, 130, 0.5);
-}
-
-.two {
-    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {

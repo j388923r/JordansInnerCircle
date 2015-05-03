@@ -207,6 +207,7 @@
                             $("#ideaTagInput").tagsinput("add", tags[tagIndex]);
                         }
                     }
+                    $($('#ideaPopup').children()[0]).focus();
                 });
 
                 $('#cancelIdeaButton').click(function(){
@@ -840,6 +841,7 @@
                             edittableIdea = idea;
                             var popupIdea = document.getElementById("ideaPopup");
                             popupIdea.style.display = "block";
+                            $('#ideaPopup').children()[0].focus();
                             
                             $("#ideaTitleInput").val(idea.getTitle());
                             //show image
@@ -852,6 +854,7 @@
                             for(var i = 0; i < tagList.length; i++)
                                 tagString += tagList[i] + "\n";
                             $("#ideaTagInput").val(tagString);
+                            $($('#ideaPopup').children()[0]).focus();
                         });
 
                         // Cancel click listener
@@ -1100,6 +1103,7 @@
                         for(var i = 0; i < tagList.length; i++)
                             tagString += tagList[i] + "\n";
                         $("#ideaTagInput").val(tagString);
+                        $($('#ideaPopup').children()[0]).focus();
                     });
 
                     // Cancel click listener
