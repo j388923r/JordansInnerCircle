@@ -158,20 +158,20 @@ h1 a:hover {
 
 #ideaHeader {
     margin-left: 15.5%;
-/*    -moz-transform: rotate(2deg);
+    -moz-transform: rotate(2deg);
     -webkit-transform: rotate(2deg);
     -o-transform: rotate(2deg);
     -ms-transform: rotate(2deg);
-    transform: rotate(2deg);*/
+    transform: rotate(2deg);
 }
 
 #decisionHeader {
     margin-left: 15.5%;
-/*    -moz-transform: rotate(-2deg);
+    -moz-transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
     -o-transform: rotate(-2deg);
     -ms-transform: rotate(-2deg);
-    transform: rotate(-2deg);*/
+    transform: rotate(-2deg);
 }
 
 #budgetTotalRemaining {
