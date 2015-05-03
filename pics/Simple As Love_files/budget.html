@@ -1,0 +1,178 @@
+
+<!-- saved from url=(0073)file:///Users/priscilacortez/Desktop/6.813/JordansInnerCircle/budget.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Simple As Love</title>
+    <script src="jquery-2.1.3.min.js"></script>
+
+    <link href="css(1)" rel="stylesheet" type="text/css">
+    <link href="css(2)" rel="stylesheet" type="text/css">
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="budget.js"></script>
+        
+        <link type="text/css" href="buget.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="center">
+        <div class="row" id="header">
+            <div class="col-md-12">My Wedding Budget</div>
+        </div>
+        <div class="row" id="label">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">What I'm Spending On</div>
+            <div class="col-md-3">Amount Spent</div>
+            <div class="col-md-3">Amount Allotted</div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Cake">Cake</div>
+            <div class="spent col-md-3" id="spentCake">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1 btn">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Catering">Catering</div>
+            <div class="spent col-md-3" id="spentCatering">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1 btn"> 
+                <button class="btn delete_confirm btn-s btn-danger" name="delete_btn" title="delete" id="delete_btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Clothing">Clothing</div>
+            <div class="spent col-md-3" id="spentClothing">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1 btn">
+                 
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Decorations">Decorations</div>
+            <div class="spent col-md-3" id="spentDecorations">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1 btn">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Entertainment">Entertainment</div>
+            <div class="spent col-md-3" id="spentEntertainment">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Flowers">Flowers</div>
+            <div class="spent col-md-3" id="spentFlowers">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div> 
+            <div class="category col-md-4" id="Invitations">Invitation</div>
+            <div class="spent col-md-3" id="spentInvitations">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Venue">Venue</div>
+            <div class="spent col-md-3" id="spentVenue">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="WeddingGifts">Wedding Gifts</div>
+            <div class="spent col-md-3" id="spentWeddingGifts">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1 btn">
+            </div>
+        </div>
+        <div class="list row">
+            <div class="col-md-1">
+            </div>
+            <div class="category col-md-4" id="Other">Other</div>
+            <div class="spent col-md-3" id="spentOther">0</div>
+            <div class="editable allotted col-md-3">800</div>
+            <div class="col-md-1">
+                
+            </div>
+        </div>
+        
+        <!-- <div class='items'>
+        </div>
+
+        <div class="row" id="add_new">
+            <div class="col-md-1"></div>
+            <div class="col-md-4 category">
+                <input class="new_entry" id="new_category" type="text" name="category" style="width:350px" placeholder = "Add a new item!"></input>
+            </div>
+            <div class="col-md-3 spent">
+                <input class="new_entry" id="new_spent" type="number" min="0" name="spent" style="width:150px" placeholder = "0"></input>
+            </div>
+            <div class="col-md-3 allotted">
+                <input class="new_entry" id="new_allotted" type="number" min="0" name="allotted" style="width:150px" placeholder= "1000"></input>
+            </div>
+        </div> -->
+        <div class="row" id="totals">
+            <div class="col-md-1"></div>
+            <div class="col-md-4" id="totals_title">Totals</div>
+            <div class="col-md-3" id="total_spent"></div>
+            <div class="col-md-3" id="total_allotted">8000</div>
+        </div>
+        <div class="row" id="remaining">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">Budget Remaining</div>
+            <div class="col-md-3" id="over_budget_amount"></div>
+            <div class="col-md-3" id="remaining_budget">0</div>
+        </div>
+        <div class="row" id="budget">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">My Total Budget</div>
+            <div class="col-md-3"></div>
+            <div class="editable total-budget col-md-3" id="total_budget">8000</div>
+        </div>
+    </div>
+
+    <div id="confirm" class="modal hide fade">
+        <div class="modal-body">
+            Delete?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+        </div>
+    </div>
+
+
+
+
+</body></html>
