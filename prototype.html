@@ -115,7 +115,7 @@
 
 
                 var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,costList);
+                var searchSource = listUnion(temp,titleList);
 
                 var ideaBeingEditted = undefined; // The idea that is currently being editted
 
@@ -228,6 +228,7 @@
                 })
 
                 $('#trashIcon').mouseup(function(event) {
+                    
                     if(draggedSticky && down) {
                         down = undefined;
                         var children = $(draggedSticky).children();
@@ -247,18 +248,15 @@
                                 break;
                             }
                         }
-                        
-                        for(var i = 0; i < ideasInDecisions.length; i++) {
-                            var ideaToDelete = ideasInDecisions[i];
-                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
-                                ideasInDecisions.splice(i, 1);
-                                remaining += Number(ideaToDelete.getCost());
-                                $('#budgetRemaining').text(remaining);
-                                break;
-                            }
-                        }
 
                         deletedIdeas.push(idea);
+
+                        var temp = listUnion(categorieslist,tagsList);
+                        var searchSource = listUnion(temp,titleList);
+                        $('#search').autocomplete({
+                            source: searchSource
+
+                        });
 
                         $("#trashPic").attr("src", "full_trash.png")
                     }
@@ -283,16 +281,13 @@
                             $(rows[i]).remove();
                         }
                     }
-                    
-                    for(var i = 0; i < allNonDeletedIdeas.length; i++) {
-                        var ideaToDelete = allNonDeletedIdeas[i];
-                        if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
-                            allNonDeletedIdeas.splice(i, 1);
-                            break;
-                        }
-                    }
-                    
-                    $("#trashPic").attr("src", "full_trash.png")
+
+                    var temp = listUnion(categorieslist,tagsList);
+                    var searchSource = listUnion(temp,titleList);
+                    $('#search').autocomplete({
+                        source: searchSource
+
+                    });
                 });
 
                 
@@ -503,13 +498,13 @@
             var searching = function(term) {
                 var term = term;
                 var searchList = []
-                for(var i= 0; i< costList.length; i++){
-                    if(term == costList[i]){
-                        searchedFor.push(costListForCheckAll[i]);
-                        searchList = listUnion(searchList, costMapping[costListForCheckAll[i]])
-                        // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
-                    }
-                }
+                // for(var i= 0; i< costList.length; i++){
+                //     if(term == costList[i]){
+                //         searchedFor.push(costListForCheckAll[i]);
+                //         searchList = listUnion(searchList, costMapping[costListForCheckAll[i]])
+                //         // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
+                //     }
+                // }
                 for(var i = 0; i< tagsList.length; i++ ){
                     if(term == tagsList[i]){
                         searchedFor.push(tagsList[i]);
@@ -1249,6 +1244,10 @@
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
 
+                categoryMapping[ideaCategory].push(idea);
+                updateCostMapping(idea, parseInt(idea.getCost));
+                updateTitleMapping(idea, idea.getTitle);
+
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
@@ -1298,6 +1297,12 @@
                 console.log("innerHTML");
                 console.log(div.innerhtml);
             }
+
+            var removeFromDicts = function(idea) {
+                
+            }
+
+            
          </script>
     </head>
     <body>
