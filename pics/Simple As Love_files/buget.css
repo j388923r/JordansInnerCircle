@@ -1,0 +1,74 @@
+html {
+    background-color: #eee;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+body {
+	background-color: #eee;
+	
+}
+
+#label {
+	font-size: 24px;
+	font-family: "Open Sans", sans-serif;
+	color: #8D9DB2;
+	margin-bottom: 20px;
+}
+
+#header {
+	  font: 100 60px 'Great Vibes', Helvetica, sans-serif;
+	  text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+	  font-weight: bold;
+	  line-height: 1.7em;
+	  margin-bottom: 10px;
+	  text-align: center;
+	  color: #8D9DB2;
+}
+
+.row {
+	font-size: 22px;
+	font-family: "Open Sans", sans-serif;
+	margin: 10px;
+}
+
+.list.row {
+	margin-left: 30px;
+}
+
+#totals {
+	margin-left: 30px;
+	color: steelblue;
+	
+}
+#remaining {
+	color: steelblue;
+
+}
+	
+#budget {
+	color: steelblue;
+}
+.btn.edit-btn {
+	color: steelblue;
+}
+
+.btn {
+	display: none;
+}
+
+
+.editable.spent{
+	cursor: hand;
+	cursor: pointer;
+}
+
+.editable.allotted{
+	cursor: hand;
+	cursor: pointer;
+}
+
+.editable.allotted:hover {
+	text-decoration: underline;
+	color:steelblue;
+}
