@@ -168,10 +168,8 @@ h1 a:hover {
 }
 
 #budgetTotalRemaining {
-    position: absolute;
-    /*margin-top: 10px;*/
     height: 40px;
-    width: 24%;
+    width: 60%;
     border-radius: 5px;
     background-color: #EEEEEE;
     text-align: center;
@@ -179,7 +177,7 @@ h1 a:hover {
     font-size: 20px;
     z-index: 11;
     /*bottom: -7%;*/
-    margin-left: 10%;
+    margin: auto;
 }
 
 #ideaContent {
@@ -216,8 +214,7 @@ h1 a:hover {
     position: relative;
     font-family: "Gill Sans";
     font-size: 14px;
-    left: 36%;
-    top: 5%;
+    margin: auto;
     width: 36%;
 }
 
@@ -228,6 +225,7 @@ h1 a:hover {
     background: white;
     border: 1px solid black;
     padding: 10px;
+    z-index: 12;
 }
 
 .ideaInfo{
@@ -489,18 +487,6 @@ ul
 {
     list-style-type: none;
     padding: 0;
-}
-
-.one {
-    background-color: rgba(130, 130, 139, 0.5);
-}
-
-.one:hover, .two:hover{
-    background-color: rgba(239, 220, 130, 0.5);
-}
-
-.two {
-    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {

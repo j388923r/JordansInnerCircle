@@ -5,8 +5,8 @@
        
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
          <script type='text/javascript' > 
-          total_budget = 4000; //Dummy data to set total budget to initial value
-          remaining = 4000;   
+          total_budget = 8000; //Dummy data to set total budget to initial value
+          remaining = 8000;   
         </script>
         
         <!-- Fonts -->
@@ -56,7 +56,7 @@
             }
 
             var categorieslist = ["Cake","Catering","Clothing","Decorations","Entertainment","Flowers","Venue","Invitations","Wedding Gifts", "Other"];
-            var tagsList = ["vegas", "prince"];
+            var tagsList = [];
             var costList = ["less than 500", "500 to 2000", "2001 to 5000", "more than 5000"];
             var costListForCheckAll = ['lessThan500', '500To2000', '2000To5000', 'moreThan5000'];
             var titleList = [];
@@ -207,6 +207,7 @@
                             $("#ideaTagInput").tagsinput("add", tags[tagIndex]);
                         }
                     }
+                    $($('#ideaPopup').children()[0]).focus();
                 });
 
                 $('#cancelIdeaButton').click(function(){
@@ -572,20 +573,21 @@
                 page = boardName;
                 if(boardName === 'ideas') {
                     $('#ideaBoard').show();
-                    $('#ideaBoard').css('width', '94%');
-                    $('#ideaBoard').css('margin-left', '3%');
+                    $('#ideaBoard').css('width', '96%');
+                    $('#ideaBoard').css('margin-left', '2%');
                     $('#ideaHeader').css('margin-left', '38%');
                     $('#decisionBoard').hide();
                 } else if(boardName === 'decisions') {
                     $('#decisionBoard').show();
-                    $('#decisionBoard').css('width', '94%');
-                    $('#decisionBoard').css('margin-left', '3%');
+                    $('#decisionBoard').css('width', '96%');
+                    $('#decisionBoard').css('margin-left', '2%');
                     $('#decisionHeader').css('margin-left', '38%');
                     $('#ideaBoard').hide();
                 } else {
                     $('#decisionBoard, #ideaBoard').show();
-                    $('#decisionBoard, #ideaBoard').css('width', '45%');
-                    $('#decisionBoard').css('margin-left', '52%');
+                    $('#ideaBoard').css('margin-left', '1%');
+                    $('#decisionBoard, #ideaBoard').css('width', '48.5%');
+                    $('#decisionBoard').css('margin-left', '50.5%');
                     $('#decisionHeader, #ideaHeader').css('margin-left', '15.5%');
                 }
             };
@@ -739,6 +741,7 @@
                     },
                     //grid: [125, 125],
                     drag: function(e) {
+                        console.log(e);
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
@@ -765,6 +768,10 @@
                                 var ideaIndex = ideasInIdeas.indexOf(idea);
                                 ideasInIdeas.splice(ideaIndex, 1);
                                 idea.ideaDiv = $(e.target);
+                                if(decisionViewState === 'list') {
+                                    $('#decisionListView').append(idea.ideaRow);
+                                    idea.ideaDiv.hide();
+                                }
                                 ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
@@ -776,8 +783,12 @@
                             console.log("Idea drop");
                             var idea = getNonDeletedIdea(e.target);
                             ideasInIdeas.push(idea);
-                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
                             idea.ideaDiv = $(e.target);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
                             ideasInDecisions.splice(ideaIndex, 1);
                         }
                         down = undefined;
@@ -830,6 +841,7 @@
                             edittableIdea = idea;
                             var popupIdea = document.getElementById("ideaPopup");
                             popupIdea.style.display = "block";
+                            $('#ideaPopup').children()[0].focus();
                             
                             $("#ideaTitleInput").val(idea.getTitle());
                             //show image
@@ -842,6 +854,7 @@
                             for(var i = 0; i < tagList.length; i++)
                                 tagString += tagList[i] + "\n";
                             $("#ideaTagInput").val(tagString);
+                            $($('#ideaPopup').children()[0]).focus();
                         });
 
                         // Cancel click listener
@@ -1090,6 +1103,7 @@
                         for(var i = 0; i < tagList.length; i++)
                             tagString += tagList[i] + "\n";
                         $("#ideaTagInput").val(tagString);
+                        $($('#ideaPopup').children()[0]).focus();
                     });
 
                     // Cancel click listener
@@ -1271,10 +1285,10 @@
                     <li><input type="checkbox" name="cost" id="2000To5000" />  $2000 - $5000 </li>
                     <li><input type="checkbox" name="cost" id="moreThan5000" />  > $5000 </li>
                 </ul>
-                <h4>Tags:</h4>
+                <!--<h4>Tags:</h4>
                 <ul id="tags">
 
-                </ul>
+                </ul>-->
 
                 <input id="btnCheckAll" type="button" name="checkAll" value="Check All"/>
                 <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All"/>
@@ -1289,7 +1303,9 @@
                     </div>
                 </a>
                 <div id="ideaContent">
-                    <button id="addIdeaButton" class="btn">Add a new sticky note</button>
+                    <center>
+                        <button id="addIdeaButton" class="btn">Add a new sticky note</button>
+                    </center>
                     <table id="ideaListView" class="table table-hover">
                         
                     </table>
@@ -1308,10 +1324,10 @@
                     <div id="budgetTotalRemaining">
                         <a href="#" onclick="load('budget_page')">
                         Total Remaining: $<span id="budgetRemaining"></span></a>
-                        <table id="decisionListView" class="table table-hover">
-                        
-                        </table>
                     </div>
+                    <table id="decisionListView" class="table table-hover">
+                        
+                    </table>                    
                 </div>            
             </div>
             <div id="ideaPopup" class="ideaInfo" style="display: none;">
