@@ -97,12 +97,14 @@
                     return input.substring(0, length - 3) + "...";
             }
 
-
+            var ideaBeingEditted = undefined; // The idea that is currently being editted
+            
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                ideaLeft = boardBackgroundLeft;
                 //console.log(boardBackgroundLeft);
                 var decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 var decisionBoard = document.getElementById('decisionBoard');
@@ -116,8 +118,6 @@
 
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
-
-                var ideaBeingEditted = undefined; // The idea that is currently being editted
 
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
@@ -198,7 +198,7 @@
                 })
 
                 $('#saveStickyButton').click(function(){
-
+                    
                     // if a new idea is being created
                     if (ideaBeingEditted == undefined){ 
                         createNewIdea();
@@ -613,8 +613,7 @@
             };
 
             var switchView = function(boardName) {
-                if(boardName === 'ideas') {
-                    console.log(ideaViewState);
+                if(boardName === 'ideas' && ideasInIdeas.length > 0) {
                     if(ideaViewState === 'list') {
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
@@ -631,7 +630,7 @@
                         }
                         ideaViewState = 'list';
                     }
-                } else if(boardName === 'decisions') {
+                } else if(boardName === 'decisions' && ideasInDecisions.length > 0) {
                     if(decisionViewState === 'list') {
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
@@ -721,7 +720,7 @@
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
-                
+                ideaLeft = boardBackgroundLeft;
                 //console.log(boardBackgroundLeft);
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
@@ -838,6 +837,18 @@
                 idea.updateTitle(ideaTitle);
                 idea.updateCost(ideaCost);
                 idea.updateCategory(ideaCategory);
+                               
+                var children = $(idea.ideaDiv).children();
+                //console.log(children);
+                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>");
+                $(children[0]).html("<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>");
+                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>");
+                
+                var children = $(idea.ideaRow).children();
+                //console.log(children);
+                $(children[2]).text(idea.title);
+                $(children[1]).text(idea.category);
+                $(children[3]).text(idea.cost);
 
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
@@ -865,7 +876,7 @@
                 decisionLeft = decisionBoardLeft;
                 ideaLeft = boardBackgroundLeft;
                 
-                makeIdeaDiv(idea);
+                //makeIdeaDiv(idea);
 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
@@ -1033,6 +1044,7 @@
                         $("#ideaBody").html('');
 
                         ideaBeingEditted = idea;
+                        console.log(ideaBeingEditted);
                         var popupAddSticky = document.getElementById("addStickyPopup");
                         popupAddSticky.style.display = "block";
                         
@@ -1120,6 +1132,8 @@
                         }
                     },
                     stop: function(e) {
+                        console.log(down.x);
+                        console.log(decisionLeft, e.clientX, e.target.offsetWidth);
                         if(decisionLeft < e.clientX - e.target.offsetWidth) {
                             if(down && down.x < decisionLeft) {
                                 $('#decisionBoard').append($(e.target));
@@ -1140,7 +1154,8 @@
                                 ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
-                            $('#ideasBoard').append($(e.target));
+                            console.log(e.clientX, e.target.offsetWidth, ideaLeft);
+                            $('#ideaBoard').append($(e.target));
                             $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
                             var children = $(draggedSticky).children();
                             remaining += Number($(children[2]).text().substring(1));
@@ -1321,31 +1336,26 @@
             </ul>
             <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
-        <!--<center><h2>Jordan and Annie's Wedding</h2></center>-->
+        <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
             <input type="text" style="margin-bottom: 20px"  id = "search" placeholder="Search term"/><br>
             <div id="filterPopover" hidden>
-                <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
+                <input type="text" id = "search" placeholder="Search term"/><br>
                 <h4>Categories:</h4>
                 <ul id="categories">
                     <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
                     <li><input type="checkbox" name="Entertainment" /> Entertainment </li>
                     <li><input type="checkbox" name="Flowers" /> Flowers </li>
-                    <li><input type="checkbox" name="Venue" /> Venue </li> -->
+                    <li><input type="checkbox" name="Venue" /> Venue </li>-->
                 </ul>
                 <h4>Cost:</h4>
-                <!--do we want this to dynamically change -->
                 <ul id="cost">
                     <li><input type="checkbox" name="cost" id="lessThan500" />  < $500 </li>
                     <li><input type="checkbox" name="cost" id="500To2000" />  $500 - $2000 </li>
                     <li><input type="checkbox" name="cost" id="2000To5000" />  $2000 - $5000 </li>
                     <li><input type="checkbox" name="cost" id="moreThan5000" />  > $5000 </li>
                 </ul>
-                <!--<h4>Tags:</h4>
-                <ul id="tags">
-
-                </ul>-->
 
                 <input id="btnCheckAll" type="button" name="checkAll" value="Check All"/>
                 <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All"/>
