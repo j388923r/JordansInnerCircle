@@ -284,6 +284,14 @@
                         }
                     }
                     
+                    for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                        var ideaToDelete = allNonDeletedIdeas[i];
+                        if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
+                            allNonDeletedIdeas.splice(i, 1);
+                            break;
+                        }
+                    }
+                    
                     $("#trashPic").attr("src", "full_trash.png")
                 });
 
