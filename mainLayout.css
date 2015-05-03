@@ -82,9 +82,16 @@ h1 a:hover {
     font: 100 18px'Gill Sans';
     padding: 1%;
     display:inline-block;
-    color: #EEDC82;
     text-align: center;
     margin-left:4%;
+}
+
+.header li:hover{
+    border-bottom: 2px solid #1EBED6;
+}
+
+.header li:hover a{
+    color: #1EBED6;
 }
 
 #boardBackground {
@@ -151,20 +158,20 @@ h1 a:hover {
 
 #ideaHeader {
     margin-left: 15.5%;
-    -moz-transform: rotate(2deg);
+/*    -moz-transform: rotate(2deg);
     -webkit-transform: rotate(2deg);
     -o-transform: rotate(2deg);
     -ms-transform: rotate(2deg);
-    transform: rotate(2deg);
+    transform: rotate(2deg);*/
 }
 
 #decisionHeader {
     margin-left: 15.5%;
-    -moz-transform: rotate(-2deg);
+/*    -moz-transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
     -o-transform: rotate(-2deg);
     -ms-transform: rotate(-2deg);
-    transform: rotate(-2deg);
+    transform: rotate(-2deg);*/
 }
 
 #budgetTotalRemaining {
@@ -210,7 +217,7 @@ h1 a:hover {
     padding-left: 1em
 }
 
-#addIdeaButton {
+#addStickyButton {
     position: relative;
     font-family: "Gill Sans";
     font-size: 14px;
@@ -218,7 +225,7 @@ h1 a:hover {
     width: 36%;
 }
 
-#ideaPopup {
+#addStickyPopup {
     font-family: "Gill Sans";
     font-size: 12px;
     position: absolute;

@@ -112,8 +112,7 @@
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,costList);
 
-                var editIdea = false;
-                var edittableIdea = undefined;
+                var ideaBeingEditted = undefined; // The idea that is currently being editted
 
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
@@ -191,36 +190,27 @@
                     //down = undefined;
                 });
 
-                $('#addIdeaButton').click(function(){
-                    var popupIdea = document.getElementById("ideaPopup");
-                    popupIdea.style.display = 'block';
-                    console.log("ADD IDEA BUTTON!!")
+                $('#addStickyButton').click(function(){
+                    var popupAddSticky = document.getElementById("addStickyPopup");
+                    popupAddSticky.style.display = 'block';
 
-                    if (editIdea){
-                        $('#ideaTitleInput').val(idea.getTitle());
-                        $('#ideaCostInput').val(idea.getCost());
-                        $("#categoryDropDown").val([idea.getCategory()]);
-                        $("#ideaDescriptionInput").val(idea.getDescription());
-                        var tags = idea.getTags();
-
-                        for (var tagIndex in tags){
-                            $("#ideaTagInput").tagsinput("add", tags[tagIndex]);
-                        }
-                    }
-                    $($('#ideaPopup').children()[0]).focus();
+                    $($('#addStickyPopup').children()[0]).focus();
                 });
 
-                $('#cancelIdeaButton').click(function(){
+                $('#cancelStickyButton').click(function(){
                     restoreBorderColor();
                     closeAndClearForm();
                 })
 
-                $('#saveIdeaButton').click(function(){
-                    //console.log(true);
-                    if (!editIdea){
+                $('#saveStickyButton').click(function(){
+
+                    // if a new idea is being created
+                    if (ideaBeingEditted == undefined){ 
                         createNewIdea();
-                    } else {
-                        updateIdea(edittableIdea);
+
+                    // if an existing idea is being editted
+                    } else { 
+                        updateIdea(ideaBeingEditted);
                     }
 
                 });
@@ -659,18 +649,6 @@
 
             }
 
-            var createIdeaDisplay = function(idea) {
-                var idea = idea;
-                console.log("make idea pop up");
-                var pictures = idea.getPictures();
-                var title = idea.getTitle();
-                var category = idea.getCategory();
-                var description = idea.getDescription();
-                var tags = idea.getTags();
-                var cost = idea.getCost();
-
-            }
-
             var createNewIdea = function(){
                 restoreBorderColor();
 
@@ -678,12 +656,10 @@
                 ideaCost = $('#ideaCostInput').val();
                 ideaCategory = $("#categoryDropDown").val();
                 ideaPics = $("#picUploader").context.URL;
-                console.log(ideaPics);
                 ideaDescription = $("#ideaDescriptionInput").val();
                 ideaTags = $("#ideaTagInput").tagsinput("items");
 
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
-                console.log(validIdea);
                 if (!validIdea){
                     missingInputFeedback();
                     return;
@@ -837,11 +813,10 @@
                             div.style.display = "none";
                             $("ideaView").html('');
 
-                            editIdea = true;
-                            edittableIdea = idea;
-                            var popupIdea = document.getElementById("ideaPopup");
-                            popupIdea.style.display = "block";
-                            $('#ideaPopup').children()[0].focus();
+                            ideaBeingEditted = idea;
+                            var popupAddSticky = document.getElementById("addStickyPopup");
+                            popupAddSticky.style.display = "block";
+                            $('#addStickyPopup').children()[0].focus();
                             
                             $("#ideaTitleInput").val(idea.getTitle());
                             //show image
@@ -854,7 +829,7 @@
                             for(var i = 0; i < tagList.length; i++)
                                 tagString += tagList[i] + "\n";
                             $("#ideaTagInput").val(tagString);
-                            $($('#ideaPopup').children()[0]).focus();
+                            $($('#addStickyPopup').children()[0]).focus();
                         });
 
                         // Cancel click listener
@@ -883,12 +858,12 @@
             var updateIdea = function(idea){
                 restoreBorderColor();
 
-                ideaTitle = $('#ideaTitleInput').val();
-                ideaCost = $('#ideaCostInput').val();
-                ideaCategory = $("#categoryDropDown").val();
-                ideaPics = $("#picUploader").context.URL;
-                ideaDescription = $("#ideaDescriptionInput").val();
-                ideaTags = $("#ideaTagInput").tagsinput("items");
+                var ideaTitle = $('#ideaTitleInput').val();
+                var ideaCost = $('#ideaCostInput').val();
+                var ideaCategory = $("#categoryDropDown").val();
+                var ideaPics = $("#picUploader").context.URL;
+                var ideaDescription = $("#ideaDescriptionInput").val();
+                var ideaTags = $("#ideaTagInput").tagsinput("items");
 
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
                 console.log(validIdea);
@@ -920,29 +895,11 @@
                 decisionLeft = decisionBoardLeft;
                 ideaLeft = boardBackgroundLeft;
                 
-                var ideaHtml = "<div class='stickynote' unselectable='on' style='background: #" + categoryColors[idea.category][0] + "'>" +
-                               "<div style='background: #" + categoryColors[idea.category][1] + "; pointerEvents: none'>" +
-                               "<h2 style='font-size: 125%; pointer-events: none'>" + idea.category + "</h2>" +
-                               "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
-                               "</div>";
-                               
-                var ideaDiv = $(ideaHtml);
-
-                idea.setDiv(ideaDiv);
-
-                ideaDiv.mousedown(stickyDown);
-                
-                ideaDiv.mouseup(stickyUp);
-                
-                ideaDiv.mousemove(stickyMove);
-                $('#ideaBoard').append(ideaDiv);
+                makeIdeaDiv(idea);
 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
-                edittableIdea = undefined;
-                editIdea = false;
+                ideaBeingEditted = undefined;
             }
 
             var makeIdeaDiv = function(idea) {
@@ -1055,7 +1012,7 @@
             }
 
             var closeAndClearForm = function(){
-                $("#ideaPopup").attr("style","display: none");
+                $("#addStickyPopup").attr("style","display: none");
                 $("#ideaTitleInput").val('');
                 $("#ideaDescriptionInput").val('');
                 $("#ideaCostInput").val('');
@@ -1065,7 +1022,7 @@
             }
 
             var stickyDown = function(event){
-                //console.log($("#addIdeaButton").css('height'));
+                //console.log($("#addStickyButton").css('height'));
                 draggedSticky = event.currentTarget;
                 //console.log(draggedSticky);
                 down = {x: event.clientX, y: event.clientY, stickyLeft: Number($(draggedSticky).css('margin-left').substring(0, $(draggedSticky).css('margin-left').length - 2)), stickyTop: Number($(draggedSticky).css('margin-top').substring(0, $(draggedSticky).css('margin-top').length - 2))};
@@ -1087,10 +1044,9 @@
                         div.style.display = "none";
                         $("#ideaBody").html('');
 
-                        editIdea = true;
-                        edittableIdea = idea;
-                        var popupIdea = document.getElementById("ideaPopup");
-                        popupIdea.style.display = "block";
+                        ideaBeingEditted = idea;
+                        var popupAddSticky = document.getElementById("addStickyPopup");
+                        popupAddSticky.style.display = "block";
                         
                         $("#ideaTitleInput").val(idea.getTitle());
                         //show image
@@ -1103,7 +1059,7 @@
                         for(var i = 0; i < tagList.length; i++)
                             tagString += tagList[i] + "\n";
                         $("#ideaTagInput").val(tagString);
-                        $($('#ideaPopup').children()[0]).focus();
+                        $($('#addStickyPopup').children()[0]).focus();
                     });
 
                     // Cancel click listener
@@ -1304,7 +1260,7 @@
                 </a>
                 <div id="ideaContent">
                     <center>
-                        <button id="addIdeaButton" class="btn">Add a new sticky note</button>
+                        <button id="addStickyButton" class="btn">Add a new sticky note</button>
                     </center>
                     <table id="ideaListView" class="table table-hover">
                         
@@ -1330,7 +1286,7 @@
                     </table>                    
                 </div>            
             </div>
-            <div id="ideaPopup" class="ideaInfo" style="display: none;">
+            <div id="addStickyPopup" class="ideaInfo" style="display: none;">
                 <input type="text" id="ideaTitleInput" placeholder="Title *"/>
                 <div id="dragAndDropPicUploader">
                         <div class="fallback">
@@ -1360,8 +1316,8 @@
                         </div>
                     <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                 </div>
-                <button id="saveIdeaButton" class="btn">Save</button>
-                <button id="cancelIdeaButton" class="btn">Cancel</button>
+                <button id="saveStickyButton" class="btn">Save</button>
+                <button id="cancelStickyButton" class="btn">Cancel</button>
             </div>
         </div>
         <div id='ideaView' class="ideaInfo" style="display: none;" >
