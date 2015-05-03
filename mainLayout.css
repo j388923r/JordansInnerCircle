@@ -1,3 +1,5 @@
+@import url('http://fonts.googleapis.com/css?family=Sacramento');
+
 li a { cursor: pointer; cursor: hand; }    
 
 .stickynote:hover {
@@ -29,15 +31,14 @@ li a { cursor: pointer; cursor: hand; }
 }
 
 body {
-    padding-left:2%;
-    padding-top:2%;
+    padding-top: 0.5%;
     background-color: #FFFFFF;
 }
 
 h1 {
     margin: 0px;
     padding-right: 2%;
-    font: 100 60px'Great Vibes', Helvetica, sans-serif;
+    font: 100 40px 'Sacramento', Helvetica, sans-serif;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     display: inline-block;
 }
@@ -55,12 +56,14 @@ h2 {
 
 ul.header {
     display: inline;
-    padding: 10px 0px;
-    margin: 0px;
-    background-color:silver;
+    /*padding: 10px 0px;*/
+    width: 50%;
+    float: right;
+    padding-left: 17%;
 }
+
 h1 a {
-    color: blue;
+    color: #1EBED6;
 }
 
 a {
@@ -76,22 +79,21 @@ h1 a:hover {
 }
 
 .header li {
-    font: 18pt bold "Gill Sans";
-    width:12%;
+    font: 100 18px'Gill Sans';
     padding: 1%;
     display:inline-block;
     color: #EEDC82;
-    border-right: 2px solid black;
-    /*background-color: #F1E5ED;*/
     text-align: center;
+    margin-left:4%;
 }
 
 #boardBackground {
     border-radius: 5px;
     width: 96%; 
     height: 90%;
-    background-image: url('pics/blackRusticWood.jpg');
+    background-image: url('pics/redWood.jpg');
     display: inline-block;
+    margin: 2%;
 }
 
 #ideaBoard {
