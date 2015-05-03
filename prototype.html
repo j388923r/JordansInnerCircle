@@ -228,7 +228,6 @@
                 })
 
                 $('#trashIcon').mouseup(function(event) {
-                    
                     if(draggedSticky && down) {
                         down = undefined;
                         var children = $(draggedSticky).children();
@@ -245,6 +244,16 @@
                             var ideaToDelete = ideasInIdeas[i];
                             if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
                                 ideasInIdeas.splice(i, 1);
+                                break;
+                            }
+                        }
+                        
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var ideaToDelete = ideasInDecisions[i];
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
+                                ideasInDecisions.splice(i, 1);
+                                remaining += Number(ideaToDelete.getCost());
+                                $('#budgetRemaining').text(remaining);
                                 break;
                             }
                         }
@@ -274,6 +283,16 @@
                             $(rows[i]).remove();
                         }
                     }
+                    
+                    for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                        var ideaToDelete = allNonDeletedIdeas[i];
+                        if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
+                            allNonDeletedIdeas.splice(i, 1);
+                            break;
+                        }
+                    }
+                    
+                    $("#trashPic").attr("src", "full_trash.png")
                 });
 
                 
