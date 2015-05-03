@@ -84,6 +84,9 @@
             var ideasToShow = [];
 
             var searchedFor = [];
+            
+            var checkedIdeas = [];
+            var checkedDecisions = [];
 
             var shorten = function(input, length) {
                 if(input.length < length)
@@ -174,17 +177,7 @@
                 
                 $('.stickynote').mousemove(stickyMove);
                 
-                $('.stickynote').draggable({
-                    start: function(a) {
-                        console.log(a);
-                    },
-                    drag: function(a) {
-                        console.log(a);
-                    },
-                    stop: function(a) {
-                        console.log(a);
-                    }
-                });
+                $('.stickynote').draggable(draggableObject);
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     //down = undefined;
@@ -257,6 +250,27 @@
                         deletedIdeas.push(idea);
 
                         $("#trashPic").attr("src", "full_trash.png")
+                    }
+                });
+                
+                $('#trashIcon').click(function(){
+                    var rows = $($('#ideaListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            ideasInIdeas.splice(i, 1);
+                            deletedIdeas.push(idea);
+                            $(rows[i]).remove();
+                        }
+                    }
+                    var rows = $($('#decisionListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            ideasInDecisions.splice(i, 1);
+                            deletedIdeas.push(idea);
+                            $(rows[i]).remove();
+                        }
                     }
                 });
 
@@ -708,83 +722,7 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 
-                ideaDiv.draggable({ 
-                    cursor: "hand",
-                    containment: "#boardBackground",
-                    start: function(a) {
-                        down = {x: event.clientX, y: event.clientY};
-                        console.log(down);
-                    },
-                    //grid: [125, 125],
-                    drag: function(e) {
-                        console.log(e);
-                        if(page === 'home') {
-                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                            } else {
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                            }
-                        } else if(page === 'ideas') {
-                            
-                        } else if(page === 'decisions') {
-                            
-                        }
-                    },
-                    stop: function(e) {
-                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                            if(down && down.x < decisionLeft) {
-                                $('#decisionBoard').append($(e.target));
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                                var children = $(draggedSticky).children();
-                                remaining -= Number($(children[2]).text().substring(1));
-                                $('#budgetRemaining').text(remaining);
-                                console.log("Decision drop");
-                                var idea = getNonDeletedIdea(e.target);
-                                console.log(idea);
-                                var ideaIndex = ideasInIdeas.indexOf(idea);
-                                ideasInIdeas.splice(ideaIndex, 1);
-                                idea.ideaDiv = $(e.target);
-                                if(decisionViewState === 'list') {
-                                    $('#decisionListView').append(idea.ideaRow);
-                                    idea.ideaDiv.hide();
-                                }
-                                ideasInDecisions.push(idea);
-                             }
-                        } else if(down && down.x > decisionLeft) {
-                            $('#ideasBoard').append($(e.target));
-                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                            var children = $(draggedSticky).children();
-                            remaining += Number($(children[2]).text().substring(1));
-                            $('#budgetRemaining').text(remaining);
-                            console.log("Idea drop");
-                            var idea = getNonDeletedIdea(e.target);
-                            ideasInIdeas.push(idea);
-                            var ideaIndex = ideasInDecisions.indexOf(idea);
-                            idea.ideaDiv = $(e.target);
-                            if(ideaViewState === 'list') {
-                                $('#ideaListView').append(idea.ideaRow);
-                                idea.ideaDiv.hide();
-                            }
-                            ideasInDecisions.splice(ideaIndex, 1);
-                        }
-                        down = undefined;
-
-                        for(var i=0; i < ideasInDecisions.length; i++) {
-                            var current_idea = ideasInDecisions[i];
-                            var category = current_idea.getCategory();
-                            var cost = current_idea.getCost(); 
-                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
-                            console.log("Categories:", categoriesAndCosts);
-                        }
-
-                        (function (global) {
-                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
-                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
-                        }(window));  
-                        
-                    }
-
-                });
+                ideaDiv.draggable(draggableObject);
 
                 $('#ideaBoard').append(ideaDiv);
                 
@@ -799,12 +737,12 @@
                 var ideaRow = $(ideaRowHTML);
                 
                 ideaRow.click(function(e){
+                    console.log($(e.target), $(e.target).parent().children().length);
                     if($(e.target).parent().children().length > 2) {
                         var idea = getNonDeletedIdeaTable(e.target);
                         var div = document.getElementById("ideaView");
                         div.style.display = "block";
                         $("#ideaView").html(idea.getHtml());
-                        console.log("double clikc");
 
                         // Edit Click Listener
                         $('.editIdeaView').click(function(event){
@@ -921,7 +859,25 @@
                 ideaDiv.mouseup(stickyUp);
                 
                 ideaDiv.mousemove(stickyMove);
+                
+                ideaDiv.draggable(draggableObject);
+                
+                                var ideaRowHTML = "<tr>" +
+                               "<td style='font-size: 24'> <input type='checkbox'></input> </td>" + 
+                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
+                               "<td style='font-size: 24'>" + idea.title + "</td>" +
+                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
+                               //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
+                               //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
+                               "</tr>";
+                var ideaRow = $(ideaRowHTML);
+                
+                idea.ideaRow = ideaRow;
                 $('#ideaBoard').append(ideaDiv);
+                if(ideaViewState === 'list') {
+                    $('#ideaListView').append(ideaRow);
+                    ideaDiv.hide();
+                }
             }
 
             var checkUserInputs = function(title, cost, category){
@@ -1107,6 +1063,84 @@
                 }
             };
 
+            var draggableObject = { 
+                    cursor: "hand",
+                    containment: "#boardBackground",
+                    start: function(a) {
+                        down = {x: event.clientX, y: event.clientY};
+                        console.log(down);
+                    },
+                    //grid: [125, 125],
+                    drag: function(e) {
+                        console.log(e);
+                        if(page === 'home') {
+                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                            } else {
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            }
+                        } else if(page === 'ideas') {
+                            
+                        } else if(page === 'decisions') {
+                            
+                        }
+                    },
+                    stop: function(e) {
+                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                            if(down && down.x < decisionLeft) {
+                                $('#decisionBoard').append($(e.target));
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                                var children = $(draggedSticky).children();
+                                remaining -= Number($(children[2]).text().substring(1));
+                                $('#budgetRemaining').text(remaining);
+                                console.log("Decision drop");
+                                var idea = getNonDeletedIdea(e.target);
+                                console.log(idea);
+                                var ideaIndex = ideasInIdeas.indexOf(idea);
+                                ideasInIdeas.splice(ideaIndex, 1);
+                                idea.ideaDiv = $(e.target);
+                                if(decisionViewState === 'list') {
+                                    $('#decisionListView').append(idea.ideaRow);
+                                    idea.ideaDiv.hide();
+                                }
+                                ideasInDecisions.push(idea);
+                             }
+                        } else if(down && down.x > decisionLeft) {
+                            $('#ideasBoard').append($(e.target));
+                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            var children = $(draggedSticky).children();
+                            remaining += Number($(children[2]).text().substring(1));
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Idea drop");
+                            var idea = getNonDeletedIdea(e.target);
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
+                            idea.ideaDiv = $(e.target);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.splice(ideaIndex, 1);
+                        }
+                        down = undefined;
+
+                        for(var i=0; i < ideasInDecisions.length; i++) {
+                            var current_idea = ideasInDecisions[i];
+                            var category = current_idea.getCategory();
+                            var cost = current_idea.getCost(); 
+                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                            console.log("Categories:", categoriesAndCosts);
+                        }
+
+                        (function (global) {
+                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
+                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
+                        }(window));  
+                        
+                    }
+
+                };
+            
             function load_deleted() {
                 
                 for(var i=0; i < deletedIdeas.length; i++){
