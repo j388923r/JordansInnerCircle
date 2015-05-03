@@ -84,6 +84,11 @@
             var ideasToShow = [];
 
             var searchedFor = [];
+            
+            var checkedIdeas = [];
+            var checkedDecisions = [];
+
+            var deletedInt = 0
 
             var shorten = function(input, length) {
                 if(input.length < length)
@@ -174,17 +179,7 @@
                 
                 $('.stickynote').mousemove(stickyMove);
                 
-                $('.stickynote').draggable({
-                    start: function(a) {
-                        console.log(a);
-                    },
-                    drag: function(a) {
-                        console.log(a);
-                    },
-                    stop: function(a) {
-                        console.log(a);
-                    }
-                });
+                $('.stickynote').draggable(draggableObject);
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     //down = undefined;
@@ -233,7 +228,6 @@
                 })
 
                 $('#trashIcon').mouseup(function(event) {
-                    
                     if(draggedSticky && down) {
                         down = undefined;
                         var children = $(draggedSticky).children();
@@ -253,11 +247,52 @@
                                 break;
                             }
                         }
+                        
+                        for(var i = 0; i < ideasInDecisions.length; i++) {
+                            var ideaToDelete = ideasInDecisions[i];
+                            if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
+                                ideasInDecisions.splice(i, 1);
+                                remaining += Number(ideaToDelete.getCost());
+                                $('#budgetRemaining').text(remaining);
+                                break;
+                            }
+                        }
 
                         deletedIdeas.push(idea);
 
                         $("#trashPic").attr("src", "full_trash.png")
                     }
+                });
+                
+                $('#trashIcon').click(function(){
+                    var rows = $($('#ideaListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            ideasInIdeas.splice(i, 1);
+                            deletedIdeas.push(idea);
+                            $(rows[i]).remove();
+                        }
+                    }
+                    var rows = $($('#decisionListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            ideasInDecisions.splice(i, 1);
+                            deletedIdeas.push(idea);
+                            $(rows[i]).remove();
+                        }
+                    }
+                    
+                    for(var i = 0; i < allNonDeletedIdeas.length; i++) {
+                        var ideaToDelete = allNonDeletedIdeas[i];
+                        if(ideaToDelete.getTitle() === $(children[1]).text() && ideaToDelete.getCategory() === $(children[0]).text()) {
+                            allNonDeletedIdeas.splice(i, 1);
+                            break;
+                        }
+                    }
+                    
+                    $("#trashPic").attr("src", "full_trash.png")
                 });
 
                 
@@ -681,6 +716,13 @@
 
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
+
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,titleList);
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -708,83 +750,7 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 
-                ideaDiv.draggable({ 
-                    cursor: "hand",
-                    containment: "#boardBackground",
-                    start: function(a) {
-                        down = {x: event.clientX, y: event.clientY};
-                        console.log(down);
-                    },
-                    //grid: [125, 125],
-                    drag: function(e) {
-                        console.log(e);
-                        if(page === 'home') {
-                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                            } else {
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                            }
-                        } else if(page === 'ideas') {
-                            
-                        } else if(page === 'decisions') {
-                            
-                        }
-                    },
-                    stop: function(e) {
-                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                            if(down && down.x < decisionLeft) {
-                                $('#decisionBoard').append($(e.target));
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                                var children = $(draggedSticky).children();
-                                remaining -= Number($(children[2]).text().substring(1));
-                                $('#budgetRemaining').text(remaining);
-                                console.log("Decision drop");
-                                var idea = getNonDeletedIdea(e.target);
-                                console.log(idea);
-                                var ideaIndex = ideasInIdeas.indexOf(idea);
-                                ideasInIdeas.splice(ideaIndex, 1);
-                                idea.ideaDiv = $(e.target);
-                                if(decisionViewState === 'list') {
-                                    $('#decisionListView').append(idea.ideaRow);
-                                    idea.ideaDiv.hide();
-                                }
-                                ideasInDecisions.push(idea);
-                             }
-                        } else if(down && down.x > decisionLeft) {
-                            $('#ideasBoard').append($(e.target));
-                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                            var children = $(draggedSticky).children();
-                            remaining += Number($(children[2]).text().substring(1));
-                            $('#budgetRemaining').text(remaining);
-                            console.log("Idea drop");
-                            var idea = getNonDeletedIdea(e.target);
-                            ideasInIdeas.push(idea);
-                            var ideaIndex = ideasInDecisions.indexOf(idea);
-                            idea.ideaDiv = $(e.target);
-                            if(ideaViewState === 'list') {
-                                $('#ideaListView').append(idea.ideaRow);
-                                idea.ideaDiv.hide();
-                            }
-                            ideasInDecisions.splice(ideaIndex, 1);
-                        }
-                        down = undefined;
-
-                        for(var i=0; i < ideasInDecisions.length; i++) {
-                            var current_idea = ideasInDecisions[i];
-                            var category = current_idea.getCategory();
-                            var cost = current_idea.getCost(); 
-                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
-                            console.log("Categories:", categoriesAndCosts);
-                        }
-
-                        (function (global) {
-                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
-                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
-                        }(window));  
-                        
-                    }
-
-                });
+                ideaDiv.draggable(draggableObject);
 
                 $('#ideaBoard').append(ideaDiv);
                 
@@ -799,6 +765,7 @@
                 var ideaRow = $(ideaRowHTML);
                 
                 ideaRow.click(function(e){
+                    console.log($(e.target), $(e.target).parent().children().length);
                     if($(e.target).parent().children().length > 2) {
                         var idea = getNonDeletedIdeaTable(e.target);
                         var div = document.getElementById("ideaView");
@@ -889,6 +856,13 @@
                     idea.updateTags(ideaTags);
                     updateTagMapping(idea, ideaTags);
                 }
+
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,titleList);
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -922,7 +896,25 @@
                 ideaDiv.mouseup(stickyUp);
                 
                 ideaDiv.mousemove(stickyMove);
+                
+                ideaDiv.draggable(draggableObject);
+                
+                                var ideaRowHTML = "<tr>" +
+                               "<td style='font-size: 24'> <input type='checkbox'></input> </td>" + 
+                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
+                               "<td style='font-size: 24'>" + idea.title + "</td>" +
+                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
+                               //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
+                               //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
+                               "</tr>";
+                var ideaRow = $(ideaRowHTML);
+                
+                idea.ideaRow = ideaRow;
                 $('#ideaBoard').append(ideaDiv);
+                if(ideaViewState === 'list') {
+                    $('#ideaListView').append(ideaRow);
+                    ideaDiv.hide();
+                }
             }
 
             var checkUserInputs = function(title, cost, category){
@@ -1110,20 +1102,112 @@
                 }
             };
 
+            var draggableObject = { 
+                    cursor: "hand",
+                    containment: "#boardBackground",
+                    start: function(a) {
+                        down = {x: event.clientX, y: event.clientY};
+                        console.log(down);
+                    },
+                    //grid: [125, 125],
+                    drag: function(e) {
+                        console.log(e);
+                        if(page === 'home') {
+                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                            } else {
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            }
+                        } else if(page === 'ideas') {
+                            
+                        } else if(page === 'decisions') {
+                            
+                        }
+                    },
+                    stop: function(e) {
+                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                            if(down && down.x < decisionLeft) {
+                                $('#decisionBoard').append($(e.target));
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                                var children = $(draggedSticky).children();
+                                remaining -= Number($(children[2]).text().substring(1));
+                                $('#budgetRemaining').text(remaining);
+                                console.log("Decision drop");
+                                var idea = getNonDeletedIdea(e.target);
+                                console.log(idea);
+                                var ideaIndex = ideasInIdeas.indexOf(idea);
+                                ideasInIdeas.splice(ideaIndex, 1);
+                                idea.ideaDiv = $(e.target);
+                                if(decisionViewState === 'list') {
+                                    $('#decisionListView').append(idea.ideaRow);
+                                    idea.ideaDiv.hide();
+                                }
+                                ideasInDecisions.push(idea);
+                             }
+                        } else if(down && down.x > decisionLeft) {
+                            $('#ideasBoard').append($(e.target));
+                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            var children = $(draggedSticky).children();
+                            remaining += Number($(children[2]).text().substring(1));
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Idea drop");
+                            var idea = getNonDeletedIdea(e.target);
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
+                            idea.ideaDiv = $(e.target);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.splice(ideaIndex, 1);
+                        }
+                        down = undefined;
+
+                        for(var i=0; i < ideasInDecisions.length; i++) {
+                            var current_idea = ideasInDecisions[i];
+                            var category = current_idea.getCategory();
+                            var cost = current_idea.getCost(); 
+                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                            console.log("Categories:", categoriesAndCosts);
+                        }
+
+                        (function (global) {
+                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
+                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
+                        }(window));  
+                        
+                    }
+
+                };
+            
             function load_deleted() {
+                do{
+                    $('#keywords').tablesorter(); 
+                    $("#keywords").find('tbody').html("");
+                    $("#keywords").trigger('update');
                 
-                for(var i=0; i < deletedIdeas.length; i++){
-                    var idea = deletedIdeas[i];
-                    populate_list(idea.title, idea.category, idea.cost,idea);
-                    console.log(idea.title, idea.category, idea.cost);
-                }
+                    for(var i=0; i < deletedIdeas.length; i++){
+                        var idea = deletedIdeas[i];
+                        populate_list(idea.title, idea.category, idea.cost,idea);
+                        console.log(idea.title, idea.category, idea.cost);
+                    }
+                    deletedInt += 1
+
+                }while( deletedInt % 2 == 0)
+                // $('#keywords').tablesorter(); 
+                // $("#keywords").find('tbody').html("");
+                // $("#keywords").trigger('update');
+                
+                // for(var i=0; i < deletedIdeas.length; i++){
+                //     var idea = deletedIdeas[i];
+                //     populate_list(idea.title, idea.category, idea.cost,idea);
+                //     console.log(idea.title, idea.category, idea.cost);
+                // }
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "block"); 
                 $("#iframeClose").css("display", "block");
             
-                $('#keywords').tablesorter(); 
-
             }
             
             //Add row for entered item
@@ -1168,6 +1252,13 @@
                 deletedIdeas.splice(deletedIdeas.indexOf(idea),1);
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
+
+                var temp = listUnion(categorieslist,tagsList);
+                var searchSource = listUnion(temp,titleList);
+                $('#search').autocomplete({
+                    source: searchSource
+
+                });
                 updateFilter();
             }
 
@@ -1226,9 +1317,10 @@
             <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
         <div>
-            <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
+            <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
+            <input type="text" id = "search" placeholder="Search term"/><br>
             <div id="filterPopover" hidden>
-                <input type="text" id = "search" placeholder="Search term"/><br>
+                <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
                 <h4>Categories:</h4>
                 <ul id="categories">
                     <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
@@ -1333,19 +1425,19 @@
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
         <div id="wrapper" class="deleted_archive_view">
-        <h2>Deleted Archive</h2>
-        <table id="keywords" cellspacing="0" cellpadding="0">
-            <thead>
-                <tr>
-                    <th><span>Title</span></th>
-                    <th><span>Category</span></th>
-                    <th><span>Cost</span></th>
-                    <th>Restore?</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+            <h2>Deleted Archive</h2>
+            <table id="keywords" cellspacing="0" cellpadding="0" class="tablesorter">
+                <thead>
+                    <tr>
+                        <th><span>Title</span></th>
+                        <th><span>Category</span></th>
+                        <th><span>Cost</span></th>
+                        <th>Restore?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
