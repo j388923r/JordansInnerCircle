@@ -1,4 +1,6 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
+@import url('http://fonts.googleapis.com/css?family=Open+Sans');
+
 
 li a { cursor: pointer; cursor: hand; }    
 
@@ -125,7 +127,7 @@ h1 a:hover {
 }
 
 .stickynote {
-    font-family: "Gill Sans";
+    font-family: "Open Sans";
     height: 125px;
     width: 125px;
     background-color: #EEDC82;
@@ -145,7 +147,7 @@ h1 a:hover {
 
 #decisionHeader, #ideaHeader {
     position: absolute;
-    font: "Gill Sans";
+    font: "Open Sans";
     margin-top: -20px;
     height: 40px;
     width: 15%;
@@ -219,14 +221,14 @@ h1 a:hover {
 
 #addStickyButton {
     position: relative;
-    font-family: "Gill Sans";
+    font-family: "Open Sans";
     font-size: 14px;
     margin: auto;
     width: 36%;
 }
 
 #addStickyPopup {
-    font-family: "Gill Sans";
+    font-family: "Open Sans";
     font-size: 12px;
     position: absolute;
     background: white;

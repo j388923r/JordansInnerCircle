@@ -8,6 +8,7 @@ $(document).ready(function(){
     var total_spent = 0;
     var total_allotted = total_budget;
     var each_allotted = Math.floor(total_budget/10);
+    $("#budget").val(total_budget);
     default_budget();
     calculate();
     editable();
