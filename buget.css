@@ -11,7 +11,7 @@ body {
 
 #label {
 	font-size: 24px;
-	font-family: "Gill Sans", sans-serif;
+	font-family: "Open Sans", sans-serif;
 	color: #8D9DB2;
 	margin-bottom: 20px;
 }
@@ -28,10 +28,16 @@ body {
 
 .row {
 	font-size: 22px;
-	font-family: "Gill Sans", sans-serif;
+	font-family: "Open Sans", sans-serif;
 	margin: 10px;
 }
+
+.list.row {
+	margin-left: 30px;
+}
+
 #totals {
+	margin-left: 30px;
 	color: steelblue;
 	
 }
@@ -45,4 +51,24 @@ body {
 }
 .btn.edit-btn {
 	color: steelblue;
+}
+
+.btn {
+	display: none;
+}
+
+
+.editable.spent{
+	cursor: hand;
+	cursor: pointer;
+}
+
+.editable.allotted{
+	cursor: hand;
+	cursor: pointer;
+}
+
+.editable.allotted:hover {
+	text-decoration: underline;
+	color:steelblue;
 }
