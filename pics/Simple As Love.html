@@ -1,17 +1,18 @@
-<html>
-    <head>
+
+<!-- saved from url=(0076)file:///Users/priscilacortez/Desktop/6.813/JordansInnerCircle/prototype.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
         <title>Simple As Love</title>
         <!-- Deeclaring global budget variables -->
        
-        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-         <script type='text/javascript' > 
+        <script src="./Simple As Love_files/jquery-2.1.3.min.js"></script>
+         <script type="text/javascript"> 
           total_budget = 8000; //Dummy data to set total budget to initial value
           remaining = 8000;   
         </script>
         
         <!-- Fonts -->
-        <link href="http://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Great+Vibes" rel="stylesheet" type="text/css">
+        <link href="./Simple As Love_files/css" rel="stylesheet" type="text/css">
+        <link href="./Simple As Love_files/css(1)" rel="stylesheet" type="text/css">
         
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -19,9 +20,9 @@
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
-        <link rel="stylesheet" href="mainLayout.css">
+        <link rel="stylesheet" href="file:///Users/priscilacortez/Desktop/6.813/JordansInnerCircle/mainLayout.css">
 
-        <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+        <script type="text/javascript" src="./Simple As Love_files/jquery-ui-1.10.0.custom.min.js"></script>
 
       
         
@@ -30,19 +31,19 @@
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
         
         <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="./Simple As Love_files/bootstrap.min.js"></script>
 
         <!-- For drag and drop uploader -->
-        <script type="text/javascript" src="dropzone.js"></script>
-        <link rel="stylesheet" type="text/css" href="dropzone.css" />
+        <script type="text/javascript" src="./Simple As Love_files/dropzone.js"></script>
+        <link rel="stylesheet" type="text/css" href="./Simple As Love_files/dropzone.css">
 
-        <script type="text/javascript" src="Idea.js"></script>
+        <script type="text/javascript" src="./Simple As Love_files/Idea.js"></script>
         
         <!-- For Cool Tagging -->
-        <script type="text/javascript" src="bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-        <link rel="stylesheet" type="text/css" href="bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+        <script type="text/javascript" src="./Simple As Love_files/bootstrap-tagsinput.js"></script>
+        <link rel="stylesheet" type="text/css" href="./Simple As Love_files/bootstrap-tagsinput.css">
 
-        <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
+        <script type="text/javascript" src="./Simple As Love_files/jquery.tablesorter.min.js"></script>
 
         <script>
 
@@ -84,11 +85,6 @@
             var ideasToShow = [];
 
             var searchedFor = [];
-            
-            var checkedIdeas = [];
-            var checkedDecisions = [];
-
-            var deletedInt = 0
 
             var shorten = function(input, length) {
                 if(input.length < length)
@@ -115,7 +111,7 @@
 
 
                 var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,titleList);
+                var searchSource = listUnion(temp,costList);
 
                 var ideaBeingEditted = undefined; // The idea that is currently being editted
 
@@ -179,7 +175,17 @@
                 
                 $('.stickynote').mousemove(stickyMove);
                 
-                $('.stickynote').draggable(draggableObject);
+                $('.stickynote').draggable({
+                    start: function(a) {
+                        console.log(a);
+                    },
+                    drag: function(a) {
+                        console.log(a);
+                    },
+                    stop: function(a) {
+                        console.log(a);
+                    }
+                });
                 
                 $('#ideaBoard, #decisionBoard').mouseleave(function(event) {
                     //down = undefined;
@@ -251,43 +257,8 @@
 
                         deletedIdeas.push(idea);
 
-                        var temp = listUnion(categorieslist,tagsList);
-                        var searchSource = listUnion(temp,titleList);
-                        $('#search').autocomplete({
-                            source: searchSource
-
-                        });
-
                         $("#trashPic").attr("src", "full_trash.png")
                     }
-                });
-                
-                $('#trashIcon').click(function(){
-                    var rows = $($('#ideaListView').children()[0]).children();
-                    for(var i = 0; i < rows.length; i++) {
-                        if($($(rows[i]).children()[0]).children()[0].checked) {
-                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
-                            ideasInIdeas.splice(i, 1);
-                            deletedIdeas.push(idea);
-                            $(rows[i]).remove();
-                        }
-                    }
-                    var rows = $($('#decisionListView').children()[0]).children();
-                    for(var i = 0; i < rows.length; i++) {
-                        if($($(rows[i]).children()[0]).children()[0].checked) {
-                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
-                            ideasInDecisions.splice(i, 1);
-                            deletedIdeas.push(idea);
-                            $(rows[i]).remove();
-                        }
-                    }
-
-                    var temp = listUnion(categorieslist,tagsList);
-                    var searchSource = listUnion(temp,titleList);
-                    $('#search').autocomplete({
-                        source: searchSource
-
-                    });
                 });
 
                 
@@ -498,13 +469,13 @@
             var searching = function(term) {
                 var term = term;
                 var searchList = []
-                // for(var i= 0; i< costList.length; i++){
-                //     if(term == costList[i]){
-                //         searchedFor.push(costListForCheckAll[i]);
-                //         searchList = listUnion(searchList, costMapping[costListForCheckAll[i]])
-                //         // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
-                //     }
-                // }
+                for(var i= 0; i< costList.length; i++){
+                    if(term == costList[i]){
+                        searchedFor.push(costListForCheckAll[i]);
+                        searchList = listUnion(searchList, costMapping[costListForCheckAll[i]])
+                        // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
+                    }
+                }
                 for(var i = 0; i< tagsList.length; i++ ){
                     if(term == tagsList[i]){
                         searchedFor.push(tagsList[i]);
@@ -711,13 +682,6 @@
 
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
-
-                var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,titleList);
-                $('#search').autocomplete({
-                    source: searchSource
-
-                });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -745,7 +709,83 @@
                 
                 ideaDiv.mousemove(stickyMove);
                 
-                ideaDiv.draggable(draggableObject);
+                ideaDiv.draggable({ 
+                    cursor: "hand",
+                    containment: "#boardBackground",
+                    start: function(a) {
+                        down = {x: event.clientX, y: event.clientY};
+                        console.log(down);
+                    },
+                    //grid: [125, 125],
+                    drag: function(e) {
+                        console.log(e);
+                        if(page === 'home') {
+                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                            } else {
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            }
+                        } else if(page === 'ideas') {
+                            
+                        } else if(page === 'decisions') {
+                            
+                        }
+                    },
+                    stop: function(e) {
+                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
+                            if(down && down.x < decisionLeft) {
+                                $('#decisionBoard').append($(e.target));
+                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
+                                var children = $(draggedSticky).children();
+                                remaining -= Number($(children[2]).text().substring(1));
+                                $('#budgetRemaining').text(remaining);
+                                console.log("Decision drop");
+                                var idea = getNonDeletedIdea(e.target);
+                                console.log(idea);
+                                var ideaIndex = ideasInIdeas.indexOf(idea);
+                                ideasInIdeas.splice(ideaIndex, 1);
+                                idea.ideaDiv = $(e.target);
+                                if(decisionViewState === 'list') {
+                                    $('#decisionListView').append(idea.ideaRow);
+                                    idea.ideaDiv.hide();
+                                }
+                                ideasInDecisions.push(idea);
+                             }
+                        } else if(down && down.x > decisionLeft) {
+                            $('#ideasBoard').append($(e.target));
+                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
+                            var children = $(draggedSticky).children();
+                            remaining += Number($(children[2]).text().substring(1));
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Idea drop");
+                            var idea = getNonDeletedIdea(e.target);
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
+                            idea.ideaDiv = $(e.target);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.splice(ideaIndex, 1);
+                        }
+                        down = undefined;
+
+                        for(var i=0; i < ideasInDecisions.length; i++) {
+                            var current_idea = ideasInDecisions[i];
+                            var category = current_idea.getCategory();
+                            var cost = current_idea.getCost(); 
+                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                            console.log("Categories:", categoriesAndCosts);
+                        }
+
+                        (function (global) {
+                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
+                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
+                        }(window));  
+                        
+                    }
+
+                });
 
                 $('#ideaBoard').append(ideaDiv);
                 
@@ -760,7 +800,6 @@
                 var ideaRow = $(ideaRowHTML);
                 
                 ideaRow.click(function(e){
-                    console.log($(e.target), $(e.target).parent().children().length);
                     if($(e.target).parent().children().length > 2) {
                         var idea = getNonDeletedIdeaTable(e.target);
                         var div = document.getElementById("ideaView");
@@ -851,13 +890,6 @@
                     idea.updateTags(ideaTags);
                     updateTagMapping(idea, ideaTags);
                 }
-
-                var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,titleList);
-                $('#search').autocomplete({
-                    source: searchSource
-
-                });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -891,25 +923,7 @@
                 ideaDiv.mouseup(stickyUp);
                 
                 ideaDiv.mousemove(stickyMove);
-                
-                ideaDiv.draggable(draggableObject);
-                
-                                var ideaRowHTML = "<tr>" +
-                               "<td style='font-size: 24'> <input type='checkbox'></input> </td>" + 
-                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
-                               "<td style='font-size: 24'>" + idea.title + "</td>" +
-                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
-                               //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
-                               //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
-                               "</tr>";
-                var ideaRow = $(ideaRowHTML);
-                
-                idea.ideaRow = ideaRow;
                 $('#ideaBoard').append(ideaDiv);
-                if(ideaViewState === 'list') {
-                    $('#ideaListView').append(ideaRow);
-                    ideaDiv.hide();
-                }
             }
 
             var checkUserInputs = function(title, cost, category){
@@ -1097,112 +1111,20 @@
                 }
             };
 
-            var draggableObject = { 
-                    cursor: "hand",
-                    containment: "#boardBackground",
-                    start: function(a) {
-                        down = {x: event.clientX, y: event.clientY};
-                        console.log(down);
-                    },
-                    //grid: [125, 125],
-                    drag: function(e) {
-                        console.log(e);
-                        if(page === 'home') {
-                            if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                            } else {
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                            }
-                        } else if(page === 'ideas') {
-                            
-                        } else if(page === 'decisions') {
-                            
-                        }
-                    },
-                    stop: function(e) {
-                        if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                            if(down && down.x < decisionLeft) {
-                                $('#decisionBoard').append($(e.target));
-                                $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
-                                var children = $(draggedSticky).children();
-                                remaining -= Number($(children[2]).text().substring(1));
-                                $('#budgetRemaining').text(remaining);
-                                console.log("Decision drop");
-                                var idea = getNonDeletedIdea(e.target);
-                                console.log(idea);
-                                var ideaIndex = ideasInIdeas.indexOf(idea);
-                                ideasInIdeas.splice(ideaIndex, 1);
-                                idea.ideaDiv = $(e.target);
-                                if(decisionViewState === 'list') {
-                                    $('#decisionListView').append(idea.ideaRow);
-                                    idea.ideaDiv.hide();
-                                }
-                                ideasInDecisions.push(idea);
-                             }
-                        } else if(down && down.x > decisionLeft) {
-                            $('#ideasBoard').append($(e.target));
-                            $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
-                            var children = $(draggedSticky).children();
-                            remaining += Number($(children[2]).text().substring(1));
-                            $('#budgetRemaining').text(remaining);
-                            console.log("Idea drop");
-                            var idea = getNonDeletedIdea(e.target);
-                            ideasInIdeas.push(idea);
-                            var ideaIndex = ideasInDecisions.indexOf(idea);
-                            idea.ideaDiv = $(e.target);
-                            if(ideaViewState === 'list') {
-                                $('#ideaListView').append(idea.ideaRow);
-                                idea.ideaDiv.hide();
-                            }
-                            ideasInDecisions.splice(ideaIndex, 1);
-                        }
-                        down = undefined;
-
-                        for(var i=0; i < ideasInDecisions.length; i++) {
-                            var current_idea = ideasInDecisions[i];
-                            var category = current_idea.getCategory();
-                            var cost = current_idea.getCost(); 
-                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
-                            console.log("Categories:", categoriesAndCosts);
-                        }
-
-                        (function (global) {
-                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
-                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
-                        }(window));  
-                        
-                    }
-
-                };
-            
             function load_deleted() {
-                do{
-                    $('#keywords').tablesorter(); 
-                    $("#keywords").find('tbody').html("");
-                    $("#keywords").trigger('update');
                 
-                    for(var i=0; i < deletedIdeas.length; i++){
-                        var idea = deletedIdeas[i];
-                        populate_list(idea.title, idea.category, idea.cost,idea);
-                        console.log(idea.title, idea.category, idea.cost);
-                    }
-                    deletedInt += 1
-
-                }while( deletedInt % 2 == 0)
-                // $('#keywords').tablesorter(); 
-                // $("#keywords").find('tbody').html("");
-                // $("#keywords").trigger('update');
-                
-                // for(var i=0; i < deletedIdeas.length; i++){
-                //     var idea = deletedIdeas[i];
-                //     populate_list(idea.title, idea.category, idea.cost,idea);
-                //     console.log(idea.title, idea.category, idea.cost);
-                // }
+                for(var i=0; i < deletedIdeas.length; i++){
+                    var idea = deletedIdeas[i];
+                    populate_list(idea.title, idea.category, idea.cost,idea);
+                    console.log(idea.title, idea.category, idea.cost);
+                }
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "block"); 
                 $("#iframeClose").css("display", "block");
             
+                $('#keywords').tablesorter(); 
+
             }
             
             //Add row for entered item
@@ -1247,17 +1169,6 @@
                 deletedIdeas.splice(deletedIdeas.indexOf(idea),1);
                 allNonDeletedIdeas.push(idea);
                 ideasInIdeas.push(idea);
-
-                categoryMapping[ideaCategory].push(idea);
-                updateCostMapping(idea, parseInt(idea.getCost));
-                updateTitleMapping(idea, idea.getTitle);
-
-                var temp = listUnion(categorieslist,tagsList);
-                var searchSource = listUnion(temp,titleList);
-                $('#search').autocomplete({
-                    source: searchSource
-
-                });
                 updateFilter();
             }
 
@@ -1301,59 +1212,47 @@
                 console.log("innerHTML");
                 console.log(div.innerhtml);
             }
-
-            var removeFromDicts = function(idea) {
-                
-            }
-
-            
          </script>
     </head>
     <body>
         <div class="navigationbar">
-            <h1><a ref="#" onclick="show('home')">Simple as Love</a></h1>
+            <h1><a ref="#" onclick="show(&#39;home&#39;)">Simple as Love</a></h1>
             <ul class="header">
-                <li id="mainpageheader"><a ref="#" onclick="show('home')">Main Page</a></li>
-                <li><a ref="#" onclick="show('ideas')">Ideas</a></li>
-                <li><a ref="#" onclick="show('decisions')">Decisions</a></li>
-                <li id="budget_button"><a ref="#" onclick="load('budget_page')">Budget</a></li>
+                <li id="mainpageheader"><a ref="#" onclick="show(&#39;home&#39;)">Main Page</a></li>
+                <li><a ref="#" onclick="show(&#39;ideas&#39;)">Ideas</a></li>
+                <li><a ref="#" onclick="show(&#39;decisions&#39;)">Decisions</a></li>
+                <li id="budget_button"><a ref="#" onclick="load(&#39;budget_page&#39;)">Budget</a></li>
                 <li id="archiveheader"><a ref="#" onclick="load_deleted()">Archive</a></li>
             </ul>
             <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
         <div>
-            <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
-            <input type="text" id = "search" placeholder="Search term"/><br>
-            <div id="filterPopover" hidden>
-                <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
+            <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span class="glyphicon glyphicon-menu-down"></span></button>
+            <div id="filterPopover" hidden="">
+                <input type="text" id="search" placeholder="Search term" class="ui-autocomplete-input" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><br>
                 <h4>Categories:</h4>
-                <ul id="categories">
-                    <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
-                    <li><input type="checkbox" name="Entertainment" /> Entertainment </li>
-                    <li><input type="checkbox" name="Flowers" /> Flowers </li>
-                    <li><input type="checkbox" name="Venue" /> Venue </li> -->
-                </ul>
+                <ul id="categories"><li><input type="checkbox" name="cat" id="Cake">  Cake</li><li><input type="checkbox" name="cat" id="Catering">  Catering</li><li><input type="checkbox" name="cat" id="Clothing">  Clothing</li><li><input type="checkbox" name="cat" id="Decorations">  Decorations</li><li><input type="checkbox" name="cat" id="Entertainment">  Entertainment</li><li><input type="checkbox" name="cat" id="Flowers">  Flowers</li><li><input type="checkbox" name="cat" id="Invitations">  Invitations</li><li><input type="checkbox" name="cat" id="Other">  Other</li><li><input type="checkbox" name="cat" id="Venue">  Venue</li><li><input type="checkbox" name="cat" id="Wedding Gifts">  Wedding Gifts</li></ul>
                 <h4>Cost:</h4>
                 <!--do we want this to dynamically change -->
                 <ul id="cost">
-                    <li><input type="checkbox" name="cost" id="lessThan500" />  < $500 </li>
-                    <li><input type="checkbox" name="cost" id="500To2000" />  $500 - $2000 </li>
-                    <li><input type="checkbox" name="cost" id="2000To5000" />  $2000 - $5000 </li>
-                    <li><input type="checkbox" name="cost" id="moreThan5000" />  > $5000 </li>
+                    <li><input type="checkbox" name="cost" id="lessThan500">  &lt; $500 </li>
+                    <li><input type="checkbox" name="cost" id="500To2000">  $500 - $2000 </li>
+                    <li><input type="checkbox" name="cost" id="2000To5000">  $2000 - $5000 </li>
+                    <li><input type="checkbox" name="cost" id="moreThan5000">  &gt; $5000 </li>
                 </ul>
                 <!--<h4>Tags:</h4>
                 <ul id="tags">
 
                 </ul>-->
 
-                <input id="btnCheckAll" type="button" name="checkAll" value="Check All"/>
-                <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All"/>
+                <input id="btnCheckAll" type="button" name="checkAll" value="Check All">
+                <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All">
 
             </div>
         </div>
         <div id="boardBackground">
-            <div id='ideaBoard'>
-                <a href="#" onclick="switchView('ideas')">
+            <div id="ideaBoard">
+                <a href="file:///Users/priscilacortez/Desktop/6.813/JordansInnerCircle/prototype.html#" onclick="switchView(&#39;ideas&#39;)">
                     <div id="ideaHeader">
                         Ideas
                     </div>
@@ -1367,19 +1266,19 @@
                     </table>
                 </div>
                 <div id="trashIcon">
-                    <img id="trashPic" src="empty_trash.png">
+                    <img id="trashPic" src="./Simple As Love_files/empty_trash.png">
                 </div>
             </div>
-            <div id='decisionBoard'>
-                <a href="#" onclick="switchView('decisions')">
+            <div id="decisionBoard">
+                <a href="file:///Users/priscilacortez/Desktop/6.813/JordansInnerCircle/prototype.html#" onclick="switchView(&#39;decisions&#39;)">
                     <div id="decisionHeader">
                     Decisions
                     </div>
                 </a>
                 <div id="decisionContent">
                     <div id="budgetTotalRemaining">
-                        <a href="#" onclick="load('budget_page')">
-                        Total Remaining: $<span id="budgetRemaining"></span></a>
+                        <a href="file:///Users/priscilacortez/Desktop/6.813/JordansInnerCircle/prototype.html#" onclick="load(&#39;budget_page&#39;)">
+                        Total Remaining: $<span id="budgetRemaining">8000</span></a>
                     </div>
                     <table id="decisionListView" class="table table-hover">
                         
@@ -1387,21 +1286,21 @@
                 </div>            
             </div>
             <div id="addStickyPopup" class="ideaInfo" style="display: none;">
-                <input type="text" id="ideaTitleInput" placeholder="Title *"/>
+                <input type="text" id="ideaTitleInput" placeholder="Title *">
                 <div id="dragAndDropPicUploader">
                         <div class="fallback">
-                            <input name="file" type="file" multiple>
+                            <input name="file" type="file" multiple="">
                         </div>
                 </div>
                 <div id="descriptionAndCost">
                     <textarea rows="4" id="ideaDescriptionInput" placeholder="Description"></textarea>
-                    <input type="text" id="ideaCostInput" placeholder="Cost *"/>
+                    <input type="text" id="ideaCostInput" placeholder="Cost *">
                 </div>
                 <div id="tagsAndCategory">
                     <div id="ideaCategoryPicker">
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
-                                <option value="" disabled selected>Select a Category*</option>
+                                <option value="" disabled="" selected="">Select a Category*</option>
                                 <option value="Cake">Cake</option>
                                 <option value="Catering">Catering</option>
                                 <option value="Clothing">Clothing</option>
@@ -1414,35 +1313,35 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" style="display: none;"><div class="bootstrap-tagsinput"><input type="text" placeholder="Add tags" style="width: 8em !important;"></div>
                 </div>
                 <button id="saveStickyButton" class="btn">Save</button>
                 <button id="cancelStickyButton" class="btn">Cancel</button>
             </div>
         </div>
-        <div id='ideaView' class="ideaInfo" style="display: none;" >
-            <div class="stickyNoteHeader" style='text-align:right'> 
-                <button type='button' class='cancelIdeaView'>X</button>
+        <div id="ideaView" class="ideaInfo" style="display: none;">
+            <div class="stickyNoteHeader" style="text-align:right"> 
+                <button type="button" class="cancelIdeaView">X</button>
             </div>
-            <div id='ideaBody'></div>
+            <div id="ideaBody"></div>
         </div>
-        <div id="budget_link" >
-            <iframe id="budget_iframe" src="budget.html" seamless></iframe>
+        <div id="budget_link">
+            <iframe id="budget_iframe" src="./Simple As Love_files/budget.html" seamless=""></iframe>
         </div>
         <div id="wrapper" class="deleted_archive_view">
-            <h2>Deleted Archive</h2>
-            <table id="keywords" cellspacing="0" cellpadding="0" class="tablesorter">
-                <thead>
-                    <tr>
-                        <th><span>Title</span></th>
-                        <th><span>Category</span></th>
-                        <th><span>Cost</span></th>
-                        <th>Restore?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+        <h2>Deleted Archive</h2>
+        <table id="keywords" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th><span>Title</span></th>
+                    <th><span>Category</span></th>
+                    <th><span>Cost</span></th>
+                    <th>Restore?</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
         </div>
-    </body>
-</html>
+    
+</div><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="z-index: 10; display: none;"></ul></body></html>

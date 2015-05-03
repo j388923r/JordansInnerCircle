@@ -31,7 +31,7 @@ li a { cursor: pointer; cursor: hand; }
 }
 
 body {
-    padding-top: 0.5%;
+    padding: 1%;
     background-color: #FFFFFF;
 }
 
@@ -59,7 +59,7 @@ ul.header {
     /*padding: 10px 0px;*/
     width: 50%;
     float: right;
-    padding-left: 17%;
+    padding-left: 15%;
 }
 
 h1 a {
@@ -96,11 +96,11 @@ h1 a:hover {
 
 #boardBackground {
     border-radius: 5px;
-    width: 96%; 
+    width: 100%; 
     height: 90%;
     background-image: url('pics/redWood.jpg');
     display: inline-block;
-    margin: 2%;
+    /*margin: 2%;*/
 }
 
 #ideaBoard {
@@ -456,7 +456,7 @@ iframe[seamless] {
 }
 
 .stickyNoteHeader{
-    background-color: #8A6F4E;
+    
 }
 
 @-ms-keyframes wiggle{
