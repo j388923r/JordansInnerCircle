@@ -141,7 +141,6 @@
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(categorieslist, tagsList); //change to names
-                    //working here
                     if($('#filterIcon').hasClass("glyphicon glyphicon-menu-down")){
                         $('#filterIcon').removeClass("glyphicon glyphicon-menu-down")
                         $('#filterIcon').addClass("glyphicon glyphicon-menu-up")
@@ -186,6 +185,7 @@
                         }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
@@ -281,6 +281,7 @@
                                 }, 50);
                             }
                         });
+                        $('.ui-autocomplete').focus();
 
                         $("#trashPic").attr("src", "full_trash.png")
                     }
@@ -328,6 +329,7 @@
                             }, 50);
                         }
                     });
+                    $('.ui-autocomplete').focus();
                 });
 
                 
@@ -431,6 +433,7 @@
                         }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -848,8 +851,10 @@
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
                         }, 50);
+
                     }
                 });
+                $('.ui-autocomplete').focus();
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -863,8 +868,8 @@
                                "<div style='background: #" +categoryColors[idea.category][1]+ ";pointer-events:none'>" +
                                "<h2 style='font-size: 125%; pointer-events:none'>" + idea.category + "</h2>" +
                                "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
+                               "<h2 style='font-size: 100%;text-align:left;margin:5%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:5%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -974,9 +979,9 @@
                                
                 var children = $(idea.ideaDiv).children();
                 //console.log(children);
-                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>");
+                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;pointer-events:none'>" + idea.title + "</h6>");
                 $(children[0]).html("<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>");
-                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>");
+                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;pointer-events:none'>$" + idea.cost + "</h6>");
                 
                 var children = $(idea.ideaRow).children();
                 //console.log(children);
@@ -1007,6 +1012,7 @@
                         }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -1405,6 +1411,7 @@
                         }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 updateFilter();
             }
 
