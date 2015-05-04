@@ -351,6 +351,8 @@
                             $('#budgetRemaining').text(remaining);
                             if (remaining < 0) {
                                 $('#budgetRemaining').css({"color":"red"});
+                            } else {
+                                $('#budgetRemaining').css({"color":"black"});
                             }
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
@@ -382,6 +384,8 @@
                             $('#budgetRemaining').text(remaining);
                             if (remaining < 0) {
                                 $('#budgetRemaining').css({"color":"red"});
+                            } else {
+                                $('#budgetRemaining').css({"color":"black"});
                             }
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
@@ -1028,6 +1032,8 @@
                 $('#budgetRemaining').text(remaining);
                 if (remaining < 0) {
                     $('#budgetRemaining').css({"color":"red"});
+                } else {
+                    $('#budgetRemaining').css({"color":"black"});
                 }
 
                 var ideaTitle = $('#ideaTitleInput').val();
@@ -1041,6 +1047,8 @@
                 $('#budgetRemaining').text(remaining);
                 if (remaining < 0) {
                     $('#budgetRemaining').css({"color":"red"});
+                } else {
+                    $('#budgetRemaining').css({"color":"black"});
                 }
 
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
@@ -1372,6 +1380,8 @@
                                 $('#budgetRemaining').text(remaining);
                                 if (remaining < 0) {
                                     $('#budgetRemaining').css({"color":"red"});
+                                } else {
+                                    $('#budgetRemaining').css({"color":"black"});
                                 }
                             } else {
                                 //$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
@@ -1428,6 +1438,8 @@
                                 $('#budgetRemaining').text(remaining);
                                 if (remaining < 0) {
                                     $('#budgetRemaining').css({"color":"red"});
+                                } else {
+                                    $('#budgetRemaining').css({"color":"black"});
                                 }
                                 var idea = getNonDeletedIdea(e.target);
                                 var ideaIndex = ideasInIdeas.indexOf(idea);
@@ -1448,6 +1460,8 @@
                             $('#budgetRemaining').text(remaining);
                             if (remaining < 0) {
                                 $('#budgetRemaining').css({"color":"red"});
+                            } else {
+                                $('#budgetRemaining').css({"color":"black"});
                             }
                             var idea = getNonDeletedIdea(e.target);
                             ideasInIdeas.push(idea);
