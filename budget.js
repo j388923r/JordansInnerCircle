@@ -10,6 +10,7 @@ $(document).ready(function(){
 
     $('#total_budget').val(total_budget);
     $('#remaining_budget').innerHTML = total_budget;
+    $('#total_spent').innerHTML = total_spent;
 
     default_budget();
     calculate();
@@ -67,7 +68,7 @@ $(document).ready(function(){
             categoriesAndCosts = JSON.parse(global.localStorage.getItem("shared_categories_costs"));
         }(window));
 
-        $(".editable.spent").html(total_spent);
+        $(".spent").html(total_spent);
         //$(".editable.allotted").val(each_allotted);
 
         if(categoriesAndCosts) {
@@ -117,7 +118,7 @@ $(document).ready(function(){
 
         $(".editable.spent").each(function() {
             var class_name = ".editable.spent";
-            total_spent = calculateTotal(class_name);
+            total_spent = calculateSpent(class_name);
             $("#total_spent").html(total_spent);
             if (total_spent > total_budget) {
                 $("#total_spent").css({"color":"red"});
@@ -130,25 +131,29 @@ $(document).ready(function(){
 
     }
 
-    // //Calculate after update
-    // function calculateUpdate(class_name) {
-    //     if (class_name.match("spent")) {
-    //         class_name = ".editable.spent";
-    //         total_spent = calculateTotal(class_name);
-    //         $("#total_spent").html(total_spent);
-    //         if (total_spent > total_budget) {
-    //             $("#total_spent").css({"color":"red"});
-    //             $("#totals_title").css({"color":"red"});
-    //             $("#over_budget_amount").html(total_budget - total_spent);
-    //             $("#remaining").css({"color":"red"});
-    //         }
-    //     }
+     function calculateSpent(class_name) {
+        var sum = 0;
+        $("div"+ class_name).each(function() {
+            var value = parseFloat(this.innerHTML);
+            sum += value;
+        });
+        return sum;
+    }
 
-    //     if (class_name.match("allotted")) {
-    //         class_name = ".new_entry";
-    //         calculateRemaining(); 
-    //     }
-    // }
+    //Calculate after update
+    function calculateUpdate(class_name) {
+        if (class_name.match("spent")) {
+            class_name = ".editable.spent";
+            total_spent = calculateTotal(class_name);
+            $("#total_spent").html(total_spent);
+            if (total_spent > total_budget) {
+                $("#total_spent").css({"color":"red"});
+                $("#totals_title").css({"color":"red"});
+                $("#over_budget_amount").html(total_budget - total_spent);
+                $("#remaining").css({"color":"red"});
+            }
+        }
+    }
 
     
     
