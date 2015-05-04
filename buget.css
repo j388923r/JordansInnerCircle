@@ -1,6 +1,8 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
 
-
+body {
+	background-color: #fbf9ef;
+}
 #label {
 	font-size: 20px;
 	font-family: "Open Sans", sans-serif;
