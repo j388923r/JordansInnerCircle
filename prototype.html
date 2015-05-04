@@ -141,6 +141,15 @@
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(categorieslist, tagsList); //change to names
+                    //working here
+                    if($('#filterIcon').hasClass("glyphicon glyphicon-menu-down")){
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-down")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-up")
+                    }
+                    else{
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-up")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-down")
+                    }
                 });
 
                 $('#btnCheckAll').click(function() {
