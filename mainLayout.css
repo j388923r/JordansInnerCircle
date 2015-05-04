@@ -42,7 +42,7 @@ h1 {
     margin: 0px;
     padding-right: 2%;
     font: 100 42px 'Sacramento', Helvetica, sans-serif;
-    text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.1);
     display: inline-block;
     cursor: pointer;
 }
@@ -222,6 +222,7 @@ h1 a:hover {
     font-size: 18px;
     margin: auto;
     width: 36%;
+    background: lightgray;
 }
 
 #addStickyPopup {
