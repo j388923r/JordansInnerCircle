@@ -59,7 +59,7 @@ h2 {
 ul.header {
     display: inline;
     /*padding: 10px 0px;*/
-    width: 50%;
+    width: 60%;
     float: right;
     padding-left: 15%;
 }
@@ -81,7 +81,7 @@ h1 a:hover {
 }
 
 .header li {
-    font: 100 18px'Gill Sans';
+    font: 100 24px'Gill Sans';
     padding: 1%;
     display:inline-block;
     text-align: center;
