@@ -170,8 +170,12 @@
 
 
                 $('#search').autocomplete({
-                    source: searchSource
-
+                    source: searchSource,
+                    open: function( event, ui ) {
+                        setTimeout(function(){
+                            $('.ui-autocomplete').css('z-index', 9999);
+                        }, 100);
+                    }
                 });
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
@@ -261,8 +265,12 @@
                         var temp = listUnion(categorieslist,tagsList);
                         var searchSource = listUnion(temp,titleList);
                         $('#search').autocomplete({
-                            source: searchSource
-
+                            source: searchSource,
+                            open: function( event, ui ) {
+                                setTimeout(function(){
+                                    $('.ui-autocomplete').css('z-index', 9999);
+                                }, 100);
+                            }
                         });
 
                         $("#trashPic").attr("src", "full_trash.png")
@@ -304,8 +312,12 @@
                     var temp = listUnion(categorieslist,tagsList);
                     var searchSource = listUnion(temp,titleList);
                     $('#search').autocomplete({
-                        source: searchSource
-
+                        source: searchSource,
+                        open: function( event, ui ) {
+                            setTimeout(function(){
+                                $('.ui-autocomplete').css('z-index', 9999);
+                            }, 100);
+                        }
                     });
                 });
 
@@ -403,8 +415,12 @@
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
-                    source: searchSource
-
+                    source: searchSource,
+                    open: function( event, ui ) {
+                        setTimeout(function(){
+                            $('.ui-autocomplete').css('z-index', 9999);
+                        }, 100);
+                    }
                 });
                 cat_arr.sort();
                 tag_arr.sort();
@@ -816,7 +832,12 @@
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
-                    source: searchSource
+                    source: searchSource,
+                    open: function( event, ui ) {
+                        setTimeout(function(){
+                            $('.ui-autocomplete').css('z-index', 9999);
+                        }, 100);
+                    }
                 });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -968,8 +989,12 @@
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
-                    source: searchSource
-
+                    source: searchSource,
+                    open: function( event, ui ) {
+                        setTimeout(function(){
+                            $('.ui-autocomplete').css('z-index', 9999);
+                        }, 100);
+                    }
                 });
                 
                 
@@ -1362,8 +1387,12 @@
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
-                    source: searchSource
-
+                    source: searchSource,
+                    open: function( event, ui ) {
+                        setTimeout(function(){
+                            $('.ui-autocomplete').css('z-index', 9999);
+                        }, 100);
+                    }
                 });
                 updateFilter();
             }

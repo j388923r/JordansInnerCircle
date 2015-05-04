@@ -583,3 +583,7 @@ ul
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: rgba(239, 220, 130,  0.5);
 }
+
+ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
+    z-index: 20 !important;
+}
