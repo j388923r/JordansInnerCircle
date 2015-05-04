@@ -602,6 +602,7 @@
                 //         // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
                 //     }
                 // }
+                console.log(tagsList);
                 for(var i = 0; i< tagsList.length; i++ ){
                     if(term == tagsList[i]){
                         searchedFor.push(tagsList[i]);
@@ -609,6 +610,7 @@
                         // ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
                     }
                 }
+                console.log(categorieslist);
                 for(var i = 0; i< categorieslist.length; i++){
                     if(term == categorieslist[i]){
                         searchedFor.push(categorieslist[i]);
@@ -616,7 +618,7 @@
                         // ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
                     }
                 }
-
+                console.log(titleList);
                 for(var i = 0; i < titleList.length; i++){
 
                     if(stringContains(titleList[i],term)){
@@ -624,8 +626,12 @@
                         searchList = listUnion(searchList, titleMapping[titleList[i]])
                     }
                 }
+                console.log("ideasToShow")
+                console.log(searchList)
 
                 ideasToShow = listInter(ideasToShow,searchList)
+                console.log("ideas to show after")
+                console.log(ideasToShow);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -912,7 +918,7 @@
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
-
+                updateFilter();
             }
 
             var updateIdea = function(idea){
@@ -969,6 +975,7 @@
 
                 });
                 
+                
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
                 //console.log(boardBackgroundLeft);
@@ -980,6 +987,7 @@
                 // closing and clearing form!! :DD
                 closeAndClearForm();
                 ideaBeingEditted = undefined;
+                updateFilter();
             }
 
             var makeIdeaDiv = function(idea) {
