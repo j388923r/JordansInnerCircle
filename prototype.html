@@ -934,6 +934,52 @@
                 });
                 
                 idea.ideaRow = ideaRow;
+                
+                ideaRow.click(function(e){
+                    console.log($(e.target), $(e.target).parent().children().length);
+                    if($(e.target).parent().children().length > 2) {
+                        var idea = getNonDeletedIdeaTable(e.target);
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "block";
+                        $("#ideaView").html(idea.getHtml());
+
+                        // Edit Click Listener
+                        $('.editIdeaView').click(function(event){
+                            console.log("Edit!");
+                            var div = document.getElementById("ideaView");
+                            div.style.display = "none";
+                            $("ideaView").html('');
+
+                            ideaBeingEditted = idea;
+                            var popupAddSticky = document.getElementById("addStickyPopup");
+                            popupAddSticky.style.display = "block";
+                            $('#addStickyPopup').children()[0].focus();
+                            
+                            $("#ideaTitleInput").val(idea.getTitle());
+                            //show image
+                            $("#ideaDescriptionInput").val(idea.getDescription());
+                            $("#ideaCostInput").val(idea.getCost());
+                            document.getElementById("categoryDropDown").value = idea.getCategory();
+                            var tagList = idea.getTags();
+                            console.log(tagList);
+                            var tagString = "";
+                            for(var i = 0; i < tagList.length; i++)
+                                tagString += tagList[i] + "\n";
+                            $("#ideaTagInput").val(tagString);
+                            $($('#addStickyPopup').children()[0]).focus();
+
+                            $("#stickyNoteHeader").attr('background-color',categoryColors[idea.getCategory()][1]);
+                        });
+
+                        // Cancel click listener
+                        $('.cancelIdeaView').click(function(event){
+                            console.log("CLICK!");
+                            var div = document.getElementById("ideaView");
+                            div.style.display = "none";
+                            $("ideaView").html('');
+                        });
+                    }
+                });
                                
                 if(ideaViewState === 'list') {
                     $('#ideaListView').append(ideaRow);
@@ -1052,6 +1098,53 @@
                 var ideaRow = $(ideaRowHTML);
                 
                 idea.ideaRow = ideaRow;
+                
+                ideaRow.click(function(e){
+                    console.log($(e.target), $(e.target).parent().children().length);
+                    if($(e.target).parent().children().length > 2) {
+                        var idea = getNonDeletedIdeaTable(e.target);
+                        var div = document.getElementById("ideaView");
+                        div.style.display = "block";
+                        $("#ideaView").html(idea.getHtml());
+
+                        // Edit Click Listener
+                        $('.editIdeaView').click(function(event){
+                            console.log("Edit!");
+                            var div = document.getElementById("ideaView");
+                            div.style.display = "none";
+                            $("ideaView").html('');
+
+                            ideaBeingEditted = idea;
+                            var popupAddSticky = document.getElementById("addStickyPopup");
+                            popupAddSticky.style.display = "block";
+                            $('#addStickyPopup').children()[0].focus();
+                            
+                            $("#ideaTitleInput").val(idea.getTitle());
+                            //show image
+                            $("#ideaDescriptionInput").val(idea.getDescription());
+                            $("#ideaCostInput").val(idea.getCost());
+                            document.getElementById("categoryDropDown").value = idea.getCategory();
+                            var tagList = idea.getTags();
+                            console.log(tagList);
+                            var tagString = "";
+                            for(var i = 0; i < tagList.length; i++)
+                                tagString += tagList[i] + "\n";
+                            $("#ideaTagInput").val(tagString);
+                            $($('#addStickyPopup').children()[0]).focus();
+
+                            $("#stickyNoteHeader").attr('background-color',categoryColors[idea.getCategory()][1]);
+                        });
+
+                        // Cancel click listener
+                        $('.cancelIdeaView').click(function(event){
+                            console.log("CLICK!");
+                            var div = document.getElementById("ideaView");
+                            div.style.display = "none";
+                            $("ideaView").html('');
+                        });
+                    }
+                });
+                
                 $('#ideaBoard').append(ideaDiv);
                 if(ideaViewState === 'list') {
                     $('#ideaListView').append(ideaRow);
@@ -1270,8 +1363,10 @@
                     stop: function(e) {
                         console.log(down.x);
                         console.log(decisionLeft, e.clientX, e.target.offsetWidth);
+                        var parentId = $(e.target).parent().attr('id');
+                        console.log(parentId);
                         if(decisionLeft < e.clientX - e.target.offsetWidth) {
-                            if(down && down.x < decisionLeft) {
+                            if(down && parentId === 'ideaBoard') {
                                 $('#decisionBoard').append($(e.target));
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
                                 var children = $(draggedSticky).children();
@@ -1289,7 +1384,7 @@
                                 }
                                 ideasInDecisions.push(idea);
                              }
-                        } else if(down && down.x > decisionLeft) {
+                        } else if(down && parentId === 'decisionBoard') {
                             console.log(e.clientX, e.target.offsetWidth, ideaLeft);
                             $('#ideaBoard').append($(e.target));
                             $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);

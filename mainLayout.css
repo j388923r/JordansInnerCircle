@@ -159,6 +159,10 @@ h1 a:hover {
     z-index: 11;
 }
 
+#decisionHeader:hover, #ideaHeader:hover {
+    text-decoration: underline
+}
+
 #ideaHeader {
     margin-left: 15.5%;
 
