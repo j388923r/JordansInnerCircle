@@ -4,7 +4,7 @@
 #label {
 	font-size: 20px;
 	font-family: "Open Sans", sans-serif;
-	color: #8D9DB2;
+	color: #5199ce;
 	margin-bottom: 20px;
 }
 
@@ -15,7 +15,8 @@
 	  line-height: 1.7em;
 	  margin-bottom: 10px;
 	  text-align: center;
-	  color: #8D9DB2;
+	  color: #5199ce;
+
 }
 
 .row {
@@ -28,17 +29,8 @@
 	margin-left: 30px;
 }
 
-#totals {
-	color: steelblue;
-	
-}
-#remaining {
-	color: steelblue;
-
-}
-	
-#budget {
-	color: steelblue;
+#totals, #remaining, #budget {
+	color: #5199ce;
 }
 .btn.save-btn {
 	color: green;
@@ -50,7 +42,7 @@
 }
 
 .editable.allotted:hover {
-	color:steelblue;
+	color:#5199ce;
 }
 
 .editable.total-budget:hover {

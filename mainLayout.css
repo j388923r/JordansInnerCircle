@@ -1,5 +1,6 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
 @import url('http://fonts.googleapis.com/css?family=Open+Sans');
+@import url('http://fonts.googleapis.com/css?family=Satisfy');
 
 
 li a { cursor: pointer; cursor: hand; }    
@@ -40,7 +41,7 @@ body {
 h1 {
     margin: 0px;
     padding-right: 2%;
-    font: 100 40px 'Sacramento', Helvetica, sans-serif;
+    font: 100 42px 'Sacramento', Helvetica, sans-serif;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     display: inline-block;
 }
@@ -100,7 +101,7 @@ h1 a:hover {
     border-radius: 5px;
     width: 100%; 
     height: 90%;
-    background-image: url('pics/redWood.jpg');
+    background-image: url('pics/darkRusticWood.jpg');
     display: inline-block;
     /*margin: 2%;*/
 }
@@ -160,21 +161,11 @@ h1 a:hover {
 
 #ideaHeader {
     margin-left: 15.5%;
-    -moz-transform: rotate(2deg);
-    -webkit-transform: rotate(2deg);
-    -o-transform: rotate(2deg);
-    -ms-transform: rotate(2deg);
-    transform: rotate(2deg);
+
 }
 
 #decisionHeader {
-
     margin-left: 16.5%;
-    -moz-transform: rotate(-2deg);
-    -webkit-transform: rotate(-2deg);
-    -o-transform: rotate(-2deg);
-    -ms-transform: rotate(-2deg);
-    transform: rotate(-2deg);
 }
 
 #budgetTotalRemaining {
@@ -209,15 +200,17 @@ h1 a:hover {
 
 #categories {
     list-style-type: none;
-    padding-left: 1em
+    padding-left: 1em;
 }
+
 #cost {
     list-style-type: none;
-    padding-left: 1em
+    padding-left: 1em;
 }
+
 #tags {
     list-style-type: none;
-    padding-left: 1em
+    padding-left: 1em;
 }
 
 #addStickyButton {
@@ -230,12 +223,13 @@ h1 a:hover {
 
 #addStickyPopup {
     font-family: "Open Sans";
-    font-size: 12px;
+    font-size: 14px;
     position: absolute;
     background: white;
-    border: 1px solid black;
-    padding: 10px;
     z-index: 15;
+
+    padding: 1%;
+    height: 45%;
 }
 
 .ideaInfo{
@@ -250,68 +244,94 @@ h1 a:hover {
 
 #ideaTitleInput {
     position: relative;
-    padding: 10px;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 5%;
 }
 
 #dragAndDropPicUploader{
     position: relative;
-    padding: 10px;
-    width: 100%;
-    height: 20%;
-}
-
-#ideaDescriptionInput{
-    position: relative;
-    padding: 10px;
-    width: 100%;
-    height: 10%;  
-}          
+    margin-bottom: 5%;
+}        
 
 .ui-helper-hidden-accessible {
     display: none
 }
 
-#ideaCostInput{
-    position: relative;
-    padding: 10px;
-    width: 100%;
-
+#descriptionAndCost{
+    float: left;
+    height: 40%;
+    width: 49%;
+    margin-right: 1%;
 }
 
-#descriptionAndCost, #descriptionAndCostView{
-    width: 50%;
-    float: left;
-    padding: 10px;
+#ideaDescriptionInput{
+    position: relative;
+    width: 100%;
+    height: 69%;
+    margin-bottom: 1%;
+}  
+
+#ideaCostInput{
+    position: relative;
+    width: 100%;
+    height: 29%;
+    margin-top: 1%;
+}
+
+#tagsAndCategory{
+    position: relative;
+    float: right;
+    width: 49%;
+    height: 40%;
+    margin-left: 1%;
 }
 
 #ideaCategoryPicker{
     position: relative;
-    padding: 10px;
+    height: 69%;
+    margin-bottom: 1%;
+}
+
+#categoryPopover{
     width: 100%;
+    height: 39%;
+}
+
+select{
+    width: 100%;
+    font-size: 500%;
+    margin-bottom: 1%;
 }
 
 #ideaTagInput{
     position: relative;
-    padding: 10px;
+    width: 100%;
+    height: 69%;
+    overflow: scroll;
 }
 
-#tagsAndCategory, #tagsAndCategoryView{
-    position: relative;
-    padding: 10px;
-    width: 50%;
-    float: right;
+.bootstrap-tagsinput{
+    width: 100%;
+    height: 69%;
+    margin-bottom: 1%;
+    overflow: scroll;
 }
 
-#saveIdeaButton{
+#saveStickyButton {
     position: relative;
-    padding: 10px;
+    height: 10%;
+    width: 20%;
+    margin-top: 1%;
+    margin-left: 29%;
+    margin-right: 1%;
+    padding: 1%;
 }
 
-#cancelIdeaButton, #closeIdeaButton{
+#cancelStickyButton, #closeIdeaButton{
     position: relative;
-    padding: 10px;
+    margin-top: 1%;
+    height: 10%;
+    width: 20%;
 }
 
 #ideaView {
@@ -402,8 +422,9 @@ iframe {
     position: absolute;
     top: 70;
     width: 100%;
-    height: 100%;
-    z-index: 17
+    height: 900;
+    z-index: 17;
+    overflow: hidden;
 }
 
 iframe[seamless] {
@@ -413,6 +434,7 @@ iframe[seamless] {
 
 .deleted_archive_view {
     font-family: Open Sans;
+    color: #5199ce;
     display:none;
     position: absolute;
     top: 70;
@@ -551,12 +573,11 @@ ul
 }
 
 .h2 {
-    font: 100 50px 'Great Vibes';
-    text-shadow: 0px 0px 1px rgba(0,0,0,0.1);
-    line-height: 1.7em;
+    font: 25px 'Satisfy';
     text-align: center;
     margin: 0px;
     padding-bottom: 0.5em;
+    color: #5199ce;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
