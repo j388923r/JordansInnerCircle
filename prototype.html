@@ -118,6 +118,7 @@
                 var fourth = document.getElementById('moreThan5000');
                 
                 document.getElementById("budgetRemaining").innerHTML = total_budget;
+                editable();
 
                 $('#moveRight').hide();
                 $('#moveLeft').hide();
@@ -1674,17 +1675,7 @@
 
             // Switch between span and textbox
             function editable() {
-                $(".editable.title").mouseover(function() {
-
-                    //Only numbers allowed
-                    $('.editable.title').on('change keyup', function() {
-                         // Remove invalid characters
-                         var sanitized = $(this).val().replace(/[^0-9.]/g, '');
-                         // Remove the first point if there is more than one
-                         sanitized = sanitized.replace(/\.(?=.*\.)/, '');
-                         // Update value
-                         $(this).val(sanitized);
-                     });
+                $(".editable_title").mouseover(function() {
 
                     var class_name = $(this).attr("class");
                     var id_name = $(this).attr("id");
@@ -1717,12 +1708,6 @@
                             $(this).hide();
                             $(this).prev().html($(this).val());
                             $(this).prev().show();
-                            calculateUpdate(class_name);
-
-                            if(id_name === "total_budget") {
-                                total_budget = $(this).val();
-                                calculateRemaining();
-                            }
                             
                         }
                     });
@@ -1731,12 +1716,7 @@
                         $(this).hide();
                         $(this).prev().html($(this).val());
                         $(this).prev().show();
-                        calculateUpdate(class_name);
-
-                        if(id_name === "total_budget") {
-                            total_budget = $(this).val();
-                            calculateRemaining();
-                        }
+                        
                     });
 
                 });
