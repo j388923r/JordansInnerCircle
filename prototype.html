@@ -321,6 +321,9 @@
                                 idea.ideaDiv.hide();
                             }
                             ideasInDecisions.push(idea);
+                            if(ideasInIdeas.length === 0) {
+                                $('#moveRight').hide();
+                            }
                         }
                     }
                 });
@@ -343,6 +346,9 @@
                                 idea.ideaDiv.hide();
                             }
                             ideasInDecisions.splice(ideaIndex, 1);
+                            if(ideasInDecisions.length === 0) {
+                                $('#moveLeft').hide();
+                            }
                         }
                     }
                 });
@@ -1384,8 +1390,8 @@
                 <li id="budget_button"><a ref="#" onclick="load('budget_page')">Budget</a></li>
                 <li id="archiveheader"><a ref="#" onclick="load_deleted()">Archive</a></li>
             </ul>
-            <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
+        <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>

@@ -444,15 +444,19 @@ iframe[seamless] {
   background-position: 100% 100%;
 }
 
+#keywords thead tr th span:after {
+  content:"\21d5";
+}
+
 #keywords thead tr th.headerSortUp, #keywords thead tr th.headerSortDown {
   background: #acc8dd;
 }
 
-#keywords thead tr th.headerSortUp span {
-  background-image: url('up-arrow.png');
+#keywords thead tr th.headerSortUp span:after {
+  content: "\25B2"
 }
-#keywords thead tr th.headerSortDown span {
-  background-image: url('down-arrow.png');
+#keywords thead tr th.headerSortDown span:after {
+  content: "\25BC"
 }
 
 #keywords tbody tr { 
