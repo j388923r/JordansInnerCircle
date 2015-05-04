@@ -592,3 +592,9 @@ ul
 ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
     z-index: 20 !important;
 }
+
+.switch_view {
+    background-color: #cfefff;
+    padding: 2%;
+    margin-left: 10;   
+}
