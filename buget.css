@@ -1,6 +1,8 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
 
-
+body {
+	background-color: #fbf9ef;
+}
 #label {
 	font-size: 20px;
 	font-family: "Open Sans", sans-serif;
@@ -9,13 +11,12 @@
 }
 
 #header {
-	  font: 100 40px 'Sacramento', Helvetica, sans-serif;
-	  text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+	  font: 100 45px 'Sacramento', Helvetica, sans-serif;
 	  font-weight: bold;
 	  line-height: 1.7em;
 	  margin-bottom: 10px;
 	  text-align: center;
-	  color: #5199ce;
+	  color: #cdac00;
 
 }
 

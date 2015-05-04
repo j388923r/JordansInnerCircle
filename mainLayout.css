@@ -1,6 +1,6 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
 @import url('http://fonts.googleapis.com/css?family=Open+Sans');
-@import url('http://fonts.googleapis.com/css?family=Satisfy');
+@import url('http://fonts.googleapis.com/css?family=Amatic+SC');
 
 
 li a { cursor: pointer; cursor: hand; }    
@@ -35,7 +35,7 @@ li a { cursor: pointer; cursor: hand; }
 
 body {
     padding: 1%;
-    background-color: #FFFFFF;
+    background-image: url('pics/yellow.jpg');;
 }
 
 h1 {
@@ -44,6 +44,7 @@ h1 {
     font: 100 42px 'Sacramento', Helvetica, sans-serif;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     display: inline-block;
+    cursor: pointer;
 }
 
 h2 { 
@@ -82,7 +83,7 @@ h1 a:hover {
 }
 
 .header li {
-    font: 100 24px'Gill Sans';
+    font: 100 22px'Gill Sans';
     padding: 1%;
     display:inline-block;
     text-align: center;
@@ -148,14 +149,15 @@ h1 a:hover {
 
 #decisionHeader, #ideaHeader {
     position: absolute;
-    font: "Open Sans";
+    font-family: "Amatic SC";
+    font-weight: bold;
     margin-top: -20px;
     height: 40px;
     width: 15%;
     border-radius: 1px;
-    background-color: #EEDC82;
+    background-color: #cfefff;
     text-align: center;
-    font-size: 26px;
+    font-size: 30px;
     z-index: 11;
 }
 
@@ -169,16 +171,17 @@ h1 a:hover {
 }
 
 #budgetTotalRemaining {
-    height: 40px;
-    width: 60%;
+    width: 45%;
+    height: 6%;
     border-radius: 5px;
-    background-color: #EEEEEE;
+    background-color: lightgray;
     text-align: center;
-    font-family: "Helvetica";
-    font-size: 20px;
+    font-family: "Open Sans";
+    font-size: 18px;
     z-index: 11;
     /*bottom: -7%;*/
     margin: auto;
+    padding: 1%;
 }
 
 #ideaContent {
@@ -191,7 +194,7 @@ h1 a:hover {
 
 #filterPopover {
     position: absolute;
-    background-color: #EEDC82;
+    background-color: #edf8fd;
     border: solid 2px black;
     border-radius: 5px;
     padding: 5px;
@@ -216,10 +219,9 @@ h1 a:hover {
 #addStickyButton {
     position: relative;
     font-family: "Open Sans";
-    font-size: 14px;
+    font-size: 18px;
     margin: auto;
-    width: 36%;
-}
+    width: 36%;}
 
 #addStickyPopup {
     font-family: "Open Sans";
@@ -434,17 +436,18 @@ iframe[seamless] {
 
 .deleted_archive_view {
     font-family: Open Sans;
-    color: #5199ce;
+    color: #cdac00;
     display:none;
     position: absolute;
     top: 70;
     width: 100%;
-    height: 100%;
-    z-index: 16;
+    height: 900;
+    z-index: 17;
+    overflow: hidden;
 }
 
 #wrapper {
-  background: #fff;
+  background: #fbf9ef;
   margin: 0 auto;
   padding: 10px 17px;
 }
@@ -500,7 +503,7 @@ iframe[seamless] {
 .ui-menu {
     position: relative;
     width: 14%;
-    background-color: #EEDC82;
+    background-color: #cfefff;
     border-radius: 2px;
     border: solid 1px black;
     
@@ -574,11 +577,12 @@ ul
 }
 
 .h2 {
-    font: 25px 'Satisfy';
+    font: 40px 'Amatic SC';
+    font-weight: bold;
     text-align: center;
     margin: 0px;
     padding-bottom: 0.5em;
-    color: #5199ce;
+    color: #4b400a;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {

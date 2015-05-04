@@ -141,6 +141,14 @@
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(categorieslist, tagsList); //change to names
+                    if($('#filterIcon').hasClass("glyphicon glyphicon-menu-down")){
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-down")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-up")
+                    }
+                    else{
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-up")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-down")
+                    }
                 });
 
                 $('#btnCheckAll').click(function() {
@@ -174,9 +182,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
@@ -269,9 +278,10 @@
                             open: function( event, ui ) {
                                 setTimeout(function(){
                                     $('.ui-autocomplete').css('z-index', 9999);
-                                }, 100);
+                                }, 50);
                             }
                         });
+                        $('.ui-autocomplete').focus();
 
                         $("#trashPic").attr("src", "full_trash.png")
                     }
@@ -316,9 +326,10 @@
                         open: function( event, ui ) {
                             setTimeout(function(){
                                 $('.ui-autocomplete').css('z-index', 9999);
-                            }, 100);
+                            }, 50);
                         }
                     });
+                    $('.ui-autocomplete').focus();
                 });
 
                 
@@ -419,9 +430,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -650,14 +662,9 @@
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
-                if(ideaViewState === 'bulletin') {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        ideasToShow[i].setVisible();
-                    }
-                } else {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        $('#ideaListView').append(ideasToShow[i].ideaRow);
-                    }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    //console.log(ideasToShow);
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -843,9 +850,11 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
+
                     }
                 });
+                $('.ui-autocomplete').focus();
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -859,8 +868,8 @@
                                "<div style='background: #" +categoryColors[idea.category][1]+ ";pointer-events:none'>" +
                                "<h2 style='font-size: 125%; pointer-events:none'>" + idea.category + "</h2>" +
                                "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
+                               "<h2 style='font-size: 100%;text-align:left;margin:5%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:5%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -968,9 +977,9 @@
                                
                 var children = $(idea.ideaDiv).children();
                 //console.log(children);
-                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>");
+                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;pointer-events:none'>" + idea.title + "</h6>");
                 $(children[0]).html("<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>");
-                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>");
+                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;pointer-events:none'>$" + idea.cost + "</h6>");
                 
                 var children = $(idea.ideaRow).children();
                 //console.log(children);
@@ -998,9 +1007,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -1399,9 +1409,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 updateFilter();
             }
 
@@ -1500,7 +1511,7 @@
     </head>
     <body>
         <div class="navigationbar">
-            <h1><a ref="#" onclick="show('home'), closeWindows()">Simple as Love</a></h1>
+            <h1><a ref="#" onclick="closeWindows(), show('home')">Simple as Love</a></h1>
             <ul class="header">
                 <li id="mainpageheader"><a ref="#" onclick="show('home'), closeWindows()">Main Page</a></li>
                 <li><a ref="#" onclick="show('ideas'), closeWindows()">Ideas</a></li>
