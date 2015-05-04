@@ -610,6 +610,7 @@
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
+                    allNonDeletedIdeas[i].ideaRow.remove();
                 }
                 
                 if(ideaViewState === 'bulletin') {
@@ -661,10 +662,16 @@
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
+                    allNonDeletedIdeas[i].ideaRow.remove();
                 }
-                for(var i = 0; i< ideasToShow.length; i++){
-                    //console.log(ideasToShow);
-                    ideasToShow[i].setVisible();
+                if(ideaViewState === 'bulletin') {
+                    for(var i = 0; i< ideasToShow.length; i++){
+                        ideasToShow[i].setVisible();
+                    }
+                } else {
+                    for(var i = 0; i< ideasToShow.length; i++){
+                        $('#ideaListView').append(ideasToShow[i].ideaRow);
+                    }
                 }
 
             }
