@@ -2,16 +2,64 @@
 // has finished loading in the browser.
 $(document).ready(function(){
 
-    var total_budget = 8000; //Set total budget here -- dummy data
-    document.getElementById('total_budget').innerHTML = total_budget;
+    var total_budget = 10000; //Set total budget here -- dummy data
     var remaining = total_budget;
     var total_spent = 0;
     var total_allotted = total_budget;
     var each_allotted = Math.floor(total_budget/10);
+
+    $('#total_budget').val(total_budget);
+    $('#remaining_budget').innerHTML = total_budget;
+    $('#total_spent').innerHTML = total_spent;
+
     default_budget();
     calculate();
-    editable();
     delete_confirm();
+
+    // Only numbers allowed
+    $('.new_entry').keyup(function(event) {
+        if (event.keyCode == 13) {
+            total_budget = $('#total_budget').val();
+            $("#save").click();
+        } 
+    });
+
+    // $("#total_budget").keyup(function(event) {
+    //     if(event.keyCode == 13) {
+    //         total_budget = $('#total_budget').val();
+    //     }
+    // });
+
+    //Only numbers allowed
+    $('.new_entry').on('change keyup', function() {
+         // Remove invalid characters
+         var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+         // Remove the first point if there is more than one
+         sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+         // Update value
+         $(this).val(sanitized);
+     });
+    
+
+    $("#save").on("click", function() {   
+        total_budget = $('#total_budget').val();    
+        $(".new_entry.list").each(function() {
+            calculateRemaining();
+        });
+    })
+    
+    function calculateTotal(class_name) {
+        var sum = 0;
+        $(class_name).each(function() {
+            if(!isNaN(parseFloat($(this).val()))) {
+                sum = parseFloat($(this).val()) + sum;
+            }
+        });
+        console.log("SUM:", sum);
+        return sum;
+
+    }
+
 
     //Populate with default numbers
     function default_budget() {
@@ -20,8 +68,8 @@ $(document).ready(function(){
             categoriesAndCosts = JSON.parse(global.localStorage.getItem("shared_categories_costs"));
         }(window));
 
-        $(".editable.spent").html(total_spent);
-        $(".editable.allotted").html(each_allotted);
+        $(".spent").html(total_spent);
+        //$(".editable.allotted").val(each_allotted);
 
         if(categoriesAndCosts) {
             for(var key in categoriesAndCosts) {
@@ -32,7 +80,7 @@ $(document).ready(function(){
     }
 
     function calculateRemaining() {
-        var class_name = ".editable.allotted";
+        var class_name = ".new_entry.list";
         total_allotted = calculateTotal(class_name);
         $("#total_allotted").html(total_allotted);
         
@@ -48,78 +96,7 @@ $(document).ready(function(){
         }(window));
     }
 
-    //Switch between span and textbox
-    function editable() {
-        $(".editable").mouseover(function() {
-
-            //Only numbers allowed
-            $('.editable').on('change keyup', function() {
-                 // Remove invalid characters
-                 var sanitized = $(this).val().replace(/[^0-9.]/g, '');
-                 // Remove the first point if there is more than one
-                 sanitized = sanitized.replace(/\.(?=.*\.)/, '');
-                 // Update value
-                 $(this).val(sanitized);
-             });
-
-            var class_name = $(this).attr("class");
-            var id_name = $(this).attr("id");
-
-            //Reference the Label.
-            var label = $(this);
-
-            //Add a TextBox next to the Label.
-            label.after("<input style = 'display:none' />");
-
-            //Reference the TextBox.
-            var textbox = $(this).next();
-            textbox.addClass(label.attr('class'));
-
-            //Set the id attribute of the TextBox.
-            textbox.id = this.id.replace("lbl", "txt");
-
-            //Assign the value of Label to TextBox.
-            textbox.val(label.html());
-
-            //When Label is clicked, hide Label and show TextBox.
-            label.click(function() {
-                $(this).hide();
-                $(this).next().show().select();
-            });
-
-            //When focus is lost from TextBox, hide TextBox and show Label.
-            textbox.keyup(function(event) {
-                if(event.keyCode == 13) {
-                    $(this).hide();
-                    $(this).prev().html($(this).val());
-                    $(this).prev().show();
-                    calculateUpdate(class_name);
-
-                    if(id_name === "total_budget") {
-                        total_budget = $(this).val();
-                        calculateRemaining();
-                    }
-                    
-                }
-            });
-
-            textbox.blur(function(event) {
-                $(this).hide();
-                $(this).prev().html($(this).val());
-                $(this).prev().show();
-                calculateUpdate(class_name);
-
-                if(id_name === "total_budget") {
-                    total_budget = $(this).val();
-                    calculateRemaining();
-                }
-            });
-
-        });
-
-    }
-
-
+   
     //Delete confirmation
     function delete_confirm() {
         $('.delete_confirm').click(function (e) {
@@ -134,22 +111,14 @@ $(document).ready(function(){
     }
       
 
-      // Only numbers allowed
-      $('#new_allotted').on('change keyup', function() {
-          // Remove invalid characters
-          var sanitized = $(this).val().replace(/[^0-9.]/g, '');
-          // Remove the first point if there is more than one
-          sanitized = sanitized.replace(/\.(?=.*\.)/, '');
-          // Update value
-          $(this).val(sanitized);
-      });
+      
 
     //Get totals
     function calculate() {
 
         $(".editable.spent").each(function() {
             var class_name = ".editable.spent";
-            total_spent = calculateTotal(class_name);
+            total_spent = calculateSpent(class_name);
             $("#total_spent").html(total_spent);
             if (total_spent > total_budget) {
                 $("#total_spent").css({"color":"red"});
@@ -160,11 +129,15 @@ $(document).ready(function(){
         });
 
 
-        $(".editable.allotted").each(function() {
-            var class_name = ".editable.allotted";
-            calculateRemaining();
+    }
 
+     function calculateSpent(class_name) {
+        var sum = 0;
+        $("div"+ class_name).each(function() {
+            var value = parseFloat(this.innerHTML);
+            sum += value;
         });
+        return sum;
     }
 
     //Calculate after update
@@ -180,23 +153,10 @@ $(document).ready(function(){
                 $("#remaining").css({"color":"red"});
             }
         }
-
-        if (class_name.match("allotted")) {
-            class_name = ".editable.allotted";
-            calculateRemaining(); 
-        }
     }
 
     
-    function calculateTotal(class_name) {
-        var sum = 0;
-        $("div"+ class_name).each(function() {
-            var value = parseFloat(this.innerHTML);
-            sum += value;
-        });
-        return sum;
-    }
-
+    
 });
 
 
@@ -219,14 +179,7 @@ $(document).ready(function(){
     // }
     // 
     
-    // //Editable from edit button
-    // function edit_with_btn() {
-    //     $('.edit-btn').click(function(e) {
-    //         $(this).css("color","steelblue");
-    //         var $row = $(this).closest('div[class^="row"]'); 
-    //         $row.children('.editable:first').click();
-    //     });
-    // }
+   
 
 
     // //Textboxes for adding new category
@@ -244,4 +197,77 @@ $(document).ready(function(){
     //         //edit_with_btn();
     //     }
     // });
+    // 
+    //  //Switch between span and textbox
+    // function editable() {
+    //     $(".editable").mouseover(function() {
+
+    //         //Only numbers allowed
+    //         $('.editable').on('change keyup', function() {
+    //              // Remove invalid characters
+    //              var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+    //              // Remove the first point if there is more than one
+    //              sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+    //              // Update value
+    //              $(this).val(sanitized);
+    //          });
+
+    //         var class_name = $(this).attr("class");
+    //         var id_name = $(this).attr("id");
+
+    //         //Reference the Label.
+    //         var label = $(this);
+
+    //         //Add a TextBox next to the Label.
+    //         label.after("<input style = 'display:none' />");
+
+    //         //Reference the TextBox.
+    //         var textbox = $(this).next();
+    //         textbox.addClass(label.attr('class'));
+
+    //         //Set the id attribute of the TextBox.
+    //         textbox.id = this.id.replace("lbl", "txt");
+
+    //         //Assign the value of Label to TextBox.
+    //         textbox.val(label.html());
+
+    //         //When Label is clicked, hide Label and show TextBox.
+    //         label.click(function() {
+    //             $(this).hide();
+    //             $(this).next().show().select();
+    //         });
+
+    //         //When focus is lost from TextBox, hide TextBox and show Label.
+    //         textbox.keyup(function(event) {
+    //             if(event.keyCode == 13) {
+    //                 $(this).hide();
+    //                 $(this).prev().html($(this).val());
+    //                 $(this).prev().show();
+    //                 calculateUpdate(class_name);
+
+    //                 if(id_name === "total_budget") {
+    //                     total_budget = $(this).val();
+    //                     calculateRemaining();
+    //                 }
+                    
+    //             }
+    //         });
+
+    //         textbox.blur(function(event) {
+    //             $(this).hide();
+    //             $(this).prev().html($(this).val());
+    //             $(this).prev().show();
+    //             calculateUpdate(class_name);
+
+    //             if(id_name === "total_budget") {
+    //                 total_budget = $(this).val();
+    //                 calculateRemaining();
+    //             }
+    //         });
+
+    //     });
+
+    // }
+
+
 

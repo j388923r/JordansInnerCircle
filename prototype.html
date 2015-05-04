@@ -253,6 +253,7 @@
                         }
 
                         deletedIdeas.push(idea);
+                        removeFromDicts(idea);
 
                         var temp = listUnion(categorieslist,tagsList);
                         var searchSource = listUnion(temp,titleList);
@@ -266,12 +267,18 @@
                 });
                 
                 $('#trashIcon').click(function(){
+
                     var rows = $($('#ideaListView').children()[0]).children();
                     for(var i = 0; i < rows.length; i++) {
                         if($($(rows[i]).children()[0]).children()[0].checked) {
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInIdeas.splice(i, 1);
                             deletedIdeas.push(idea);
+
+                            console.log(costMapping);
+
+                            removeFromDicts(idea);
+                            console.log(costMapping);
                             $(rows[i]).remove();
                         }
                     }
@@ -282,8 +289,14 @@
                             ideasInDecisions.splice(i, 1);
                             deletedIdeas.push(idea);
                             $(rows[i]).remove();
+
+                            console.log(costMapping);
+                            removeFromDicts(idea);
+                            console.log(costMapping);
                         }
                     }
+
+
 
                     var temp = listUnion(categorieslist,tagsList);
                     var searchSource = listUnion(temp,titleList);
@@ -771,7 +784,6 @@
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
                     source: searchSource
-
                 });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -875,6 +887,7 @@
 
             var updateIdea = function(idea){
                 restoreBorderColor();
+                removeFromDicts(idea);
 
                 var ideaTitle = $('#ideaTitleInput').val();
                 var ideaCost = $('#ideaCostInput').val();
@@ -1036,6 +1049,7 @@
             }
 
             var updateTitleMapping = function(idea, title){
+
                 if (title in Object.keys(titleMapping)){
                     if(!(idea in titleMapping[title])){
                         titleMapping[title].push(idea);
@@ -1374,7 +1388,51 @@
             }
 
             var removeFromDicts = function(idea) {
-                
+                console.log('REMOVE FROM DICS');
+
+                // delete tags mapping
+                var listOfTags = idea.getTags();
+
+                for (var tagIndex in listOfTags){
+                    var tag = listOfTags[tagIndex];
+                    listOfIdeasForTag = tagsMapping[tag];
+                    for (var i in listOfIdeasForTag){
+                        if (listOfIdeasForTag[i] == idea){
+                            tagsMapping[tag].pop(idea);
+                            if (tagsMapping[tag].length == 0){
+                                delete tagsMapping[tag];
+                                tagsList = Object.keys(tagsMapping);
+                            }
+                        }
+                    }
+                }
+
+                // delete category mapping
+                var listOfIdeasForCategory = categoryMapping[idea.getCategory()];
+                for (var i in Object.keys(categoryMapping[idea.getCategory()])){
+                    if (listOfIdeasForCategory == idea){
+                        categoryMapping[idea.getCategory()].pop(idea);
+                    }
+                }
+
+                // delete cost Mapping
+                var numberCost = parseInt(idea.getCost(), 10);
+
+                if (numberCost <= 500){
+                    costMapping["lessThan500"].pop(idea);
+                } else if (numberCost <= 2000){
+                    costMapping["500To2000"].pop(idea);
+                } else if (numberCost <= 5000){
+                    costMapping["2000To5000"].pop(idea);
+                } else {
+                    costMapping["moreThan5000"].pop(idea);
+                }
+
+                // delete title mapping
+                titleMapping[idea.getTitle()].pop(idea);
+                if (titleMapping[idea.getTitle()].length == 0){
+                    delete titleMapping[idea.getTitle()];
+                }
             }
 
             
@@ -1382,13 +1440,14 @@
     </head>
     <body>
         <div class="navigationbar">
-            <h1><a ref="#" onclick="show('home')">Simple as Love</a></h1>
+            <h1><a ref="#" onclick="show('home'), closeWindows()">Simple as Love</a></h1>
             <ul class="header">
-                <li id="mainpageheader"><a ref="#" onclick="show('home')">Main Page</a></li>
-                <li><a ref="#" onclick="show('ideas')">Ideas</a></li>
-                <li><a ref="#" onclick="show('decisions')">Decisions</a></li>
+                <li id="mainpageheader"><a ref="#" onclick="show('home'), closeWindows()">Main Page</a></li>
+                <li><a ref="#" onclick="show('ideas'), closeWindows()">Ideas</a></li>
+                <li><a ref="#" onclick="show('decisions'), closeWindows()">Decisions</a></li>
                 <li id="budget_button"><a ref="#" onclick="load('budget_page')">Budget</a></li>
-                <li id="archiveheader"><a ref="#" onclick="load_deleted()">Archive</a></li>
+                <li id="archiveheader"><a ref="#" onclick="closeWindows(), load_deleted()">Archive</a></li>
+                <!-- <button id="iframeClose" class="btn-default btn-danger pull-right" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button> -->
             </ul>
         </div>
         <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
@@ -1397,7 +1456,7 @@
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
             <input type="text" style="margin-bottom: 20px"  id = "search" placeholder="Search term"/><br>
             <div id="filterPopover" hidden>
-                <input type="text" id = "search" placeholder="Search term"/><br>
+                <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
                 <h4>Categories:</h4>
                 <ul id="categories">
                     <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
@@ -1513,7 +1572,7 @@
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
         <div id="wrapper" class="deleted_archive_view">
-            <h2>Deleted Archive</h2>
+            <h2 style="font-family: Sacramento">Deleted Archive</h2>
             <table id="keywords" cellspacing="0" cellpadding="0" class="tablesorter">
                 <thead>
                     <tr>
