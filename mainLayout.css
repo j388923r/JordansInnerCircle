@@ -520,6 +520,7 @@ iframe[seamless] {
 
 #ideaBody{
     padding: 10px;
+
 }
 
 .cancelIdeaView{
@@ -586,4 +587,8 @@ ul
 
 ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
     z-index: 20 !important;
+}
+
+.ideaViewTitle{
+    font-size: 10%;
 }

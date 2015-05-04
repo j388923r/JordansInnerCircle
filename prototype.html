@@ -919,8 +919,6 @@
                                 tagString += tagList[i] + "\n";
                             $("#ideaTagInput").val(tagString);
                             $($('#addStickyPopup').children()[0]).focus();
-
-                            $("#stickyNoteHeader").attr('background-color',categoryColors[idea.getCategory()][1]);
                         });
 
                         // Cancel click listener
@@ -1167,8 +1165,10 @@
             var stickyUp = function(event) {
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
+
                     var idea = getNonDeletedIdea(event.target);
                     console.log(idea);
+                    $(".stickyNoteHeader").css('background-color','#' + categoryColors[idea.getCategory()][1]);
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaBody").html(idea.getHtml());
@@ -1198,7 +1198,8 @@
                         $("#ideaTagInput").val(tagString);
                         $($('#addStickyPopup').children()[0]).focus();
 
-                        $("#stickyNoteHeader").css('background-color',categoryColors[idea.getCategory()][1]);
+
+                        $(".stickyNoteHeader").css('background',categoryColors[idea.getCategory()][1]);
                     });
 
                     // Cancel click listener
