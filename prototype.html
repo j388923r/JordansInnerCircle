@@ -363,6 +363,16 @@
                             if(decisionViewState === 'list') {
                                 $('#decisionListView').append(idea.ideaRow);
                                 idea.ideaDiv.hide();
+                            } else {
+                                var ideaRowHTML = "<tr>" +
+                               "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
+                               "<td style='font-weight:bold;1em'>" + shorten(idea.category, 12) + "</td>" +
+                               "<td style='font-size: 1em'>" + idea.title + "</td>" +
+                               "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
+                               //"<span style='1em'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
+                               //"<span style='1em'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
+                               "</tr>";
+                                idea.ideaRow = $(ideaRowHTML);
                             }
                             ideasInDecisions.push(idea);
                             if(ideasInIdeas.length === 0) {
@@ -782,8 +792,7 @@
                             idea.ideaDiv.hide();
                             $('#ideaListView').append(idea.ideaRow);
                         }
-                        if(ideasInIdeas.length > 0)
-                            $('#moveRight').show();
+                        $('#moveRight').show();
                         ideaViewState = 'list';
                     }
                 } else if(boardName === 'decisions') {
@@ -807,8 +816,7 @@
                             idea.ideaDiv.hide();
                             $('#decisionListView').append(idea.ideaRow);
                         }
-                        if(ideasInDecisions.length > 0)
-                            $('#moveLeft').show();
+                        $('#moveLeft').show();
                     }
                 }
             }
