@@ -44,18 +44,8 @@ body {
 #budget {
 	color: steelblue;
 }
-.btn.edit-btn {
-	color: steelblue;
-}
-
-.btn {
-	display: none;
-}
-
-
-.editable.spent{
-	cursor: hand;
-	cursor: pointer;
+.btn.save-btn {
+	color: green;
 }
 
 .editable.allotted{
@@ -65,6 +55,11 @@ body {
 
 .editable.allotted:hover {
 	color:steelblue;
+}
+
+.editable.total-budget:hover {
+	cursor:hand; cursor:pointer;
+	color:black;
 }
 
 #budget, #remaining, #totals{
