@@ -336,6 +336,16 @@
                             ideasInDecisions.push(idea);
                         }
                     }
+
+                    //Add for budget data propagation
+                    categoriesAndCosts
+                    for(var i=0; i < ideasInDecisions.length; i++) {
+                            var current_idea = ideasInDecisions[i];
+                            var category = current_idea.getCategory();
+                            var cost = current_idea.getCost(); 
+                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                    }
+
                 });
                 $("#moveLeft").click(function() {
                     var rows = $($('#decisionListView').children()[0]).children();
@@ -1236,14 +1246,6 @@
                         }
                         down = undefined;
 
-                        for(var i=0; i < ideasInDecisions.length; i++) {
-                            var current_idea = ideasInDecisions[i];
-                            var category = current_idea.getCategory();
-                            var cost = current_idea.getCost(); 
-                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
-                            console.log("Categories:", categoriesAndCosts);
-                        }
-
                         (function (global) {
                             global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
                             console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
@@ -1439,7 +1441,7 @@
                 <li id="mainpageheader"><a ref="#" onclick="show('home'), closeWindows()">Main Page</a></li>
                 <li><a ref="#" onclick="show('ideas'), closeWindows()">Ideas</a></li>
                 <li><a ref="#" onclick="show('decisions'), closeWindows()">Decisions</a></li>
-                <li id="budget_button"><a ref="#" onclick="load('budget_page')">Budget</a></li>
+                <li id="budget_button"><a ref="#" onclick="closeWindows(), load('budget_page')">Budget</a></li>
                 <li id="archiveheader"><a ref="#" onclick="closeWindows(), load_deleted()">Archive</a></li>
                 <!-- <button id="iframeClose" class="btn-default btn-danger pull-right" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button> -->
             </ul>
