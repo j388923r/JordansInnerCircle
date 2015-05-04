@@ -746,6 +746,7 @@
                 if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
                         $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                        $('#ideaBoard').css('overflow', 'none');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
@@ -754,6 +755,7 @@
                         $('#moveRight').hide();
                         ideaViewState = 'bulletin';
                     } else if(ideasInIdeas.length > 0){
+                        $('#ideaBoard').css('overflow', 'auto');
                         $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
@@ -767,6 +769,7 @@
                  
                     if(decisionViewState === 'list') {
                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                       $('#ideaBoard').css('overflow', 'none');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -776,6 +779,7 @@
                         $('#moveLeft').hide();
                     } else if(ideasInDecisions.length > 0){
                         $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                        $('#ideaBoard').css('overflow', 'auto');
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -895,10 +899,10 @@
                 $('#ideaBoard').append(ideaDiv);
                 
                 var ideaRowHTML = "<tr>" +
-                               "<td style='font-size: 24'> <input type='checkbox'></input> </td>" + 
+                               "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
                                "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
-                               "<td style='font-size: 24'>" + idea.title + "</td>" +
-                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
+                               "<td style='font-size: 1em'>" + idea.title + "</td>" +
+                               "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
                                //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
                                //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
                                "</tr>";
@@ -1106,10 +1110,10 @@
                 ideaDiv.draggable(draggableObject);
                 
                                 var ideaRowHTML = "<tr>" +
-                               "<td style='font-size: 24'> <input type='checkbox'></input> </td>" + 
+                               "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
                                "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
-                               "<td style='font-size: 24'>" + idea.title + "</td>" +
-                               "<td style='font-size: 24'>$" + idea.cost + "</td>" + 
+                               "<td style='font-size: 1em'>" + idea.title + "</td>" +
+                               "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
                                //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
                                //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
                                "</tr>";
