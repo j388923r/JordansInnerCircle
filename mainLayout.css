@@ -239,7 +239,6 @@ h1 a:hover {
     top: 20%;
     left: 30%;
     width: 40%;
-    height: 75%;
     background: white;
 }
 
@@ -340,7 +339,8 @@ select{
     z-index: 15;
     top: 20%;
     width: 30%;
-    box-shadow: 10px 10px 20px #888888;
+    height: 50%;
+    box-shadow: 1px 1px 20px #888888;
 }
 
 #trashIcon{
@@ -531,12 +531,12 @@ iframe[seamless] {
     font-size: 12px;
     height: 100%;
     width: 7%;
-    padding: 1%;
+    padding: 0.5%;
 }
 
 .stickyNoteHeader{
     height: 7%;
-    padding: 1%;
+    padding: 0.5%;
 }
 
 @-ms-keyframes wiggle{
@@ -595,4 +595,10 @@ ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
 
 .ideaViewTitle{
     font-size: 10%;
+    text-align: center;
+}
+
+.editIdeaView{
+    background: white;
+    color: black;
 }

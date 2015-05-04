@@ -836,7 +836,10 @@
                     idea.updateDescription(ideaDescription);
                 }
                 if (ideaTags.length != 0){
+                    console.log('Create new Idea');
+                    console.log(ideaTags);
                     idea.updateTags(ideaTags);
+                    console.log(idea);
                     updateTagMapping(idea, ideaTags);
                 }
 
@@ -996,6 +999,8 @@
                     idea.updateDescription(ideaDescription);
                 }
                 if (ideaTags.length != 0){
+                    console.log('Update Idea');
+                    console.log(ideaTags);
                     idea.updateTags(ideaTags);
                     updateTagMapping(idea, ideaTags);
                 }

@@ -43,8 +43,11 @@ var Idea = function(title, category, cost){
 		this.description = description;
 	}
 
-	this.updateTags = function(tags){
-		this.tags = tags;
+	this.updateTags = function(tagsList){
+		for (var tagIndex in tagsList){
+			console.log(tagsList[tagIndex]);
+			this.tags.push(tagsList[tagIndex]);
+		}
 	}
 
 
@@ -113,6 +116,8 @@ var Idea = function(title, category, cost){
 	}
 
 	this.getTags = function(){
+		console.log('get tags fun');
+		console.log(this.tags);
 		return this.tags;
 	}
 
@@ -134,20 +139,25 @@ var Idea = function(title, category, cost){
 
 	this.getHtml = function(){
 		var ideaTags = this.getTags();
+		console.log('beginning of fun');
+		console.log(this.tags);
+		console.log(ideaTags);
 
-		var html = "<h2 style='font-size:150%;margin-top:0px'>"+this.getTitle()+"</h1>";
+		var html = "<h2 style='font-size:150%;margin-top:0px;text-align:left'>"+this.getTitle()+"</h1>";
 		html += "<img src='Jellyfish.jpg' width='60%' style='display:block;margin-right:auto;margin-left:auto'>";
 		// html += "<h2 style='font-size:125%;text-align:left'>Category: "+this.getCategory()+"</h2>"
 		html += "<h2 style='font-size:125%;text-align:left'>"+this.getDescription()+"</h2>";
-		
+		html += "<h2 style='border-radius: 1px; font-size:125%; text-align:left' height=5% width=3%>Tags: ";
 		for (var tagIndex in ideaTags){
-			html += "<h2 style='border: 1px solid black; border-radius: 10px; font-size:125%; text-align:left'>";
-			html += ideaTag(tagIndex);
-			html += "</h2>";
+			if (tagIndex != ideaTags.length - 1){
+				html += ideaTags[tagIndex] + ", ";
+			} else {
+				html += ideaTags[tagIndex];
+			}
 		}
-
-		// html += "<br>"
-		html += "<h2 style='font-size:125%; text-align:left'>Cost $" + this.getCost() + "</h2>";
+		html += "</h2>";
+		html += "</div>"
+		html += "<h2 style='font-size:125%; text-align:left'>Cost: $" + this.getCost() + "</h2>";
 		html += "<div style='text-align:center'>"
 		html += "<button type='button' class='btn editIdeaView'>Edit</button>";
 		return html;
