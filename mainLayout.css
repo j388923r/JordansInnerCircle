@@ -221,7 +221,8 @@ h1 a:hover {
     font-family: "Open Sans";
     font-size: 18px;
     margin: auto;
-    width: 36%;}
+    width: 36%;
+}
 
 #addStickyPopup {
     font-family: "Open Sans";
@@ -361,6 +362,7 @@ select{
     font-size: 4em;
     z-index: 13;
     color: #00CC66;
+    cursor: pointer;
 }
 
 #moveRightIconFilling{
@@ -382,6 +384,7 @@ select{
     font-size: 4em;
     z-index: 15;
     color: #F6A028;
+    cursor: pointer;
 }
 
 #moveLeftIconFilling{
@@ -582,7 +585,7 @@ ul
     text-align: center;
     margin: 0px;
     padding-bottom: 0.5em;
-    color: #4b400a;
+    color: black;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
@@ -592,6 +595,11 @@ ul
 ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
     z-index: 20 !important;
 }
+
+.switch_view {
+    background-color: #cfefff;
+    padding: 2%;
+    margin-left: 10;   
 
 .ideaViewTitle{
     font-size: 10%;
