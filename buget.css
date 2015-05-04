@@ -1,8 +1,4 @@
-html {
-    background-color: #eee;
-    margin-left: 30px;
-    margin-top: 20px;
-}
+@import url('http://fonts.googleapis.com/css?family=Sacramento');
 
 body {
 	background-color: #eee;
@@ -10,14 +6,14 @@ body {
 }
 
 #label {
-	font-size: 24px;
+	font-size: 20px;
 	font-family: "Open Sans", sans-serif;
 	color: #8D9DB2;
 	margin-bottom: 20px;
 }
 
 #header {
-	  font: 100 60px 'Great Vibes', Helvetica, sans-serif;
+	  font: 100 40px 'Sacramento', Helvetica, sans-serif;
 	  text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
 	  font-weight: bold;
 	  line-height: 1.7em;
@@ -27,7 +23,7 @@ body {
 }
 
 .row {
-	font-size: 22px;
+	font-size: 18px;
 	font-family: "Open Sans", sans-serif;
 	margin: 10px;
 }
@@ -37,7 +33,6 @@ body {
 }
 
 #totals {
-	margin-left: 30px;
 	color: steelblue;
 	
 }
@@ -49,18 +44,8 @@ body {
 #budget {
 	color: steelblue;
 }
-.btn.edit-btn {
-	color: steelblue;
-}
-
-.btn {
-	display: none;
-}
-
-
-.editable.spent{
-	cursor: hand;
-	cursor: pointer;
+.btn.save-btn {
+	color: green;
 }
 
 .editable.allotted{
@@ -69,6 +54,15 @@ body {
 }
 
 .editable.allotted:hover {
-	text-decoration: underline;
 	color:steelblue;
+}
+
+.editable.total-budget:hover {
+	cursor:hand; cursor:pointer;
+	color:black;
+}
+
+#budget, #remaining, #totals{
+	font-size: 22px;
+	font-family: "Open Sans", sans-serif;
 }

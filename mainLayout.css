@@ -1,4 +1,6 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
+@import url('http://fonts.googleapis.com/css?family=Open+Sans');
+
 
 li a { cursor: pointer; cursor: hand; }    
 
@@ -44,7 +46,7 @@ h1 {
 }
 
 h2 { 
-      font: 100 60px'Gill Sans';
+      font: 100 50px 'Open Sans';
       text-shadow: 0px 0px 1px rgba(0,0,0,0.1);
       line-height: 1.7em;
       text-align: center;
@@ -125,7 +127,7 @@ h1 a:hover {
 }
 
 .stickynote {
-    font-family: "Gill Sans";
+    font-family: "Open Sans";
     height: 125px;
     width: 125px;
     background-color: #EEDC82;
@@ -145,7 +147,7 @@ h1 a:hover {
 
 #decisionHeader, #ideaHeader {
     position: absolute;
-    font: "Gill Sans";
+    font: "Open Sans";
     margin-top: -20px;
     height: 40px;
     width: 15%;
@@ -166,7 +168,8 @@ h1 a:hover {
 }
 
 #decisionHeader {
-    margin-left: 15.5%;
+
+    margin-left: 16.5%;
     -moz-transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
     -o-transform: rotate(-2deg);
@@ -219,20 +222,20 @@ h1 a:hover {
 
 #addStickyButton {
     position: relative;
-    font-family: "Gill Sans";
+    font-family: "Open Sans";
     font-size: 14px;
     margin: auto;
     width: 36%;
 }
 
 #addStickyPopup {
-    font-family: "Gill Sans";
+    font-family: "Open Sans";
     font-size: 12px;
     position: absolute;
     background: white;
     border: 1px solid black;
     padding: 10px;
-    z-index: 12;
+    z-index: 15;
 }
 
 .ideaInfo{
@@ -322,13 +325,55 @@ h1 a:hover {
 }
 
 #trashIcon{
-    position: absolute;
+    position: fixed;
     left: 3%;
-    bottom: 5%;
+    bottom: 10%;
     margin-bottom: -70px;
     font-size: 5em;
     z-index: 15;
     color: #BF7D91;
+}
+
+#moveRightIcon{
+    position: fixed;
+    left: 50%;
+    bottom: 50%;
+    margin-left: -2.5%;
+    font-size: 5em;
+    z-index: 13;
+    color: #00CC66;
+}
+
+#moveRightIconFilling{
+    position: fixed;
+    left: 50%;
+    bottom: 50%;
+    margin-left: -2.5%;
+    font-size: 5em;
+    z-index: 13;
+    color:white;
+}
+
+#moveLeftIcon{
+    position: fixed;
+    left: 50%;
+    bottom: 50%;
+    margin-left: -2.5%;
+    margin-bottom: -100px;
+    font-size: 5em;
+    z-index: 15;
+    color: #F6A028;
+}
+
+#moveLeftIconFilling{
+    position: fixed;
+    left: 50%;
+    bottom: 50%;
+    margin-left: -2.5%;
+    margin-bottom: -100px;
+    font-size: 5em;
+    z-index: 15;
+    color:white;
 }
 
 #trashPic{
@@ -496,6 +541,15 @@ ul
     padding: 0;
 }
 
+.h2 {
+    font: 100 50px 'Great Vibes';
+    text-shadow: 0px 0px 1px rgba(0,0,0,0.1);
+    line-height: 1.7em;
+    text-align: center;
+    margin: 0px;
+    padding-bottom: 0.5em;
+}
+
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: rgba(239, 220, 130, 0.5);
+  background-color: rgba(239, 220, 130,  0.5);
 }

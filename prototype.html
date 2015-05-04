@@ -91,18 +91,21 @@
             var deletedInt = 0
 
             var shorten = function(input, length) {
-                if(input.length < length)
+                return input;
+                /*if(input.length < length)
                     return input;
                  else
-                    return input.substring(0, length - 3) + "...";
+                    return input.substring(0, length - 3) + "...";*/
             }
 
-
+            var ideaBeingEditted = undefined; // The idea that is currently being editted
+            
             $(document).ready(function(){
                 var ideaBoard = document.getElementById('ideaBoard');
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
+                ideaLeft = boardBackgroundLeft;
                 //console.log(boardBackgroundLeft);
                 var decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 var decisionBoard = document.getElementById('decisionBoard');
@@ -113,11 +116,11 @@
                 
                 document.getElementById("budgetRemaining").innerHTML = remaining;
 
+                $('#moveRight').hide();
+                $('#moveLeft').hide();
 
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
-
-                var ideaBeingEditted = undefined; // The idea that is currently being editted
 
                 first.addEventListener("change", checkboxChange);
                 second.addEventListener("change", checkboxChange);
@@ -198,7 +201,7 @@
                 })
 
                 $('#saveStickyButton').click(function(){
-
+                    
                     // if a new idea is being created
                     if (ideaBeingEditted == undefined){ 
                         createNewIdea();
@@ -312,6 +315,50 @@
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 });
                 
+                $("#moveRight").click(function() {
+                    var rows = $($('#ideaListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            $('#decisionBoard').append(idea.ideaDiv);
+                            remaining -= Number(idea.cost);
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Decision shoot");
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                            idea.ideaRow.children().children()[0].checked = false;
+                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            ideasInIdeas.splice(ideaIndex, 1);
+                            if(decisionViewState === 'list') {
+                                $('#decisionListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.push(idea);
+                        }
+                    }
+                });
+                $("#moveLeft").click(function() {
+                    var rows = $($('#decisionListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            $('#ideaBoard').append($(idea.ideaDiv));
+                            remaining += Number(idea.cost);
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Idea shoot");
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                            idea.ideaRow.children().children()[0].checked = false;
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.splice(ideaIndex, 1);
+                        }
+                    }
+                });
             });
 
             //function that takes in categories and tags list and contructs the filter 
@@ -627,21 +674,21 @@
 
             var switchView = function(boardName) {
                 if(boardName === 'ideas') {
-                    console.log(ideaViewState);
                     if(ideaViewState === 'list') {
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
                         }
+                        $('#moveRight').hide();
                         ideaViewState = 'bulletin';
-                    } else {
+                    } else if(ideasInIdeas.length > 0){
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
-                            console.log(idea);
                             idea.ideaDiv.hide();
                             $('#ideaListView').append(idea.ideaRow);
                         }
+                        $('#moveRight').show();
                         ideaViewState = 'list';
                     }
                 } else if(boardName === 'decisions') {
@@ -652,13 +699,15 @@
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
                         }
-                    } else {
+                        $('#moveLeft').hide();
+                    } else if(ideasInDecisions.length > 0){
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
                             idea.ideaDiv.hide();
                             $('#decisionListView').append(idea.ideaRow);
                         }
+                        $('#moveLeft').show();
                     }
                 }
             }
@@ -733,7 +782,7 @@
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
-                
+                ideaLeft = boardBackgroundLeft;
                 //console.log(boardBackgroundLeft);
                 decisionLeft = decisionBoardLeft - boardBackgroundLeft;
                 
@@ -851,6 +900,18 @@
                 idea.updateTitle(ideaTitle);
                 idea.updateCost(ideaCost);
                 idea.updateCategory(ideaCategory);
+                               
+                var children = $(idea.ideaDiv).children();
+                //console.log(children);
+                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>");
+                $(children[0]).html("<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>");
+                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>");
+                
+                var children = $(idea.ideaRow).children();
+                //console.log(children);
+                $(children[2]).text(idea.title);
+                $(children[1]).text(idea.category);
+                $(children[3]).text(idea.cost);
 
                 // Add attributes to ideas.. except for pic...
                 categoryMapping[ideaCategory].push(idea);
@@ -878,7 +939,7 @@
                 decisionLeft = decisionBoardLeft;
                 ideaLeft = boardBackgroundLeft;
                 
-                makeIdeaDiv(idea);
+                //makeIdeaDiv(idea);
 
                 // closing and clearing form!! :DD
                 closeAndClearForm();
@@ -1047,6 +1108,7 @@
                         $("#ideaBody").html('');
 
                         ideaBeingEditted = idea;
+                        console.log(ideaBeingEditted);
                         var popupAddSticky = document.getElementById("addStickyPopup");
                         popupAddSticky.style.display = "block";
                         
@@ -1120,7 +1182,6 @@
                     },
                     //grid: [125, 125],
                     drag: function(e) {
-                        console.log(e);
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
@@ -1134,6 +1195,8 @@
                         }
                     },
                     stop: function(e) {
+                        console.log(down.x);
+                        console.log(decisionLeft, e.clientX, e.target.offsetWidth);
                         if(decisionLeft < e.clientX - e.target.offsetWidth) {
                             if(down && down.x < decisionLeft) {
                                 $('#decisionBoard').append($(e.target));
@@ -1154,7 +1217,8 @@
                                 ideasInDecisions.push(idea);
                              }
                         } else if(down && down.x > decisionLeft) {
-                            $('#ideasBoard').append($(e.target));
+                            console.log(e.clientX, e.target.offsetWidth, ideaLeft);
+                            $('#ideaBoard').append($(e.target));
                             $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - ideaLeft);
                             var children = $(draggedSticky).children();
                             remaining += Number($(children[2]).text().substring(1));
@@ -1296,10 +1360,11 @@
                 var children = $(sticky).parent().children();
                 console.log(children);
                 var title = $(children[2]).text();
-                //console.log(title);
+                console.log(title);
                 var category = $(children[1]).text();
+                console.log(category);
                 for(var i = 0; i < allNonDeletedIdeas.length; i++) {
-                    var idea = allNonDeletedIdeas[i];
+                    var idea = allNonDeletedIdeas[i];console.log(idea);
                     if(title === idea.getTitle() && category === idea.getCategory()) {
                         return idea;
                     }
@@ -1379,30 +1444,26 @@
             </ul>
             <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
+        <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
-            <input type="text" id = "search" placeholder="Search term"/><br>
+            <input type="text" style="margin-bottom: 20px"  id = "search" placeholder="Search term"/><br>
             <div id="filterPopover" hidden>
-                <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
+                <input type="text" id = "search" placeholder="Search term"/><br>
                 <h4>Categories:</h4>
                 <ul id="categories">
                     <!-- <li><input type="checkbox" name="Clothing" /> Clothing </li>
                     <li><input type="checkbox" name="Entertainment" /> Entertainment </li>
                     <li><input type="checkbox" name="Flowers" /> Flowers </li>
-                    <li><input type="checkbox" name="Venue" /> Venue </li> -->
+                    <li><input type="checkbox" name="Venue" /> Venue </li>-->
                 </ul>
                 <h4>Cost:</h4>
-                <!--do we want this to dynamically change -->
                 <ul id="cost">
                     <li><input type="checkbox" name="cost" id="lessThan500" />  < $500 </li>
                     <li><input type="checkbox" name="cost" id="500To2000" />  $500 - $2000 </li>
                     <li><input type="checkbox" name="cost" id="2000To5000" />  $2000 - $5000 </li>
                     <li><input type="checkbox" name="cost" id="moreThan5000" />  > $5000 </li>
                 </ul>
-                <!--<h4>Tags:</h4>
-                <ul id="tags">
-
-                </ul>-->
 
                 <input id="btnCheckAll" type="button" name="checkAll" value="Check All"/>
                 <input id="btnUncheckAll" type="button" name="uncheckAll" value="Uncheck All"/>
@@ -1427,6 +1488,22 @@
                 <div id="trashIcon">
                     <img id="trashPic" src="empty_trash.png">
                 </div>
+                <div id="moveRight">
+                    <div id="moveRightIconFilling">
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                    </div>
+                    <div id="moveRightIcon">
+                        <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                    </div>
+                 </div>
+                 <div id="moveLeft">
+                    <div id="moveLeftIconFilling">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                    </div>
+                    <div id="moveLeftIcon">
+                        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                    </div>
+                 </div>
             </div>
             <div id='decisionBoard'>
                 <a href="#" onclick="switchView('decisions')">
