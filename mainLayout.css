@@ -101,7 +101,7 @@ h1 a:hover {
     border-radius: 5px;
     width: 100%; 
     height: 90%;
-    background-image: url('pics/redWood.jpg');
+    background-image: url('pics/lighterWood.jpg');
     display: inline-block;
     /*margin: 2%;*/
 }
