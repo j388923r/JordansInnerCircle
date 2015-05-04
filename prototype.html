@@ -363,6 +363,8 @@
                             if(ideasInIdeas.length === 0) {
                                 $('#moveRight').hide();
                             }
+                            if(decisionViewState === 'list')
+                                $('#moveRight').show();
                         }
                     }
 
@@ -392,6 +394,8 @@
                             if(ideasInDecisions.length === 0) {
                                 $('#moveLeft').hide();
                             }
+                            if(ideaViewState === 'list')
+                                $('#moveRight').show();
                         }
                     }
 
@@ -753,7 +757,7 @@
                 if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
                         $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
-                        $('#ideaBoard').css('overflow', 'none');
+                        $('#ideaBoard').css('overflow', 'hidden');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
@@ -769,14 +773,15 @@
                             idea.ideaDiv.hide();
                             $('#ideaListView').append(idea.ideaRow);
                         }
-                        $('#moveRight').show();
+                        if(ideasInIdeas.length > 0)
+                            $('#moveRight').show();
                         ideaViewState = 'list';
                     }
                 } else if(boardName === 'decisions') {
                  
                     if(decisionViewState === 'list') {
                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
-                       $('#decisionBoard').css('overflow', 'none');
+                       $('#decisionBoard').css('overflow', 'hidden');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -793,7 +798,8 @@
                             idea.ideaDiv.hide();
                             $('#decisionListView').append(idea.ideaRow);
                         }
-                        $('#moveLeft').show();
+                        if(ideasInDecisions.length > 0)
+                            $('#moveLeft').show();
                     }
                 }
             }
@@ -907,11 +913,11 @@
                 
                 var ideaRowHTML = "<tr>" +
                                "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
-                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
+                               "<td style='font-weight:bold;1em'>" + shorten(idea.category, 12) + "</td>" +
                                "<td style='font-size: 1em'>" + idea.title + "</td>" +
                                "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
-                               //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
-                               //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
+                               //"<span style='1em'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
+                               //"<span style='1em'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
                                "</tr>";
                 var ideaRow = $(ideaRowHTML);
                 
@@ -1118,11 +1124,11 @@
                 
                                 var ideaRowHTML = "<tr>" +
                                "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
-                               "<td style='font-weight:bold;font-size: 24'>" + shorten(idea.category, 12) + "</td>" +
+                               "<td style='font-weight:bold;1em'>" + shorten(idea.category, 12) + "</td>" +
                                "<td style='font-size: 1em'>" + idea.title + "</td>" +
                                "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
-                               //"<span style='font-size: 24'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
-                               //"<span style='font-size: 24'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
+                               //"<span style='1em'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
+                               //"<span style='1em'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
                                "</tr>";
                 var ideaRow = $(ideaRowHTML);
                 
