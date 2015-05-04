@@ -250,6 +250,7 @@
                         }
 
                         deletedIdeas.push(idea);
+                        removeFromDicts(idea);
 
                         var temp = listUnion(categorieslist,tagsList);
                         var searchSource = listUnion(temp,titleList);
@@ -263,12 +264,18 @@
                 });
                 
                 $('#trashIcon').click(function(){
+
                     var rows = $($('#ideaListView').children()[0]).children();
                     for(var i = 0; i < rows.length; i++) {
                         if($($(rows[i]).children()[0]).children()[0].checked) {
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInIdeas.splice(i, 1);
                             deletedIdeas.push(idea);
+
+                            console.log(costMapping);
+
+                            removeFromDicts(idea);
+                            console.log(costMapping);
                             $(rows[i]).remove();
                         }
                     }
@@ -279,8 +286,14 @@
                             ideasInDecisions.splice(i, 1);
                             deletedIdeas.push(idea);
                             $(rows[i]).remove();
+
+                            console.log(costMapping);
+                            removeFromDicts(idea);
+                            console.log(costMapping);
                         }
                     }
+
+
 
                     var temp = listUnion(categorieslist,tagsList);
                     var searchSource = listUnion(temp,titleList);
@@ -716,7 +729,6 @@
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
                     source: searchSource
-
                 });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -820,6 +832,7 @@
 
             var updateIdea = function(idea){
                 restoreBorderColor();
+                removeFromDicts(idea);
 
                 var ideaTitle = $('#ideaTitleInput').val();
                 var ideaCost = $('#ideaCostInput').val();
@@ -969,6 +982,7 @@
             }
 
             var updateTitleMapping = function(idea, title){
+
                 if (title in Object.keys(titleMapping)){
                     if(!(idea in titleMapping[title])){
                         titleMapping[title].push(idea);
@@ -1303,7 +1317,51 @@
             }
 
             var removeFromDicts = function(idea) {
-                
+                console.log('REMOVE FROM DICS');
+
+                // delete tags mapping
+                var listOfTags = idea.getTags();
+
+                for (var tagIndex in listOfTags){
+                    var tag = listOfTags[tagIndex];
+                    listOfIdeasForTag = tagsMapping[tag];
+                    for (var i in listOfIdeasForTag){
+                        if (listOfIdeasForTag[i] == idea){
+                            tagsMapping[tag].pop(idea);
+                            if (tagsMapping[tag].length == 0){
+                                delete tagsMapping[tag];
+                                tagsList = Object.keys(tagsMapping);
+                            }
+                        }
+                    }
+                }
+
+                // delete category mapping
+                var listOfIdeasForCategory = categoryMapping[idea.getCategory()];
+                for (var i in Object.keys(categoryMapping[idea.getCategory()])){
+                    if (listOfIdeasForCategory == idea){
+                        categoryMapping[idea.getCategory()].pop(idea);
+                    }
+                }
+
+                // delete cost Mapping
+                var numberCost = parseInt(idea.getCost(), 10);
+
+                if (numberCost <= 500){
+                    costMapping["lessThan500"].pop(idea);
+                } else if (numberCost <= 2000){
+                    costMapping["500To2000"].pop(idea);
+                } else if (numberCost <= 5000){
+                    costMapping["2000To5000"].pop(idea);
+                } else {
+                    costMapping["moreThan5000"].pop(idea);
+                }
+
+                // delete title mapping
+                titleMapping[idea.getTitle()].pop(idea);
+                if (titleMapping[idea.getTitle()].length == 0){
+                    delete titleMapping[idea.getTitle()];
+                }
             }
 
             
