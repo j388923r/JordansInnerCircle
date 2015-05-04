@@ -776,7 +776,7 @@
                 if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
                         $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
-                        $('#ideaBoard').css('overflow', 'hidden');
+                        $('#ideaBoard').css('overflow', 'initial');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
@@ -799,7 +799,7 @@
                  
                     if(decisionViewState === 'list') {
                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
-                       $('#decisionBoard').css('overflow', 'hidden');
+                       $('#decisionBoard').css('overflow', 'initial');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
