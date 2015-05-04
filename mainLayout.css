@@ -1,6 +1,6 @@
 @import url('http://fonts.googleapis.com/css?family=Sacramento');
 @import url('http://fonts.googleapis.com/css?family=Open+Sans');
-@import url('http://fonts.googleapis.com/css?family=Satisfy');
+@import url('http://fonts.googleapis.com/css?family=Amatic+SC');
 
 
 li a { cursor: pointer; cursor: hand; }    
@@ -35,15 +35,16 @@ li a { cursor: pointer; cursor: hand; }
 
 body {
     padding: 1%;
-    background-color: #FFFFFF;
+    background-image: url('pics/yellow.jpg');;
 }
 
 h1 {
     margin: 0px;
     padding-right: 2%;
     font: 100 42px 'Sacramento', Helvetica, sans-serif;
-    text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.1);
     display: inline-block;
+    cursor: pointer;
 }
 
 h2 { 
@@ -82,7 +83,7 @@ h1 a:hover {
 }
 
 .header li {
-    font: 100 24px'Gill Sans';
+    font: 100 22px'Gill Sans';
     padding: 1%;
     display:inline-block;
     text-align: center;
@@ -101,7 +102,7 @@ h1 a:hover {
     border-radius: 5px;
     width: 100%; 
     height: 90%;
-    background-image: url('pics/redWood.jpg');
+    background-image: url('pics/lighterWood.jpg');
     display: inline-block;
     /*margin: 2%;*/
 }
@@ -148,14 +149,15 @@ h1 a:hover {
 
 #decisionHeader, #ideaHeader {
     position: absolute;
-    font: "Open Sans";
+    font-family: "Amatic SC";
+    font-weight: bold;
     margin-top: -20px;
     height: 40px;
     width: 15%;
     border-radius: 1px;
-    background-color: #EEDC82;
+    background-color: #cfefff;
     text-align: center;
-    font-size: 26px;
+    font-size: 30px;
     z-index: 11;
 }
 
@@ -173,16 +175,17 @@ h1 a:hover {
 }
 
 #budgetTotalRemaining {
-    height: 40px;
-    width: 60%;
+    width: 45%;
+    height: 6%;
     border-radius: 5px;
-    background-color: #EEEEEE;
+    background-color: lightgray;
     text-align: center;
-    font-family: "Helvetica";
-    font-size: 20px;
+    font-family: "Open Sans";
+    font-size: 18px;
     z-index: 11;
     /*bottom: -7%;*/
     margin: auto;
+    padding: 1%;
 }
 
 #ideaContent {
@@ -195,7 +198,7 @@ h1 a:hover {
 
 #filterPopover {
     position: absolute;
-    background-color: #EEDC82;
+    background-color: #edf8fd;
     border: solid 2px black;
     border-radius: 5px;
     padding: 5px;
@@ -220,9 +223,10 @@ h1 a:hover {
 #addStickyButton {
     position: relative;
     font-family: "Open Sans";
-    font-size: 14px;
+    font-size: 18px;
     margin: auto;
     width: 36%;
+    background: lightgray;
 }
 
 #addStickyPopup {
@@ -241,9 +245,7 @@ h1 a:hover {
     top: 20%;
     left: 30%;
     width: 40%;
-    height: 75%;
     background: white;
-    border: 1px solid black;
 }
 
 #ideaTitleInput {
@@ -342,10 +344,9 @@ select{
     position: absolute;
     z-index: 15;
     top: 20%;
-    background: white;
-    border: 1px solid black;
     width: 30%;
-    box-shadow: 10px 10px 20px #888888;
+    height: 50%;
+    box-shadow: 1px 1px 20px #888888;
 }
 
 #trashIcon{
@@ -366,6 +367,7 @@ select{
     font-size: 4em;
     z-index: 13;
     color: #00CC66;
+    cursor: pointer;
 }
 
 #moveRightIconFilling{
@@ -387,6 +389,7 @@ select{
     font-size: 4em;
     z-index: 15;
     color: #F6A028;
+    cursor: pointer;
 }
 
 #moveLeftIconFilling{
@@ -438,17 +441,18 @@ iframe[seamless] {
 
 .deleted_archive_view {
     font-family: Open Sans;
-    color: #5199ce;
+    color: #cdac00;
     display:none;
     position: absolute;
     top: 70;
     width: 100%;
-    height: 100%;
-    z-index: 16;
+    height: 900;
+    z-index: 17;
+    overflow: hidden;
 }
 
 #wrapper {
-  background: #fff;
+  background: #fbf9ef;
   margin: 0 auto;
   padding: 10px 17px;
 }
@@ -504,7 +508,7 @@ iframe[seamless] {
 .ui-menu {
     position: relative;
     width: 14%;
-    background-color: #EEDC82;
+    background-color: #cfefff;
     border-radius: 2px;
     border: solid 1px black;
     
@@ -523,20 +527,24 @@ iframe[seamless] {
 }
 
 #ideaBody{
-    padding: 10px;
+    height: 93%;
+    padding: 1%;
 }
 
 .cancelIdeaView{
-    background-color: Transparent;
     background-repeat:no-repeat;
-    border: none;
     cursor:pointer;
     overflow: hidden;
     outline:none;
+    font-size: 12px;
+    height: 100%;
+    width: 7%;
+    padding: 0.5%;
 }
 
 .stickyNoteHeader{
-    
+    height: 7%;
+    padding: 0.5%;
 }
 
 @-ms-keyframes wiggle{
@@ -577,11 +585,12 @@ ul
 }
 
 .h2 {
-    font: 25px 'Satisfy';
+    font: 40px 'Amatic SC';
+    font-weight: bold;
     text-align: center;
     margin: 0px;
     padding-bottom: 0.5em;
-    color: #5199ce;
+    color: black;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
@@ -590,4 +599,19 @@ ul
 
 ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
     z-index: 20 !important;
+}
+
+.switch_view {
+    background-color: #cfefff;
+    padding: 2%;
+    margin-left: 10;   
+
+.ideaView{
+    font-size: 10%;
+    text-align: center;
+}
+
+.btn editIdeaView {
+    background: white;
+    color: black;
 }

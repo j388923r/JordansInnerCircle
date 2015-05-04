@@ -141,6 +141,14 @@
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(categorieslist, tagsList); //change to names
+                    if($('#filterIcon').hasClass("glyphicon glyphicon-menu-down")){
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-down")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-up")
+                    }
+                    else{
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-up")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-down")
+                    }
                 });
 
                 $('#btnCheckAll').click(function() {
@@ -174,9 +182,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
@@ -269,9 +278,10 @@
                             open: function( event, ui ) {
                                 setTimeout(function(){
                                     $('.ui-autocomplete').css('z-index', 9999);
-                                }, 100);
+                                }, 50);
                             }
                         });
+                        $('.ui-autocomplete').focus();
 
                         $("#trashPic").attr("src", "full_trash.png")
                     }
@@ -316,9 +326,10 @@
                         open: function( event, ui ) {
                             setTimeout(function(){
                                 $('.ui-autocomplete').css('z-index', 9999);
-                            }, 100);
+                            }, 50);
                         }
                     });
+                    $('.ui-autocomplete').focus();
                 });
 
                 
@@ -419,9 +430,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 cat_arr.sort();
                 tag_arr.sort();
                 $("#categories").html("");
@@ -650,14 +662,9 @@
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
-                if(ideaViewState === 'bulletin') {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        ideasToShow[i].setVisible();
-                    }
-                } else {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        $('#ideaListView').append(ideasToShow[i].ideaRow);
-                    }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    //console.log(ideasToShow);
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -738,6 +745,7 @@
             var switchView = function(boardName) {
                 if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
+                        $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
@@ -746,6 +754,7 @@
                         $('#moveRight').hide();
                         ideaViewState = 'bulletin';
                     } else if(ideasInIdeas.length > 0){
+                        $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.hide();
@@ -755,7 +764,9 @@
                         ideaViewState = 'list';
                     }
                 } else if(boardName === 'decisions') {
+                 
                     if(decisionViewState === 'list') {
+                       $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -764,6 +775,7 @@
                         }
                         $('#moveLeft').hide();
                     } else if(ideasInDecisions.length > 0){
+                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -829,7 +841,10 @@
                     idea.updateDescription(ideaDescription);
                 }
                 if (ideaTags.length != 0){
+                    console.log('Create new Idea');
+                    console.log(ideaTags);
                     idea.updateTags(ideaTags);
+                    console.log(idea);
                     updateTagMapping(idea, ideaTags);
                 }
 
@@ -843,9 +858,11 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
+
                     }
                 });
+                $('.ui-autocomplete').focus();
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
@@ -859,8 +876,8 @@
                                "<div style='background: #" +categoryColors[idea.category][1]+ ";pointer-events:none'>" +
                                "<h2 style='font-size: 125%; pointer-events:none'>" + idea.category + "</h2>" +
                                "</div>" +
-                               "<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>" +
-                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>" + 
+                               "<h2 style='font-size: 100%;text-align:left;margin:5%;pointer-events:none'>" + idea.title + "</h6>" +
+                               "<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:5%;pointer-events:none'>$" + idea.cost + "</h6>" + 
                                "</div>";
                                
                 var ideaDiv = $(ideaHtml);
@@ -900,7 +917,7 @@
                             console.log("Edit!");
                             var div = document.getElementById("ideaView");
                             div.style.display = "none";
-                            $("ideaView").html('');
+                            
 
                             ideaBeingEditted = idea;
                             var popupAddSticky = document.getElementById("addStickyPopup");
@@ -919,8 +936,6 @@
                                 tagString += tagList[i] + "\n";
                             $("#ideaTagInput").val(tagString);
                             $($('#addStickyPopup').children()[0]).focus();
-
-                            $("#stickyNoteHeader").attr('background-color',categoryColors[idea.getCategory()][1]);
                         });
 
                         // Cancel click listener
@@ -928,7 +943,7 @@
                             console.log("CLICK!");
                             var div = document.getElementById("ideaView");
                             div.style.display = "none";
-                            $("ideaView").html('');
+                            $(".stickyNoteHeader").html("<button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>");
                         });
                     }
                 });
@@ -1016,9 +1031,9 @@
                                
                 var children = $(idea.ideaDiv).children();
                 //console.log(children);
-                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;margin:10%;pointer-events:none'>" + idea.title + "</h6>");
+                $(children[1]).html("<h2 style='font-size: 100%;text-align:left;pointer-events:none'>" + idea.title + "</h6>");
                 $(children[0]).html("<h2 style='font-size: 125%;pointer-events:none'>" + idea.category + "</h2>");
-                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;margin:10%;pointer-events:none'>$" + idea.cost + "</h6>");
+                $(children[2]).html("<h2 style='bottom: 0;font-size: 100%;text-align:left;pointer-events:none'>$" + idea.cost + "</h6>");
                 
                 var children = $(idea.ideaRow).children();
                 //console.log(children);
@@ -1035,6 +1050,8 @@
                     idea.updateDescription(ideaDescription);
                 }
                 if (ideaTags.length != 0){
+                    console.log('Update Idea');
+                    console.log(ideaTags);
                     idea.updateTags(ideaTags);
                     updateTagMapping(idea, ideaTags);
                 }
@@ -1046,9 +1063,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -1260,11 +1278,18 @@
             var stickyUp = function(event) {
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
+
                     var idea = getNonDeletedIdea(event.target);
                     console.log(idea);
+                    $(".stickyNoteHeader").css('background-color','#' + categoryColors[idea.getCategory()][1]);
+                    $(".stickyNoteHeader").html('<h2 style="font-size:100%;text-align:left">'+idea.getCategory()+'</h2>' + $(".stickyNoteHeader").html());
+                    $(".stickyNoteHeader h2").css('width','50%');
+                    $(".stickyNoteHeader h2").css('float','left');
+                    $(".stickyNoteHeader h2").css('padding','1%');
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaBody").html(idea.getHtml());
+                    $("#ideaBody").css('background-color','#' + categoryColors[idea.getCategory()][0]);
 
                     // Edit Click Listener
                     $('.editIdeaView').click(function(event){
@@ -1272,6 +1297,7 @@
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
                         $("#ideaBody").html('');
+                        $(".stickyNoteHeader").html("<button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>");
 
                         ideaBeingEditted = idea;
                         console.log(ideaBeingEditted);
@@ -1291,7 +1317,6 @@
                         $("#ideaTagInput").val(tagString);
                         $($('#addStickyPopup').children()[0]).focus();
 
-                        $("#stickyNoteHeader").css('background-color',categoryColors[idea.getCategory()][1]);
                     });
 
                     // Cancel click listener
@@ -1300,6 +1325,7 @@
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
                         $("#ideaBody").html('');
+                        $(".stickyNoteHeader").html("<button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>");
                     });
                 }
                 //down = undefined;
@@ -1493,9 +1519,10 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
+                $('.ui-autocomplete').focus();
                 updateFilter();
             }
 
@@ -1594,7 +1621,7 @@
     </head>
     <body>
         <div class="navigationbar">
-            <h1><a ref="#" onclick="show('home'), closeWindows()">Simple as Love</a></h1>
+            <h1><a ref="#" onclick="closeWindows(), show('home')">Simple as Love</a></h1>
             <ul class="header">
                 <li id="mainpageheader"><a ref="#" onclick="show('home'), closeWindows()">Main Page</a></li>
                 <li><a ref="#" onclick="show('ideas'), closeWindows()">Ideas</a></li>
@@ -1635,7 +1662,7 @@
             <div id='ideaBoard'>
                 <a href="#" onclick="switchView('ideas')">
                     <div id="ideaHeader">
-                        Ideas
+                        Ideas<button class="btn switch_view first btn-lg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
                     </div>
                 </a>
                 <div id="ideaContent">
@@ -1669,7 +1696,7 @@
             <div id='decisionBoard'>
                 <a href="#" onclick="switchView('decisions')">
                     <div id="decisionHeader">
-                    Decisions
+                    Decisions<button class="btn switch_view second btn-lg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
                     </div>
                 </a>
                 <div id="decisionContent">
@@ -1719,7 +1746,7 @@
         </div>
         <div id='ideaView' class="ideaInfo" style="display: none;" >
             <div class="stickyNoteHeader" style='text-align:right'> 
-                <button type='button' class='cancelIdeaView'>X</button>
+                <button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>
             </div>
             <div id='ideaBody'></div>
         </div>
