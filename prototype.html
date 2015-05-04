@@ -328,7 +328,7 @@
                     var iframe = $('#budget_iframe');
                     $('#budget_iframe').attr('src', $('#budget_iframe').attr('src'));
                     iframe.css("display", "block");
-                    $("#iframeClose").css("display", "block");
+                    //$("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 });
                 
@@ -782,7 +782,7 @@
                 if(page_name === 'budget_page') {                  
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
-                    $("#iframeClose").css("display", "block");
+                    //$("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
 
@@ -792,7 +792,7 @@
                 
                 var iframe = $('#budget_iframe');
                 iframe.css("display", "none");
-                $("#iframeClose").css("display", "none");
+               // $("#iframeClose").css("display", "none");
 
                 // function to set remaining budget the same
                 (function (global) {
@@ -801,7 +801,7 @@
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "none"); 
-                $("#iframeClose").css("display", "none");
+                //$("#iframeClose").css("display", "none");
 
             }
 
@@ -1090,14 +1090,14 @@
                 }
 
                 if (ideaCategory == "" | ideaCategory == null){
-                    $("#ideaCategoryPicker").css("border","1px solid red");
+                    $("#categoryPopover").css("border","1px solid red");
                 }
             }
 
             var restoreBorderColor = function(){
-                $("#ideaTitleInput").css("border","1px solid black");
-                $("#ideaCostInput").css("border","1px solid black");
-                $("#ideaCategoryPicker").css("border","1px solid black");
+                $("#ideaTitleInput").css("border","1px solid LightGray");
+                $("#ideaCostInput").css("border","1px solid LightGray");
+                $("#categoryPopover").css("border","0px solid LightGray");
             }
 
             var updateTagMapping = function(idea, tags){
@@ -1342,7 +1342,7 @@
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "block"); 
-                $("#iframeClose").css("display", "block");
+                //$("#iframeClose").css("display", "block");
             
             }
             
@@ -1601,6 +1601,7 @@
                     <input type="text" id="ideaCostInput" placeholder="Cost *"/>
                 </div>
                 <div id="tagsAndCategory">
+                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
                     <div id="ideaCategoryPicker">
                         <div id="categoryPopover">
                             <select id="categoryDropDown" placeholder="Category">
@@ -1617,7 +1618,7 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                    <input type="text" id="ideaTagInput" value="" data-role="tagsinput" placeholder="Add tags" />
+                    </div>
                 </div>
                 <button id="saveStickyButton" class="btn">Save</button>
                 <button id="cancelStickyButton" class="btn">Cancel</button>
