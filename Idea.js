@@ -73,6 +73,7 @@ var Idea = function(title, category, cost){
 	this.hide = function(){
 		this.hidden = true;
 		this.ideaDiv.hide();
+        this.ideaRow.remove();
 	}
 
 	/*
@@ -82,6 +83,8 @@ var Idea = function(title, category, cost){
 		this.hidden = false;
 		this.ideaDiv.show();
 	}
+    
+    
 
 	this.setDiv = function(ideaDiv) {
 		this.ideaDiv = ideaDiv;

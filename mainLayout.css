@@ -59,7 +59,7 @@ h2 {
 ul.header {
     display: inline;
     /*padding: 10px 0px;*/
-    width: 50%;
+    width: 60%;
     float: right;
     padding-left: 15%;
 }
@@ -81,7 +81,7 @@ h1 a:hover {
 }
 
 .header li {
-    font: 100 18px'Gill Sans';
+    font: 100 24px'Gill Sans';
     padding: 1%;
     display:inline-block;
     text-align: center;
@@ -329,7 +329,7 @@ h1 a:hover {
     left: 3%;
     bottom: 10%;
     margin-bottom: -70px;
-    font-size: 5em;
+    font-size: 2.5em;
     z-index: 15;
     color: #BF7D91;
 }
@@ -338,8 +338,8 @@ h1 a:hover {
     position: fixed;
     left: 50%;
     bottom: 50%;
-    margin-left: -2.5%;
-    font-size: 5em;
+    margin-left: -2%;
+    font-size: 4em;
     z-index: 13;
     color: #00CC66;
 }
@@ -348,8 +348,8 @@ h1 a:hover {
     position: fixed;
     left: 50%;
     bottom: 50%;
-    margin-left: -2.5%;
-    font-size: 5em;
+    margin-left: -2%;
+    font-size: 4em;
     z-index: 13;
     color:white;
 }
@@ -358,9 +358,9 @@ h1 a:hover {
     position: fixed;
     left: 50%;
     bottom: 50%;
-    margin-left: -2.5%;
+    margin-left: -2%;
     margin-bottom: -100px;
-    font-size: 5em;
+    font-size: 4em;
     z-index: 15;
     color: #F6A028;
 }
@@ -369,9 +369,9 @@ h1 a:hover {
     position: fixed;
     left: 50%;
     bottom: 50%;
-    margin-left: -2.5%;
+    margin-left: -2%;
     margin-bottom: -100px;
-    font-size: 5em;
+    font-size: 4em;
     z-index: 15;
     color:white;
 }
@@ -551,7 +551,7 @@ ul
 }
 
 .h2 {
-    font: 100 50px 'Open Sans';
+    font: 100 50px 'Great Vibes';
     text-shadow: 0px 0px 1px rgba(0,0,0,0.1);
     line-height: 1.7em;
     text-align: center;

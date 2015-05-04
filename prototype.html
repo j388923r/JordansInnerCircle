@@ -558,7 +558,7 @@
                 for(var i = 0; i< categoryFilters.length; i++){
                     catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
-                //console.log("start sets");
+                
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
                 }
@@ -585,10 +585,16 @@
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
-                for(var i = 0; i< ideasToShow.length; i++){
-                    ideasToShow[i].setVisible();
+                
+                if(ideaViewState === 'bulletin') {
+                    for(var i = 0; i< ideasToShow.length; i++){
+                        ideasToShow[i].setVisible();
+                    }
+                } else {
+                    for(var i = 0; i< ideasToShow.length; i++){
+                        $('#ideaListView').append(ideasToShow[i].ideaRow);
+                    }
                 }
-
             }
 
 
@@ -1477,7 +1483,7 @@
             </ul>
         </div>
         <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
-        <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
+        <center><div class="h2">Jordan and Annie's Wedding</div></center>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
             <input type="text" style="margin-bottom: 20px; z-index: 1000;"  id = "search" placeholder="Search by Tag or Title"/><br>
