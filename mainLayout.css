@@ -601,12 +601,12 @@ ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
     padding: 2%;
     margin-left: 10;   
 
-.ideaViewTitle{
+.ideaView{
     font-size: 10%;
     text-align: center;
 }
 
-.editIdeaView{
+.btn editIdeaView {
     background: white;
     color: black;
 }

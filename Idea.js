@@ -159,7 +159,7 @@ var Idea = function(title, category, cost){
 		html += "</div>"
 		html += "<h2 style='font-size:125%; text-align:left'>Cost: $" + this.getCost() + "</h2>";
 		html += "<div style='text-align:center'>"
-		html += "<button type='button' class='btn editIdeaView'>Edit</button>";
+		html += "<button type='button' class='btn editIdeaView' style='background:white; color:black;'>Edit</button>";
 		return html;
 	}
 
