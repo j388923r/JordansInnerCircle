@@ -141,6 +141,15 @@
                     var categories = document.getElementById("filterPopover");
                     categories.hidden = !categories.hidden;
                     buildFilter(categorieslist, tagsList); //change to names
+                    //working here
+                    if($('#filterIcon').hasClass("glyphicon glyphicon-menu-down")){
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-down")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-up")
+                    }
+                    else{
+                        $('#filterIcon').removeClass("glyphicon glyphicon-menu-up")
+                        $('#filterIcon').addClass("glyphicon glyphicon-menu-down")
+                    }
                 });
 
                 $('#btnCheckAll').click(function() {
@@ -174,7 +183,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 $("#search").autocomplete( "option", "autoFocus", false );
@@ -269,7 +278,7 @@
                             open: function( event, ui ) {
                                 setTimeout(function(){
                                     $('.ui-autocomplete').css('z-index', 9999);
-                                }, 100);
+                                }, 50);
                             }
                         });
 
@@ -316,7 +325,7 @@
                         open: function( event, ui ) {
                             setTimeout(function(){
                                 $('.ui-autocomplete').css('z-index', 9999);
-                            }, 100);
+                            }, 50);
                         }
                     });
                 });
@@ -419,7 +428,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 cat_arr.sort();
@@ -650,14 +659,9 @@
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
-                if(ideaViewState === 'bulletin') {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        ideasToShow[i].setVisible();
-                    }
-                } else {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        $('#ideaListView').append(ideasToShow[i].ideaRow);
-                    }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    //console.log(ideasToShow);
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -843,7 +847,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 
@@ -1000,7 +1004,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 
@@ -1398,7 +1402,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 updateFilter();

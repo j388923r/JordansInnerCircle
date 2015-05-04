@@ -44,6 +44,7 @@ h1 {
     font: 100 42px 'Sacramento', Helvetica, sans-serif;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     display: inline-block;
+    cursor: pointer;
 }
 
 h2 { 
