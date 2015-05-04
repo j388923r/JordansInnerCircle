@@ -137,7 +137,7 @@ var Idea = function(title, category, cost){
 
 		var html = "<h2 style='font-size:150%;margin-top:0px'>"+this.getTitle()+"</h1>";
 		html += "<img src='Jellyfish.jpg' width='60%' style='display:block;margin-right:auto;margin-left:auto'>";
-		html += "<h2 style='font-size:125%;text-align:left'>Category: "+this.getCategory()+"</h2>"
+		// html += "<h2 style='font-size:125%;text-align:left'>Category: "+this.getCategory()+"</h2>"
 		html += "<h2 style='font-size:125%;text-align:left'>"+this.getDescription()+"</h2>";
 		
 		for (var tagIndex in ideaTags){
