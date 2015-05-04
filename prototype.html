@@ -154,12 +154,18 @@
                 });
 
                 $('#search').keyup(function(e) {
-                    if (e.keyCode == 13){
-                        var input = $("#search");
-                        var inputValue = $(input).val();
-                        //console.log(inputValue);
-                        searching(inputValue);
+                    clearing();
+                    if(e.keyCode == 13){
+                        $('#search').autocomplete("close");
                     }
+                    var input = $("#search");
+                    var inputValue = $(input).val();
+                    console.log(inputValue);
+                    searching(inputValue);
+                    if(inputValue == ""){
+                        clearing();
+                    }
+
                 });
 
 
@@ -176,14 +182,6 @@
                 $("#search").autocomplete( "option", "delay", 0);
                 $("#search").css("z-index","10000")
 
-
-                $('#search').change(function() {
-                    var input = $("#search");
-                    var inputValue = $(input).val();
-                    if(inputValue == ""){
-                        clearing();
-                    }
-                });
                 
                 $('.stickynote').mousedown(stickyDown);
                 
@@ -624,23 +622,20 @@
                 //         // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
                 //     }
                 // }
-                console.log(tagsList);
                 for(var i = 0; i< tagsList.length; i++ ){
-                    if(term == tagsList[i]){
+                    if(stringContains(tagsList[i],term)){
                         searchedFor.push(tagsList[i]);
                         searchList = listUnion(searchList, tagsMapping[tagsList[i]])
                         // ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
                     }
                 }
-                console.log(categorieslist);
                 for(var i = 0; i< categorieslist.length; i++){
-                    if(term == categorieslist[i]){
+                    if(stringContains(categorieslist[i],term)){
                         searchedFor.push(categorieslist[i]);
                         searchList = listUnion(searchList, categoryMapping[categorieslist[i]])
                         // ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
                     }
                 }
-                console.log(titleList);
                 for(var i = 0; i < titleList.length; i++){
 
                     if(stringContains(titleList[i],term)){
@@ -648,12 +643,8 @@
                         searchList = listUnion(searchList, titleMapping[titleList[i]])
                     }
                 }
-                console.log("ideasToShow")
-                console.log(searchList)
 
                 ideasToShow = listInter(ideasToShow,searchList)
-                console.log("ideas to show after")
-                console.log(ideasToShow);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
