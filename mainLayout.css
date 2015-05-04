@@ -362,6 +362,7 @@ select{
     font-size: 4em;
     z-index: 13;
     color: #00CC66;
+    cursor: pointer;
 }
 
 #moveRightIconFilling{
@@ -383,6 +384,7 @@ select{
     font-size: 4em;
     z-index: 15;
     color: #F6A028;
+    cursor: pointer;
 }
 
 #moveLeftIconFilling{

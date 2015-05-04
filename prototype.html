@@ -745,6 +745,7 @@
             var switchView = function(boardName) {
                 if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
+                        $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
@@ -753,6 +754,7 @@
                         $('#moveRight').hide();
                         ideaViewState = 'bulletin';
                     } else if(ideasInIdeas.length > 0){
+                        $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.hide();
@@ -762,7 +764,9 @@
                         ideaViewState = 'list';
                     }
                 } else if(boardName === 'decisions') {
+                 
                     if(decisionViewState === 'list') {
+                       $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -771,6 +775,7 @@
                         }
                         $('#moveLeft').hide();
                     } else if(ideasInDecisions.length > 0){
+                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -1557,7 +1562,7 @@
             <div id='ideaBoard'>
                 <a href="#" onclick="switchView('ideas')">
                     <div id="ideaHeader">
-                        Ideas
+                        Ideas<button class="btn switch_view first btn-lg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
                     </div>
                 </a>
                 <div id="ideaContent">
@@ -1591,7 +1596,7 @@
             <div id='decisionBoard'>
                 <a href="#" onclick="switchView('decisions')">
                     <div id="decisionHeader">
-                    Decisions
+                    Decisions<button class="btn switch_view second btn-lg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
                     </div>
                 </a>
                 <div id="decisionContent">
