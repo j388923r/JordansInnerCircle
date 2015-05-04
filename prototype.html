@@ -101,6 +101,9 @@
             var ideaBeingEditted = undefined; // The idea that is currently being editted
             
             $(document).ready(function(){
+
+                localStorage.clear();
+
                 var ideaBoard = document.getElementById('ideaBoard');
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -340,15 +343,10 @@
                         }
                     }
 
-                    //Add for budget data propagation
-                    for(var i=0; i < ideasInDecisions.length; i++) {
-                            var current_idea = ideasInDecisions[i];
-                            var category = current_idea.getCategory();
-                            var cost = current_idea.getCost(); 
-                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
-                    }
+                    updateBudgetList();
 
                 });
+
                 $("#moveLeft").click(function() {
                     var rows = $($('#decisionListView').children()[0]).children();
                     for(var i = 0; i < rows.length; i++) {
@@ -373,8 +371,30 @@
                             }
                         }
                     }
+
+                    updateBudgetList();
                 });
             });
+
+            var updateBudgetList = function() {
+                 for (key in categoriesAndCosts) {
+                        categoriesAndCosts[key] = 0;
+                }
+                //Add for budget data propagation
+                for(var i=0; i < ideasInDecisions.length; i++) {
+                        var current_idea = ideasInDecisions[i];
+                        var category = current_idea.getCategory();
+                        var cost = current_idea.getCost(); 
+                        categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                }
+
+                (function (global) {
+                    global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
+                    console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
+                }(window));
+                        
+
+            }
 
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -748,7 +768,6 @@
                 (function (global) {
                     document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
                 }(window));
-
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "none"); 
@@ -1249,13 +1268,9 @@
                             }
                             ideasInDecisions.splice(ideaIndex, 1);
                         }
-                        down = undefined;
-
-                        (function (global) {
-                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
-                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
-                        }(window));  
+                        down = undefined;        
                         
+                        updateBudgetList();
                     }
 
                 };
