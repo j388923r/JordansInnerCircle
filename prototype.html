@@ -1030,14 +1030,14 @@
                 }
 
                 if (ideaCategory == "" | ideaCategory == null){
-                    $("#ideaCategoryPicker").css("border","1px solid red");
+                    $("#categoryPopover").css("border","1px solid red");
                 }
             }
 
             var restoreBorderColor = function(){
-                $("#ideaTitleInput").css("border","1px solid black");
-                $("#ideaCostInput").css("border","1px solid black");
-                $("#ideaCategoryPicker").css("border","1px solid black");
+                $("#ideaTitleInput").css("border","1px solid LightGray");
+                $("#ideaCostInput").css("border","1px solid LightGray");
+                $("#categoryPopover").css("border","0px solid LightGray");
             }
 
             var updateTagMapping = function(idea, tags){

@@ -100,7 +100,7 @@ h1 a:hover {
     border-radius: 5px;
     width: 100%; 
     height: 90%;
-    background-image: url('pics/redWood.jpg');
+    background-image: url('pics/darkRusticWood.jpg');
     display: inline-block;
     /*margin: 2%;*/
 }
@@ -160,21 +160,11 @@ h1 a:hover {
 
 #ideaHeader {
     margin-left: 15.5%;
-    -moz-transform: rotate(2deg);
-    -webkit-transform: rotate(2deg);
-    -o-transform: rotate(2deg);
-    -ms-transform: rotate(2deg);
-    transform: rotate(2deg);
+
 }
 
 #decisionHeader {
-
     margin-left: 16.5%;
-    -moz-transform: rotate(-2deg);
-    -webkit-transform: rotate(-2deg);
-    -o-transform: rotate(-2deg);
-    -ms-transform: rotate(-2deg);
-    transform: rotate(-2deg);
 }
 
 #budgetTotalRemaining {
@@ -230,11 +220,9 @@ h1 a:hover {
 
 #addStickyPopup {
     font-family: "Open Sans";
-    font-size: 12px;
+    font-size: 14px;
     position: absolute;
     background: white;
-    border: 1px solid black;
-    padding: 10px;
     z-index: 15;
 }
 
@@ -250,23 +238,14 @@ h1 a:hover {
 
 #ideaTitleInput {
     position: relative;
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 10px;
 }
 
 #dragAndDropPicUploader{
     position: relative;
-    padding: 10px;
-    width: 100%;
-    height: 20%;
 }
 
 #ideaDescriptionInput{
     position: relative;
-    padding: 10px;
-    width: 100%;
-    height: 10%;  
 }          
 
 .ui-helper-hidden-accessible {
@@ -275,43 +254,31 @@ h1 a:hover {
 
 #ideaCostInput{
     position: relative;
-    padding: 10px;
-    width: 100%;
-
 }
 
 #descriptionAndCost, #descriptionAndCostView{
-    width: 50%;
     float: left;
-    padding: 10px;
 }
 
 #ideaCategoryPicker{
     position: relative;
-    padding: 10px;
-    width: 100%;
 }
 
 #ideaTagInput{
     position: relative;
-    padding: 10px;
 }
 
 #tagsAndCategory, #tagsAndCategoryView{
     position: relative;
-    padding: 10px;
-    width: 50%;
     float: right;
 }
 
 #saveIdeaButton{
     position: relative;
-    padding: 10px;
 }
 
 #cancelIdeaButton, #closeIdeaButton{
     position: relative;
-    padding: 10px;
 }
 
 #ideaView {
