@@ -5,8 +5,8 @@
        
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
          <script type='text/javascript' > 
-          total_budget = 8000; //Dummy data to set total budget to initial value
-          remaining = 8000;   
+          total_budget = 10000; //Dummy data to set total budget to initial value
+          remaining = 10000;   
         </script>
         
         <!-- Fonts -->
@@ -117,7 +117,7 @@
                 var third = document.getElementById('2000To5000');
                 var fourth = document.getElementById('moreThan5000');
                 
-                document.getElementById("budgetRemaining").innerHTML = remaining;
+                document.getElementById("budgetRemaining").innerHTML = total_budget;
 
                 $('#moveRight').hide();
                 $('#moveLeft').hide();
@@ -754,7 +754,7 @@
                         }
                         $('#moveRight').hide();
                         ideaViewState = 'bulletin';
-                    } else if(ideasInIdeas.length > 0){
+                    } else {
                         $('#ideaBoard').css('overflow', 'auto');
                         $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
@@ -769,7 +769,7 @@
                  
                     if(decisionViewState === 'list') {
                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
-                       $('#ideaBoard').css('overflow', 'none');
+                       $('#decisionBoard').css('overflow', 'none');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
@@ -777,9 +777,9 @@
                             idea.ideaRow.remove();
                         }
                         $('#moveLeft').hide();
-                    } else if(ideasInDecisions.length > 0){
+                    } else {
                         $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
-                        $('#ideaBoard').css('overflow', 'auto');
+                        $('#decisionBoard').css('overflow', 'auto');
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];

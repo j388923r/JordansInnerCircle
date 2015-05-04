@@ -176,7 +176,7 @@ h1 a:hover {
 
 #budgetTotalRemaining {
     width: 45%;
-    height: 6%;
+    /*height: 6%;*/
     border-radius: 5px;
     background-color: lightgray;
     text-align: center;
