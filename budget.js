@@ -1,19 +1,43 @@
 // This allows the Javascript code inside this block to only run when the page
 // has finished loading in the browser.
+
+var total_budget = 10000; //Set total budget here -- dummy data
+var remaining = total_budget;
+var total_spent = 0;
+var total_allotted = total_budget;
+var each_allotted = Math.floor(total_budget/10);
+var stored_values = [];
+var gotten_values = [];
+
+var stored_budget;
+
+
 $(document).ready(function(){
-
-    var total_budget = 10000; //Set total budget here -- dummy data
-    var remaining = total_budget;
-    var total_spent = 0;
-    var total_allotted = total_budget;
-    var each_allotted = Math.floor(total_budget/10);
-
-    $('#total_budget').val(total_budget);
-    $('#remaining_budget').innerHTML = total_budget;
-    $('#total_spent').innerHTML = total_spent;
+    (function(global) {
+        gotten_values = JSON.parse(global.localStorage.getItem("stored_values"));
+        stored_budget = global.localStorage.getItem("stored_budget");
+    }(window));
+    
+    var count = 0;
+    if (stored_budget) {
+        $('#total_budget').val(stored_budget);
+    } else {
+        $('#total_budget').val(total_budget);
+    }    
+    
+    $('#total_spent').html(total_spent);
+    $(".new_entry.list").each(function() {
+        count += 1;
+        if (gotten_values) {
+            if (!isNaN(gotten_values[count])) {
+                $(this).val(gotten_values[count]);
+            }
+        }
+    });
 
     default_budget();
     calculate();
+    calculateRemaining();   
     delete_confirm();
 
     // Only numbers allowed
@@ -24,11 +48,6 @@ $(document).ready(function(){
         } 
     });
 
-    // $("#total_budget").keyup(function(event) {
-    //     if(event.keyCode == 13) {
-    //         total_budget = $('#total_budget').val();
-    //     }
-    // });
 
     //Only numbers allowed
     $('.new_entry').on('change keyup', function() {
@@ -44,8 +63,14 @@ $(document).ready(function(){
     $("#save").on("click", function() {   
         total_budget = $('#total_budget').val();    
         $(".new_entry.list").each(function() {
+            stored_values.push(parseFloat($(this).val()));
             calculateRemaining();
         });
+
+        (function (global) {
+            gotten_values = global.localStorage.setItem("stored_values", JSON.stringify(stored_values));
+            stored_budget = global.localStorage.setItem("stored_budget", total_budget);
+        }(window));
     })
     
     function calculateTotal(class_name) {
@@ -55,7 +80,6 @@ $(document).ready(function(){
                 sum = parseFloat($(this).val()) + sum;
             }
         });
-        console.log("SUM:", sum);
         return sum;
 
     }
@@ -116,9 +140,10 @@ $(document).ready(function(){
     //Get totals
     function calculate() {
 
-        $(".editable.spent").each(function() {
-            var class_name = ".editable.spent";
+        $(".spent").each(function() {
+            var class_name = ".spent";
             total_spent = calculateSpent(class_name);
+            console.log("total spent:", total_spent);
             $("#total_spent").html(total_spent);
             if (total_spent > total_budget) {
                 $("#total_spent").css({"color":"red"});
@@ -127,7 +152,6 @@ $(document).ready(function(){
                 $("#remaining").css({"color":"red"});
             }
         });
-
 
     }
 
@@ -143,7 +167,7 @@ $(document).ready(function(){
     //Calculate after update
     function calculateUpdate(class_name) {
         if (class_name.match("spent")) {
-            class_name = ".editable.spent";
+            class_name = ".spent";
             total_spent = calculateTotal(class_name);
             $("#total_spent").html(total_spent);
             if (total_spent > total_budget) {
