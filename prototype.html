@@ -909,7 +909,7 @@
                             console.log("Edit!");
                             var div = document.getElementById("ideaView");
                             div.style.display = "none";
-                            $("ideaView").html('');
+                            
 
                             ideaBeingEditted = idea;
                             var popupAddSticky = document.getElementById("addStickyPopup");
@@ -928,8 +928,6 @@
                                 tagString += tagList[i] + "\n";
                             $("#ideaTagInput").val(tagString);
                             $($('#addStickyPopup').children()[0]).focus();
-
-                            $("#stickyNoteHeader").attr('background-color',categoryColors[idea.getCategory()][1]);
                         });
 
                         // Cancel click listener
@@ -937,7 +935,7 @@
                             console.log("CLICK!");
                             var div = document.getElementById("ideaView");
                             div.style.display = "none";
-                            $("ideaView").html('');
+                            $(".stickyNoteHeader").html("<button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>");
                         });
                     }
                 });
@@ -1177,11 +1175,18 @@
             var stickyUp = function(event) {
                 console.log(event);
                 if(down && event.clientX === down.x && event.clientY === down.y){
+
                     var idea = getNonDeletedIdea(event.target);
                     console.log(idea);
+                    $(".stickyNoteHeader").css('background-color','#' + categoryColors[idea.getCategory()][1]);
+                    $(".stickyNoteHeader").html('<h2 style="font-size:100%;text-align:left">'+idea.getCategory()+'</h2>' + $(".stickyNoteHeader").html());
+                    $(".stickyNoteHeader h2").css('width','50%');
+                    $(".stickyNoteHeader h2").css('float','left');
+                    $(".stickyNoteHeader h2").css('padding','1%');
                     var div = document.getElementById("ideaView");
                     div.style.display = "block";
                     $("#ideaBody").html(idea.getHtml());
+                    $("#ideaBody").css('background-color','#' + categoryColors[idea.getCategory()][0]);
 
                     // Edit Click Listener
                     $('.editIdeaView').click(function(event){
@@ -1189,6 +1194,7 @@
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
                         $("#ideaBody").html('');
+                        $(".stickyNoteHeader").html("<button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>");
 
                         ideaBeingEditted = idea;
                         console.log(ideaBeingEditted);
@@ -1208,7 +1214,6 @@
                         $("#ideaTagInput").val(tagString);
                         $($('#addStickyPopup').children()[0]).focus();
 
-                        $("#stickyNoteHeader").css('background-color',categoryColors[idea.getCategory()][1]);
                     });
 
                     // Cancel click listener
@@ -1217,6 +1222,7 @@
                         var div = document.getElementById("ideaView");
                         div.style.display = "none";
                         $("#ideaBody").html('');
+                        $(".stickyNoteHeader").html("<button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>");
                     });
                 }
                 //down = undefined;
@@ -1635,7 +1641,7 @@
         </div>
         <div id='ideaView' class="ideaInfo" style="display: none;" >
             <div class="stickyNoteHeader" style='text-align:right'> 
-                <button type='button' class='cancelIdeaView'>X</button>
+                <button type='button' class='cancelIdeaView btn' style='background:#AD1D1D;color:white'>X</button>
             </div>
             <div id='ideaBody'></div>
         </div>

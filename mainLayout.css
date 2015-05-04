@@ -242,7 +242,6 @@ h1 a:hover {
     width: 40%;
     height: 75%;
     background: white;
-    border: 1px solid black;
 }
 
 #ideaTitleInput {
@@ -341,8 +340,6 @@ select{
     position: absolute;
     z-index: 15;
     top: 20%;
-    background: white;
-    border: 1px solid black;
     width: 30%;
     box-shadow: 10px 10px 20px #888888;
 }
@@ -523,20 +520,24 @@ iframe[seamless] {
 }
 
 #ideaBody{
-    padding: 10px;
+    height: 93%;
+    padding: 1%;
 }
 
 .cancelIdeaView{
-    background-color: Transparent;
     background-repeat:no-repeat;
-    border: none;
     cursor:pointer;
     overflow: hidden;
     outline:none;
+    font-size: 12px;
+    height: 100%;
+    width: 7%;
+    padding: 1%;
 }
 
 .stickyNoteHeader{
-    
+    height: 7%;
+    padding: 1%;
 }
 
 @-ms-keyframes wiggle{
@@ -597,4 +598,7 @@ ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all {
     background-color: #cfefff;
     padding: 2%;
     margin-left: 10;   
+
+.ideaViewTitle{
+    font-size: 10%;
 }
