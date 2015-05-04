@@ -111,7 +111,7 @@ $(document).ready(function(){
         remaining = total_budget - total_allotted;
         $("#remaining_budget").html(remaining);
         if (remaining < 0) {
-            $("#remaining").css({"color":"red"});
+            $("#remaining_budget").css({"color":"red"});
             $("#total_allotted").css({"color":"red"});
         }
         
@@ -149,7 +149,7 @@ $(document).ready(function(){
                 $("#total_spent").css({"color":"red"});
                 $("#totals_title").css({"color":"red"});
                 $("#over_budget_amount").html(total_budget - total_spent);
-                $("#remaining").css({"color":"red"});
+                $("#over_budget_amount").css({"color":"red"});
             }
         });
 
@@ -174,7 +174,7 @@ $(document).ready(function(){
                 $("#total_spent").css({"color":"red"});
                 $("#totals_title").css({"color":"red"});
                 $("#over_budget_amount").html(total_budget - total_spent);
-                $("#remaining").css({"color":"red"});
+                $("#over_budget_amount").css({"color":"red"});
             }
         }
     }
