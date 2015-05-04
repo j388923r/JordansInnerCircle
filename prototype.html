@@ -349,7 +349,11 @@
                             $('#decisionBoard').append(idea.ideaDiv);
                             remaining -= Number(idea.cost);
                             $('#budgetRemaining').text(remaining);
-                            console.log("Decision shoot");
+                            if (remaining < 0) {
+                                $('#budgetRemaining').css({"color":"red"});
+                            } else {
+                                $('#budgetRemaining').css({"color":"black"});
+                            }
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
                             idea.ideaRow.children().children()[0].checked = false;
@@ -380,7 +384,11 @@
                             $('#ideaBoard').append($(idea.ideaDiv));
                             remaining += Number(idea.cost);
                             $('#budgetRemaining').text(remaining);
-                            console.log("Idea shoot");
+                            if (remaining < 0) {
+                                $('#budgetRemaining').css({"color":"red"});
+                            } else {
+                                $('#budgetRemaining').css({"color":"black"});
+                            }
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
                             idea.ideaRow.children().children()[0].checked = false;
@@ -823,7 +831,11 @@
 
                 // function to set remaining budget the same
                 (function (global) {
-                    document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
+                    var new_value = global.localStorage.getItem("shared_remaining_budget");
+                    document.getElementById("budgetRemaining").innerHTML = new_value;
+                    if (new_value < 0) {
+                        $('#budgetRemaining').css({"color":"red"});
+                    }
                 }(window));
 
                 var deleted_frame = $('.deleted_archive_view');
@@ -931,7 +943,6 @@
 
                         // Edit Click Listener
                         $('.editIdeaView').click(function(event){
-                            console.log("Edit!");
                             var div = document.getElementById("ideaView");
                             div.style.display = "none";
                             
@@ -1027,6 +1038,13 @@
             var updateIdea = function(idea){
                 restoreBorderColor();
                 removeFromDicts(idea);
+                remaining += parseFloat(idea.getCost());
+                $('#budgetRemaining').text(remaining);
+                if (remaining < 0) {
+                    $('#budgetRemaining').css({"color":"red"});
+                } else {
+                    $('#budgetRemaining').css({"color":"black"});
+                }
 
                 var ideaTitle = $('#ideaTitleInput').val();
                 var ideaCost = $('#ideaCostInput').val();
@@ -1035,16 +1053,24 @@
                 var ideaDescription = $("#ideaDescriptionInput").val();
                 var ideaTags = $("#ideaTagInput").tagsinput("items");
 
+                remaining -= parseFloat(ideaCost);
+                $('#budgetRemaining').text(remaining);
+                if (remaining < 0) {
+                    $('#budgetRemaining').css({"color":"red"});
+                } else {
+                    $('#budgetRemaining').css({"color":"black"});
+                }
+
                 var validIdea = checkUserInputs(ideaTitle, ideaCost, ideaCategory);
                 console.log(validIdea);
                 if (!validIdea){
                     missingInputFeedback();
                     return;
                 }
-
                 idea.updateTitle(ideaTitle);
                 idea.updateCost(ideaCost);
                 idea.updateCategory(ideaCategory);
+
                                
                 var children = $(idea.ideaDiv).children();
                 //console.log(children);
@@ -1362,6 +1388,11 @@
                                 var children = $(draggedSticky).children();
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
+                                if (remaining < 0) {
+                                    $('#budgetRemaining').css({"color":"red"});
+                                } else {
+                                    $('#budgetRemaining').css({"color":"black"});
+                                }
                             } else {
                                 //$(draggedSticky).css('margin-left', Math.max(0, down.stickyLeft + event.clientX - down.x));
                             }
@@ -1415,9 +1446,12 @@
                                 var children = $(draggedSticky).children();
                                 remaining -= Number($(children[2]).text().substring(1));
                                 $('#budgetRemaining').text(remaining);
-                                console.log("Decision drop");
+                                if (remaining < 0) {
+                                    $('#budgetRemaining').css({"color":"red"});
+                                } else {
+                                    $('#budgetRemaining').css({"color":"black"});
+                                }
                                 var idea = getNonDeletedIdea(e.target);
-                                console.log(idea);
                                 var ideaIndex = ideasInIdeas.indexOf(idea);
                                 ideasInIdeas.splice(ideaIndex, 1);
                                 idea.ideaDiv = $(e.target);
@@ -1434,7 +1468,11 @@
                             var children = $(draggedSticky).children();
                             remaining += Number($(children[2]).text().substring(1));
                             $('#budgetRemaining').text(remaining);
-                            console.log("Idea drop");
+                            if (remaining < 0) {
+                                $('#budgetRemaining').css({"color":"red"});
+                            } else {
+                                $('#budgetRemaining').css({"color":"black"});
+                            }
                             var idea = getNonDeletedIdea(e.target);
                             ideasInIdeas.push(idea);
                             var ideaIndex = ideasInDecisions.indexOf(idea);
@@ -1633,6 +1671,78 @@
                 }
             }
 
+
+            // Switch between span and textbox
+            function editable() {
+                $(".editable.title").mouseover(function() {
+
+                    //Only numbers allowed
+                    $('.editable.title').on('change keyup', function() {
+                         // Remove invalid characters
+                         var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+                         // Remove the first point if there is more than one
+                         sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+                         // Update value
+                         $(this).val(sanitized);
+                     });
+
+                    var class_name = $(this).attr("class");
+                    var id_name = $(this).attr("id");
+
+                    //Reference the Label.
+                    var label = $(this);
+
+                    //Add a TextBox next to the Label.
+                    label.after("<input style = 'display:none' />");
+
+                    //Reference the TextBox.
+                    var textbox = $(this).next();
+                    textbox.addClass(label.attr('class'));
+
+                    //Set the id attribute of the TextBox.
+                    textbox.id = this.id.replace("lbl", "txt");
+
+                    //Assign the value of Label to TextBox.
+                    textbox.val(label.html());
+
+                    //When Label is clicked, hide Label and show TextBox.
+                    label.click(function() {
+                        $(this).hide();
+                        $(this).next().show().select();
+                    });
+
+                    //When focus is lost from TextBox, hide TextBox and show Label.
+                    textbox.keyup(function(event) {
+                        if(event.keyCode == 13) {
+                            $(this).hide();
+                            $(this).prev().html($(this).val());
+                            $(this).prev().show();
+                            calculateUpdate(class_name);
+
+                            if(id_name === "total_budget") {
+                                total_budget = $(this).val();
+                                calculateRemaining();
+                            }
+                            
+                        }
+                    });
+
+                    textbox.blur(function(event) {
+                        $(this).hide();
+                        $(this).prev().html($(this).val());
+                        $(this).prev().show();
+                        calculateUpdate(class_name);
+
+                        if(id_name === "total_budget") {
+                            total_budget = $(this).val();
+                            calculateRemaining();
+                        }
+                    });
+
+                });
+
+            }
+
             
          </script>
     </head>
@@ -1649,7 +1759,7 @@
             </ul>
         </div>
         <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
-        <center><div class="h2">Jordan and Annie's Wedding</div></center>
+        <center><div class="h2 editable_title">Jordan and Annie's Wedding</div></center>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
             <input type="text" style="margin-bottom: 20px; z-index: 1000;"  id = "search" placeholder="Search by Tag or Title"/><br>
