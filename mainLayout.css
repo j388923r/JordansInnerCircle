@@ -101,7 +101,7 @@ h1 a:hover {
     border-radius: 5px;
     width: 100%; 
     height: 90%;
-    background-image: url('pics/darkRusticWood.jpg');
+    background-image: url('pics/redWood.jpg');
     display: inline-block;
     /*margin: 2%;*/
 }
@@ -300,7 +300,7 @@ h1 a:hover {
 
 select{
     width: 100%;
-    font-size: 500%;
+    font-size: 400%;
     margin-bottom: 1%;
 }
 
