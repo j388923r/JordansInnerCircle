@@ -170,6 +170,8 @@
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
+                $("#search").css("z-index","10000")
+
 
                 $('#search').change(function() {
                     var input = $("#search");
@@ -314,7 +316,7 @@
                     var iframe = $('#budget_iframe');
                     $('#budget_iframe').attr('src', $('#budget_iframe').attr('src'));
                     iframe.css("display", "block");
-                    $("#iframeClose").css("display", "block");
+                    //$("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 });
                 
@@ -556,7 +558,7 @@
                 for(var i = 0; i< categoryFilters.length; i++){
                     catset = listUnion(catset, categoryMapping[categoryFilters[i]]);
                 }
-                //console.log("start sets");
+                
                 if(costFilters.length == 0){
                     costset = allNonDeletedIdeas;
                 }
@@ -583,10 +585,16 @@
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
-                for(var i = 0; i< ideasToShow.length; i++){
-                    ideasToShow[i].setVisible();
+                
+                if(ideaViewState === 'bulletin') {
+                    for(var i = 0; i< ideasToShow.length; i++){
+                        ideasToShow[i].setVisible();
+                    }
+                } else {
+                    for(var i = 0; i< ideasToShow.length; i++){
+                        $('#ideaListView').append(ideasToShow[i].ideaRow);
+                    }
                 }
-
             }
 
 
@@ -600,6 +608,7 @@
                 //         // ideasToShow = listInter(ideasToShow, costMapping[costListForCheckAll[i]]);
                 //     }
                 // }
+                console.log(tagsList);
                 for(var i = 0; i< tagsList.length; i++ ){
                     if(term == tagsList[i]){
                         searchedFor.push(tagsList[i]);
@@ -607,6 +616,7 @@
                         // ideasToShow = listInter(ideasToShow, tagsMapping[tagsList[i]]);
                     }
                 }
+                console.log(categorieslist);
                 for(var i = 0; i< categorieslist.length; i++){
                     if(term == categorieslist[i]){
                         searchedFor.push(categorieslist[i]);
@@ -614,7 +624,7 @@
                         // ideasToShow = listInter(ideasToShow, categoryMapping[categorieslist[i]]);
                     }
                 }
-
+                console.log(titleList);
                 for(var i = 0; i < titleList.length; i++){
 
                     if(stringContains(titleList[i],term)){
@@ -622,8 +632,12 @@
                         searchList = listUnion(searchList, titleMapping[titleList[i]])
                     }
                 }
+                console.log("ideasToShow")
+                console.log(searchList)
 
                 ideasToShow = listInter(ideasToShow,searchList)
+                console.log("ideas to show after")
+                console.log(ideasToShow);
 
                 for(var i = 0; i < allNonDeletedIdeas.length; i++){
                     //not sure how to hide an idea but trying to do that here
@@ -752,7 +766,7 @@
                 if(page_name === 'budget_page') {                  
                     var iframe = $('#budget_iframe');
                     iframe.css("display", "block");
-                    $("#iframeClose").css("display", "block");
+                    //$("#iframeClose").css("display", "block");
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 }
 
@@ -762,7 +776,7 @@
                 
                 var iframe = $('#budget_iframe');
                 iframe.css("display", "none");
-                $("#iframeClose").css("display", "none");
+               // $("#iframeClose").css("display", "none");
 
                 // function to set remaining budget the same
                 (function (global) {
@@ -771,7 +785,7 @@
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "none"); 
-                $("#iframeClose").css("display", "none");
+                //$("#iframeClose").css("display", "none");
 
             }
 
@@ -910,7 +924,7 @@
                 // closing and clearing form!! :DD
                 closeAndClearForm();
 
-
+                updateFilter();
             }
 
             var updateIdea = function(idea){
@@ -967,6 +981,7 @@
 
                 });
                 
+                
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
                 var boardBackgroundLeft = Number($('#ideaBoard').css('margin-left').substring(0, $('#ideaBoard').css('margin-left').length - 2));
                 //console.log(boardBackgroundLeft);
@@ -978,6 +993,7 @@
                 // closing and clearing form!! :DD
                 closeAndClearForm();
                 ideaBeingEditted = undefined;
+                updateFilter();
             }
 
             var makeIdeaDiv = function(idea) {
@@ -1301,7 +1317,7 @@
 
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "block"); 
-                $("#iframeClose").css("display", "block");
+                //$("#iframeClose").css("display", "block");
             
             }
             
@@ -1467,10 +1483,10 @@
             </ul>
         </div>
         <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
-        <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
+        <center><div class="h2">Jordan and Annie's Wedding</div></center>
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
-            <input type="text" style="margin-bottom: 20px"  id = "search" placeholder="Search term"/><br>
+            <input type="text" style="margin-bottom: 20px; z-index: 1000;"  id = "search" placeholder="Search by Tag or Title"/><br>
             <div id="filterPopover" hidden>
                 <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
                 <h4>Categories:</h4>
