@@ -101,6 +101,9 @@
             var ideaBeingEditted = undefined; // The idea that is currently being editted
             
             $(document).ready(function(){
+
+                localStorage.clear();
+
                 var ideaBoard = document.getElementById('ideaBoard');
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -255,6 +258,7 @@
                         }
 
                         deletedIdeas.push(idea);
+                        removeFromDicts(idea);
 
                         var temp = listUnion(categorieslist,tagsList);
                         var searchSource = listUnion(temp,titleList);
@@ -268,12 +272,18 @@
                 });
                 
                 $('#trashIcon').click(function(){
+
                     var rows = $($('#ideaListView').children()[0]).children();
                     for(var i = 0; i < rows.length; i++) {
                         if($($(rows[i]).children()[0]).children()[0].checked) {
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInIdeas.splice(i, 1);
                             deletedIdeas.push(idea);
+
+                            console.log(costMapping);
+
+                            removeFromDicts(idea);
+                            console.log(costMapping);
                             $(rows[i]).remove();
                         }
                     }
@@ -284,8 +294,14 @@
                             ideasInDecisions.splice(i, 1);
                             deletedIdeas.push(idea);
                             $(rows[i]).remove();
+
+                            console.log(costMapping);
+                            removeFromDicts(idea);
+                            console.log(costMapping);
                         }
                     }
+
+
 
                     var temp = listUnion(categorieslist,tagsList);
                     var searchSource = listUnion(temp,titleList);
@@ -323,9 +339,16 @@
                                 idea.ideaDiv.hide();
                             }
                             ideasInDecisions.push(idea);
+                            if(ideasInIdeas.length === 0) {
+                                $('#moveRight').hide();
+                            }
                         }
                     }
+
+                    updateBudgetList();
+
                 });
+
                 $("#moveLeft").click(function() {
                     var rows = $($('#decisionListView').children()[0]).children();
                     for(var i = 0; i < rows.length; i++) {
@@ -345,10 +368,35 @@
                                 idea.ideaDiv.hide();
                             }
                             ideasInDecisions.splice(ideaIndex, 1);
+                            if(ideasInDecisions.length === 0) {
+                                $('#moveLeft').hide();
+                            }
                         }
                     }
+
+                    updateBudgetList();
                 });
             });
+
+            var updateBudgetList = function() {
+                 for (key in categoriesAndCosts) {
+                        categoriesAndCosts[key] = 0;
+                }
+                //Add for budget data propagation
+                for(var i=0; i < ideasInDecisions.length; i++) {
+                        var current_idea = ideasInDecisions[i];
+                        var category = current_idea.getCategory();
+                        var cost = current_idea.getCost(); 
+                        categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
+                }
+
+                (function (global) {
+                    global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
+                    console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
+                }(window));
+                        
+
+            }
 
             //function that takes in categories and tags list and contructs the filter 
             //do we want to do cost filtering dynamically or have set intervals
@@ -723,7 +771,6 @@
                     document.getElementById("budgetRemaining").innerHTML = global.localStorage.getItem("shared_remaining_budget");
                 }(window));
 
-
                 var deleted_frame = $('.deleted_archive_view');
                 deleted_frame.css("display", "none"); 
                 $("#iframeClose").css("display", "none");
@@ -767,7 +814,6 @@
                 var searchSource = listUnion(temp,titleList);
                 $('#search').autocomplete({
                     source: searchSource
-
                 });
                 
                 var decisionBoardLeft = Number($('#decisionBoard').css('margin-left').substring(0, $('#decisionBoard').css('margin-left').length - 2));
@@ -871,6 +917,7 @@
 
             var updateIdea = function(idea){
                 restoreBorderColor();
+                removeFromDicts(idea);
 
                 var ideaTitle = $('#ideaTitleInput').val();
                 var ideaCost = $('#ideaCostInput').val();
@@ -1032,6 +1079,7 @@
             }
 
             var updateTitleMapping = function(idea, title){
+
                 if (title in Object.keys(titleMapping)){
                     if(!(idea in titleMapping[title])){
                         titleMapping[title].push(idea);
@@ -1222,21 +1270,9 @@
                             }
                             ideasInDecisions.splice(ideaIndex, 1);
                         }
-                        down = undefined;
-
-                        for(var i=0; i < ideasInDecisions.length; i++) {
-                            var current_idea = ideasInDecisions[i];
-                            var category = current_idea.getCategory();
-                            var cost = current_idea.getCost(); 
-                            categoriesAndCosts[category] = parseFloat(categoriesAndCosts[category]) + parseFloat(cost);
-                            console.log("Categories:", categoriesAndCosts);
-                        }
-
-                        (function (global) {
-                            global.localStorage.setItem("shared_categories_costs", JSON.stringify(categoriesAndCosts));
-                            console.log("global prototype:", global.localStorage.getItem("shared_categories_costs"));
-                        }(window));  
+                        down = undefined;        
                         
+                        updateBudgetList();
                     }
 
                 };
@@ -1370,7 +1406,51 @@
             }
 
             var removeFromDicts = function(idea) {
-                
+                console.log('REMOVE FROM DICS');
+
+                // delete tags mapping
+                var listOfTags = idea.getTags();
+
+                for (var tagIndex in listOfTags){
+                    var tag = listOfTags[tagIndex];
+                    listOfIdeasForTag = tagsMapping[tag];
+                    for (var i in listOfIdeasForTag){
+                        if (listOfIdeasForTag[i] == idea){
+                            tagsMapping[tag].pop(idea);
+                            if (tagsMapping[tag].length == 0){
+                                delete tagsMapping[tag];
+                                tagsList = Object.keys(tagsMapping);
+                            }
+                        }
+                    }
+                }
+
+                // delete category mapping
+                var listOfIdeasForCategory = categoryMapping[idea.getCategory()];
+                for (var i in Object.keys(categoryMapping[idea.getCategory()])){
+                    if (listOfIdeasForCategory == idea){
+                        categoryMapping[idea.getCategory()].pop(idea);
+                    }
+                }
+
+                // delete cost Mapping
+                var numberCost = parseInt(idea.getCost(), 10);
+
+                if (numberCost <= 500){
+                    costMapping["lessThan500"].pop(idea);
+                } else if (numberCost <= 2000){
+                    costMapping["500To2000"].pop(idea);
+                } else if (numberCost <= 5000){
+                    costMapping["2000To5000"].pop(idea);
+                } else {
+                    costMapping["moreThan5000"].pop(idea);
+                }
+
+                // delete title mapping
+                titleMapping[idea.getTitle()].pop(idea);
+                if (titleMapping[idea.getTitle()].length == 0){
+                    delete titleMapping[idea.getTitle()];
+                }
             }
 
             
@@ -1378,16 +1458,17 @@
     </head>
     <body>
         <div class="navigationbar">
-            <h1><a ref="#" onclick="show('home')">Simple as Love</a></h1>
+            <h1><a ref="#" onclick="show('home'), closeWindows()">Simple as Love</a></h1>
             <ul class="header">
-                <li id="mainpageheader"><a ref="#" onclick="show('home')">Main Page</a></li>
-                <li><a ref="#" onclick="show('ideas')">Ideas</a></li>
-                <li><a ref="#" onclick="show('decisions')">Decisions</a></li>
-                <li id="budget_button"><a ref="#" onclick="load('budget_page')">Budget</a></li>
-                <li id="archiveheader"><a ref="#" onclick="load_deleted()">Archive</a></li>
+                <li id="mainpageheader"><a ref="#" onclick="show('home'), closeWindows()">Main Page</a></li>
+                <li><a ref="#" onclick="show('ideas'), closeWindows()">Ideas</a></li>
+                <li><a ref="#" onclick="show('decisions'), closeWindows()">Decisions</a></li>
+                <li id="budget_button"><a ref="#" onclick="closeWindows(), load('budget_page')">Budget</a></li>
+                <li id="archiveheader"><a ref="#" onclick="closeWindows(), load_deleted()">Archive</a></li>
+                <!-- <button id="iframeClose" class="btn-default btn-danger pull-right" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button> -->
             </ul>
-            <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
+        <button id="iframeClose" class="pull-right btn-danger" onclick="closeWindows()"><span class="glyphicon glyphicon-remove"></span></button>
         <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
@@ -1509,7 +1590,7 @@
             <iframe id="budget_iframe" src="budget.html" seamless></iframe>
         </div>
         <div id="wrapper" class="deleted_archive_view">
-            <h2>Deleted Archive</h2>
+            <h2 style="font-family: Sacramento">Deleted Archive</h2>
             <table id="keywords" cellspacing="0" cellpadding="0" class="tablesorter">
                 <thead>
                     <tr>
