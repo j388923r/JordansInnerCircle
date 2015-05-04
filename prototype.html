@@ -707,6 +707,8 @@
             }
 
             var stringContains = function(title, term) {
+                title = title.toLowerCase();
+                term = term.toLowerCase();
                 return title.indexOf(term) > -1;
             }
             
