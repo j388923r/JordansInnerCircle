@@ -469,16 +469,19 @@ iframe[seamless] {
 }
 
 .ui-menu {
+    position: relative;
     width: 14%;
-    background-color: #F1E5ED;
+    background-color: #EEDC82;
     border-radius: 2px;
     border: solid 1px black;
+    
 }
+
 
 .ui-menu .ui-menu-item a{
     color: black;
     border-radius: 0px;
-    z-index: 10;
+    
 }
 
 .divider{

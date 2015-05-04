@@ -167,6 +167,8 @@
                 $("#search").autocomplete( "option", "autoFocus", false );
                 $("#search").autocomplete( "option", "minLength", 1 );
                 $("#search").autocomplete( "option", "delay", 0);
+                $("#search").css("z-index","10000")
+
 
                 $('#search').change(function() {
                     var input = $("#search");
@@ -1389,7 +1391,7 @@
         <!--<center><div class="h2">Jordan and Annie's Wedding</div></center>-->
         <div>
             <button id="filters" style="margin-bottom: 5px" class="btn">Filters <span id= "filterIcon" class="glyphicon glyphicon-menu-down"></span></button>
-            <input type="text" style="margin-bottom: 20px"  id = "search" placeholder="Search term"/><br>
+            <input type="text" style="margin-bottom: 20px; z-index: 1000;"  id = "search" placeholder="Search by Tag or Title"/><br>
             <div id="filterPopover" hidden>
                 <!-- <input type="text" id = "search" placeholder="Search term"/><br> -->
                 <h4>Categories:</h4>
