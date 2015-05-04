@@ -91,10 +91,11 @@
             var deletedInt = 0
 
             var shorten = function(input, length) {
-                if(input.length < length)
+                return input;
+                /*if(input.length < length)
                     return input;
                  else
-                    return input.substring(0, length - 3) + "...";
+                    return input.substring(0, length - 3) + "...";*/
             }
 
             var ideaBeingEditted = undefined; // The idea that is currently being editted
@@ -115,6 +116,8 @@
                 
                 document.getElementById("budgetRemaining").innerHTML = remaining;
 
+                $('#moveRight').hide();
+                $('#moveLeft').hide();
 
                 var temp = listUnion(categorieslist,tagsList);
                 var searchSource = listUnion(temp,titleList);
@@ -299,6 +302,50 @@
                     //iframe.css({"height":"400", "width":"800", "border":"none"});
                 });
                 
+                $("#moveRight").click(function() {
+                    var rows = $($('#ideaListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            $('#decisionBoard').append(idea.ideaDiv);
+                            remaining -= Number(idea.cost);
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Decision shoot");
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                            idea.ideaRow.children().children()[0].checked = false;
+                            var ideaIndex = ideasInIdeas.indexOf(idea);
+                            ideasInIdeas.splice(ideaIndex, 1);
+                            if(decisionViewState === 'list') {
+                                $('#decisionListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.push(idea);
+                        }
+                    }
+                });
+                $("#moveLeft").click(function() {
+                    var rows = $($('#decisionListView').children()[0]).children();
+                    for(var i = 0; i < rows.length; i++) {
+                        if($($(rows[i]).children()[0]).children()[0].checked) {
+                            var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
+                            $('#ideaBoard').append($(idea.ideaDiv));
+                            remaining += Number(idea.cost);
+                            $('#budgetRemaining').text(remaining);
+                            console.log("Idea shoot");
+                            idea.ideaDiv.show();
+                            idea.ideaRow.remove();
+                            idea.ideaRow.children().children()[0].checked = false;
+                            ideasInIdeas.push(idea);
+                            var ideaIndex = ideasInDecisions.indexOf(idea);
+                            if(ideaViewState === 'list') {
+                                $('#ideaListView').append(idea.ideaRow);
+                                idea.ideaDiv.hide();
+                            }
+                            ideasInDecisions.splice(ideaIndex, 1);
+                        }
+                    }
+                });
             });
 
             //function that takes in categories and tags list and contructs the filter 
@@ -613,24 +660,25 @@
             };
 
             var switchView = function(boardName) {
-                if(boardName === 'ideas' && ideasInIdeas.length > 0) {
+                if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
                         }
+                        $('#moveRight').hide();
                         ideaViewState = 'bulletin';
-                    } else {
+                    } else if(ideasInIdeas.length > 0){
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
-                            console.log(idea);
                             idea.ideaDiv.hide();
                             $('#ideaListView').append(idea.ideaRow);
                         }
+                        $('#moveRight').show();
                         ideaViewState = 'list';
                     }
-                } else if(boardName === 'decisions' && ideasInDecisions.length > 0) {
+                } else if(boardName === 'decisions') {
                     if(decisionViewState === 'list') {
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
@@ -638,13 +686,15 @@
                             idea.ideaDiv.show();
                             idea.ideaRow.remove();
                         }
-                    } else {
+                        $('#moveLeft').hide();
+                    } else if(ideasInDecisions.length > 0){
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
                             var idea = ideasInDecisions[i];
                             idea.ideaDiv.hide();
                             $('#decisionListView').append(idea.ideaRow);
                         }
+                        $('#moveLeft').show();
                     }
                 }
             }
@@ -1118,7 +1168,6 @@
                     },
                     //grid: [125, 125],
                     drag: function(e) {
-                        console.log(e);
                         if(page === 'home') {
                             if(decisionLeft < e.clientX - e.target.offsetWidth) {
                                 $(draggedSticky).css('left', e.clientX - e.target.offsetWidth - decisionLeft);
@@ -1297,10 +1346,11 @@
                 var children = $(sticky).parent().children();
                 console.log(children);
                 var title = $(children[2]).text();
-                //console.log(title);
+                console.log(title);
                 var category = $(children[1]).text();
+                console.log(category);
                 for(var i = 0; i < allNonDeletedIdeas.length; i++) {
-                    var idea = allNonDeletedIdeas[i];
+                    var idea = allNonDeletedIdeas[i];console.log(idea);
                     if(title === idea.getTitle() && category === idea.getCategory()) {
                         return idea;
                     }
@@ -1380,6 +1430,22 @@
                 <div id="trashIcon">
                     <img id="trashPic" src="empty_trash.png">
                 </div>
+                <div id="moveRight">
+                    <div id="moveRightIconFilling">
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                    </div>
+                    <div id="moveRightIcon">
+                        <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                    </div>
+                 </div>
+                 <div id="moveLeft">
+                    <div id="moveLeftIconFilling">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                    </div>
+                    <div id="moveLeftIcon">
+                        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                    </div>
+                 </div>
             </div>
             <div id='decisionBoard'>
                 <a href="#" onclick="switchView('decisions')">
