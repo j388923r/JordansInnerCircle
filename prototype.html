@@ -174,7 +174,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 $("#search").autocomplete( "option", "autoFocus", false );
@@ -269,7 +269,7 @@
                             open: function( event, ui ) {
                                 setTimeout(function(){
                                     $('.ui-autocomplete').css('z-index', 9999);
-                                }, 100);
+                                }, 50);
                             }
                         });
 
@@ -316,7 +316,7 @@
                         open: function( event, ui ) {
                             setTimeout(function(){
                                 $('.ui-autocomplete').css('z-index', 9999);
-                            }, 100);
+                            }, 50);
                         }
                     });
                 });
@@ -419,7 +419,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 cat_arr.sort();
@@ -650,14 +650,9 @@
                     //not sure how to hide an idea but trying to do that here
                     allNonDeletedIdeas[i].hide();
                 }
-                if(ideaViewState === 'bulletin') {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        ideasToShow[i].setVisible();
-                    }
-                } else {
-                    for(var i = 0; i< ideasToShow.length; i++){
-                        $('#ideaListView').append(ideasToShow[i].ideaRow);
-                    }
+                for(var i = 0; i< ideasToShow.length; i++){
+                    //console.log(ideasToShow);
+                    ideasToShow[i].setVisible();
                 }
 
             }
@@ -843,7 +838,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 
@@ -1000,7 +995,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 
@@ -1398,7 +1393,7 @@
                     open: function( event, ui ) {
                         setTimeout(function(){
                             $('.ui-autocomplete').css('z-index', 9999);
-                        }, 100);
+                        }, 50);
                     }
                 });
                 updateFilter();
