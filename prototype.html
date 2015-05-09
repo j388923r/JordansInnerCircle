@@ -22,12 +22,6 @@
         <link rel="stylesheet" href="mainLayout.css">
 
         <script type="text/javascript" src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
-
-      
-        
-        <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
         
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -232,7 +226,6 @@
                 
                 $('#trashIcon').mouseover(function(event) {
                     var trashcan = $(event.target);
-                    console.log(trashcan);
 
                     if (draggedSticky){
                         $("#trashPic").attr("src", "full_trash.png");
@@ -270,7 +263,7 @@
                         }
 
                         deletedIdeas.push(idea);
-                        removeFromDicts(idea);
+                        //removeFromDicts(idea);
 
                         var temp = listUnion(categorieslist,tagsList);
                         var searchSource = listUnion(temp,titleList);
@@ -291,21 +284,27 @@
                 $('#trashIcon').click(function(){
 
                     var rows = $($('#ideaListView').children()[0]).children();
-                    for(var i = 0; i < rows.length; i++) {
+                    console.log(rows,4);
+                    for(var i = rows.length - 1; i >= 0; i--) {
+                        console.log(i);
                         if($($(rows[i]).children()[0]).children()[0].checked) {
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInIdeas.splice(i, 1);
                             deletedIdeas.push(idea);
+                            
+                            idea.ideaRow.hide();
+                            idea.ideaDiv.hide();
+                            //console.log(costMapping);
 
-                            console.log(costMapping);
-
-                            removeFromDicts(idea);
-                            console.log(costMapping);
-                            $(rows[i]).remove();
+                            //removeFromDicts(idea);
+                            //console.log(costMapping);
+                            console.log(rows);
                         }
+                        rows = $($('#ideaListView').children()[0]).children();
+                        console.log(rows,4);
                     }
                     var rows = $($('#decisionListView').children()[0]).children();
-                    for(var i = 0; i < rows.length; i++) {
+                    for(var i = rows.length - 1; i >= 0; i--) {
                         if($($(rows[i]).children()[0]).children()[0].checked) {
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInDecisions.splice(i, 1);
@@ -313,7 +312,7 @@
                             $(rows[i]).remove();
 
                             console.log(costMapping);
-                            removeFromDicts(idea);
+                            //removeFromDicts(idea);
                             console.log(costMapping);
                         }
                     }
@@ -331,6 +330,7 @@
                         }
                     });
                     $('.ui-autocomplete').focus();
+                    console.log(ideasInIdeas, 1);
                 });
 
                 
@@ -1046,7 +1046,7 @@
 
             var updateIdea = function(idea){
                 restoreBorderColor();
-                removeFromDicts(idea);
+                //removeFromDicts(idea);
                 remaining += parseFloat(idea.getCost());
                 $('#budgetRemaining').text(remaining);
                 if (remaining < 0) {
@@ -1157,14 +1157,13 @@
                 
                 ideaDiv.draggable(draggableObject);
                 
-                                var ideaRowHTML = "<tr>" +
-                               "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
-                               "<td style='font-weight:bold;1em'>" + shorten(idea.category, 12) + "</td>" +
-                               "<td style='font-size: 1em'>" + idea.title + "</td>" +
-                               "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
-                               //"<span style='1em'> <span style='color:red' class='glyphicon glyphicon-remove'></span> </span>" + 
-                               //"<span style='1em'> <span style='color:#66CDAA' class='glyphicon glyphicon-circle-arrow-right'></span> </span>" + 
-                               "</tr>";
+                var ideaRowHTML = "<tr>" +
+                "<td style='font-size: 1em'> <input type='checkbox'></input> </td>" + 
+                "<td style='font-weight:bold;1em'>" + shorten(idea.category, 12) + "</td>" +
+                "<td style='font-size: 1em'>" + idea.title + "</td>" +
+                "<td style='font-size: 1em'>$" + idea.cost + "</td>" + 
+                "</tr>";
+               
                 var ideaRow = $(ideaRowHTML);
                 
                 idea.ideaRow = ideaRow;
@@ -1217,7 +1216,7 @@
                 
                 $('#ideaBoard').append(ideaDiv);
                 if(ideaViewState === 'list') {
-                    $('#ideaListView').append(ideaRow);
+                    //$('#ideaListView').append(ideaRow);
                     ideaDiv.hide();
                 }
             }
@@ -1568,10 +1567,18 @@
             function restore_idea(idea) {
                 makeIdeaDiv(idea);
                 idea.setVisible();
-                deletedIdeas.splice(deletedIdeas.indexOf(idea),1);
+                for(var i = 0; i < deletedIdeas.length; i++) {
+                    var deletedIdea = deletedIdeas[i];
+                    if(deletedIdea.title === idea.getTitle() && deletedIdea.category === idea.getCategory()) {
+                        deletedIdeas.splice(i,1);
+                        break;
+                    }
+                }
                 allNonDeletedIdeas.push(idea);
+                console.log(ideasInIdeas);
                 ideasInIdeas.push(idea);
-
+                console.log(ideasInIdeas);
+                
                 categoryMapping[ideaCategory].push(idea);
                 updateCostMapping(idea, parseInt(idea.getCost));
                 updateTitleMapping(idea, idea.getTitle);

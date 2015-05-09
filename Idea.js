@@ -84,6 +84,7 @@ var Idea = function(title, category, cost){
 	this.setVisible = function(){
 		this.hidden = false;
 		this.ideaDiv.show();
+        this.ideaRow.show();
 	}
 
 	this.setDiv = function(ideaDiv) {
@@ -92,7 +93,7 @@ var Idea = function(title, category, cost){
 
 	this.delete = function(){
 		this.deleted = true;
-		this.hide;
+		this.hide();
 	}
 
 	this.getTitle = function(){
