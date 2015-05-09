@@ -775,7 +775,7 @@
             var switchView = function(boardName) {
                 if(boardName === 'ideas') {
                     if(ideaViewState === 'list') {
-                        $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                        $(".switch_view.first").find("span").toggleClass('glyphicon-modal-window').toggleClass('glyphicon-list-alt');
                         $('#ideaBoard').css('overflow', 'initial');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
@@ -786,7 +786,7 @@
                         ideaViewState = 'bulletin';
                     } else {
                         $('#ideaBoard').css('overflow', 'auto');
-                        $(".switch_view.first").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                        $(".switch_view.first").find("span").toggleClass('glyphicon-modal-window').toggleClass('glyphicon-list-alt');
                         for(var i = 0; i < ideasInIdeas.length; i++) {
                             var idea = ideasInIdeas[i];
                             idea.ideaDiv.hide();
@@ -798,7 +798,7 @@
                 } else if(boardName === 'decisions') {
                  
                     if(decisionViewState === 'list') {
-                       $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                       $(".switch_view.second").find("span").toggleClass('glyphicon-modal-window').toggleClass('glyphicon-list-alt');
                        $('#decisionBoard').css('overflow', 'initial');
                         decisionViewState = 'bulletin';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
@@ -808,7 +808,7 @@
                         }
                         $('#moveLeft').hide();
                     } else {
-                        $(".switch_view.second").find("span").toggleClass('glyphicon-list-alt').toggleClass('glyphicon-modal-window');
+                        $(".switch_view.second").find("span").toggleClass('glyphicon-modal-window').toggleClass('glyphicon-list-alt');
                         $('#decisionBoard').css('overflow', 'auto');
                         decisionViewState = 'list';
                         for(var i = 0; i < ideasInDecisions.length; i++) {
@@ -1777,7 +1777,7 @@
             <div id='ideaBoard'>
                 <a href="#" onclick="switchView('ideas')">
                     <div id="ideaHeader">
-                        Ideas<button class="btn switch_view first btn-lg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
+                        Ideas<button class="btn switch_view first btn-lg"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span></button>
                     </div>
                 </a>
                 <div id="ideaContent">
@@ -1811,7 +1811,7 @@
             <div id='decisionBoard'>
                 <a href="#" onclick="switchView('decisions')">
                     <div id="decisionHeader">
-                    Decisions<button class="btn switch_view second btn-lg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
+                    Decisions<button class="btn switch_view second btn-lg"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span></button>
                     </div>
                 </a>
                 <div id="decisionContent">
