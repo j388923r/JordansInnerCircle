@@ -284,21 +284,18 @@
                 $('#trashIcon').click(function(){
 
                     var rows = $($('#ideaListView').children()[0]).children();
-                    console.log(rows,4);
+                    var somethingChecked = false;
+                    //console.log(rows,4);
                     for(var i = rows.length - 1; i >= 0; i--) {
                         console.log(i);
                         if($($(rows[i]).children()[0]).children()[0].checked) {
+                            somethingChecked = true;
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInIdeas.splice(i, 1);
                             deletedIdeas.push(idea);
                             
                             idea.ideaRow.hide();
                             idea.ideaDiv.hide();
-                            //console.log(costMapping);
-
-                            //removeFromDicts(idea);
-                            //console.log(costMapping);
-                            console.log(rows);
                         }
                         rows = $($('#ideaListView').children()[0]).children();
                         console.log(rows,4);
@@ -306,6 +303,7 @@
                     var rows = $($('#decisionListView').children()[0]).children();
                     for(var i = rows.length - 1; i >= 0; i--) {
                         if($($(rows[i]).children()[0]).children()[0].checked) {
+                            somethingChecked = true;
                             var idea = getNonDeletedIdeaTable($(rows[i]).children()[0]);
                             ideasInDecisions.splice(i, 1);
                             deletedIdeas.push(idea);
@@ -316,8 +314,6 @@
                             console.log(costMapping);
                         }
                     }
-
-
 
                     var temp = listUnion(categorieslist,tagsList);
                     var searchSource = listUnion(temp,titleList);
@@ -331,6 +327,11 @@
                     });
                     $('.ui-autocomplete').focus();
                     console.log(ideasInIdeas, 1);
+                    
+                    if(!somethingChecked) {
+                        closeWindows();
+                        load_deleted();
+                    }
                 });
 
                 
